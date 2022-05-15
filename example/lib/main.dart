@@ -28,6 +28,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    BitLabs.instance.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
+    BitLabs.instance.checkSurveys((hasSurveys) => print(
+        '[Example] ${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),

@@ -3,27 +3,29 @@ library bitlabs;
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
+import 'package:bitlabs/bitlabs_repository.dart';
 import 'package:bitlabs/models/bitlabs_response.dart';
+import 'package:bitlabs/api/bitlabs_api.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 class BitLabs {
   static final BitLabs instance = BitLabs._();
 
-  String _token = "";
-  String _uid = "";
+  // String _token = "";
+  // String _uid = "";
 
   Map _tags = {};
 
   Function(Float) _onReward = (Float payout) {};
 
-  // TODO: BitLabs API Reference
+  BitLabsRepository? bitLabsRepository;
 
   BitLabs._();
 
   void init(String token, String uid) {
-    _token = token;
-    _uid = uid;
+    // _token = token;
+    // _uid = uid;
+    bitLabsRepository = BitLabsRepository(token, uid);
   }
 
   void setTags(Map tags) {
@@ -38,26 +40,14 @@ class BitLabs {
     _onReward = onReward;
   }
 
-  void checkSurveys(Function(bool) onResponse) => _ifInitialised(() async {
-        var response = await http.get(
-            Uri.parse('https://api.bitlabs.ai/v1/client/check?platform=MOBILE'),
-            headers: {'X-Api-Token': _token, 'X-User-Id': _uid});
-
-        var data = BitLabsResponse.fromJson(jsonDecode(response.body));
-        if (data.data == null) {
-          print('[BitLabs] CheckSurveys ${data.error?.details.http}:'
-              ' ${data.error?.details.msg}');
-        } else {
-          onResponse(data.data!.hasSurveys);
-        }
+  void checkSurveys(Function(bool?) onResponse) => _ifInitialised(() {
+        bitLabsRepository?.checkSurveys((hasSurveys) => onResponse(hasSurveys));
       });
 
   void _ifInitialised(Function block) {
-    if (_token.isEmpty && _uid.isEmpty) {
-      if (kDebugMode) {
-        print('[BitLabs] Trying to use the BitLabs without initialising it!'
-            'You should initialise BitLabs first! Call BitLabs::init()');
-      }
+    if (bitLabsRepository == null) {
+      log('[BitLabs] Trying to use BitLabs without initialising it!'
+          'You should initialise BitLabs first! Call BitLabs::init()');
       return;
     }
     block();

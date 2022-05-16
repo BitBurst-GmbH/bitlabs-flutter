@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +31,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
+    super.initState();
     BitLabs.instance.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
-    BitLabs.instance.checkSurveys((hasSurveys) => print(
-        '[Example] ${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'));
+    BitLabs.instance.checkSurveys((hasSurveys) {
+      if (hasSurveys == null) {
+        log('[Example] CheckSurveys Error. Check BitLabs logs.');
+      } else {
+        log('[Example] Checking Surveys -> '
+            '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}');
+      }
+    });
   }
 
   @override

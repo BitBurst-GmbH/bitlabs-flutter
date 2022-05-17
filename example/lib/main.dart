@@ -41,6 +41,16 @@ class _HomePageState extends State<HomePage> {
             '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}');
       }
     });
+
+    BitLabs.instance.getSurveys((surveys) {
+      if (surveys == null) {
+        log('[Example] GetSurveys Error. Check BitLabs logs.');
+      } else {
+        log('[Example] Getting Surveys -> '
+            '${surveys.map((survey) => 'Survey ${survey.id} '
+                'in ${survey.details.category.name}')}');
+      }
+    });
   }
 
   @override

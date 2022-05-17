@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bitlabs/utililies.dart';
 import 'package:http/http.dart';
 
 import '../models/bitlabs_response.dart';
@@ -14,4 +15,10 @@ class BitLabsApi {
   Future<Response> checkSurveys() =>
       get(Uri.https(_url, 'v1/client/check', {'platform': 'MOBILE'}),
           headers: _headers);
+
+  // TODO: Add query parameter 'sdk'='FLUTTER'
+  Future<Response> getActions() => get(
+      Uri.https(
+          _url, 'v1/client/actions', {'platform': 'MOBILE', 'os': platform()}),
+      headers: _headers);
 }

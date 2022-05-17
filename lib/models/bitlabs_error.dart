@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'error_details.dart';
 
 class BitLabsError {

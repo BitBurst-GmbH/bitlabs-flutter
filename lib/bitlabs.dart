@@ -1,11 +1,10 @@
 library bitlabs;
 
 import 'dart:developer';
-import 'dart:ffi';
 import 'package:bitlabs/bitlabs_repository.dart';
 import 'package:bitlabs/models/Survey.dart';
 import 'package:bitlabs/utilities.dart';
-import 'package:bitlabs/webview_offerwall.dart';
+import 'package:bitlabs/web_widget.dart';
 import 'package:flutter/material.dart';
 
 class BitLabs {
@@ -16,7 +15,7 @@ class BitLabs {
 
   Map<String, dynamic> _tags = {};
 
-  Function(Float) _onReward = (Float payout) {};
+  Function(double) _onReward = (double payout) {};
 
   BitLabsRepository? _bitLabsRepository;
 
@@ -36,7 +35,7 @@ class BitLabs {
     _tags[key] = value;
   }
 
-  void setOnReward(Function(Float) onReward) {
+  void setOnReward(Function(double) onReward) {
     _onReward = onReward;
   }
 
@@ -53,7 +52,10 @@ class BitLabs {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
-            return WebWidget(url: offerWallUrl(_token, _uid, _tags));
+            return WebWidget(
+              url: offerWallUrl(_token, _uid, _tags),
+              onReward: _onReward,
+            );
           }),
         );
       });

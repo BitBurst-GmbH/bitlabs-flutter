@@ -66,5 +66,15 @@ class _WebViewState extends State<WebWidget> {
     setState(() {
       isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });
+
+    if (isPageOfferWall) return;
+
+    if (url.contains('survey/compete') || url.contains('survey/screenout')) {
+      reward += (Uri.parse(url).queryParameters['val'] as double?) ?? 0.0;
+    } else {
+      final segments = Uri.parse(url).pathSegments;
+      networkId = segments[segments.indexOf('networks') + 1];
+      surveyId = segments[segments.indexOf('surveys') + 1];
+    }
   }
 }

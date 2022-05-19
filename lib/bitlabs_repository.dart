@@ -14,7 +14,7 @@ class BitLabsRepository {
   BitLabsRepository(String token, String uid)
       : _bitLabsApi = BitLabsApi(token, uid);
 
-  void checkSurveys(Function(bool?) onResponse) async {
+  void checkSurveys(void Function(bool?) onResponse) async {
     var response = await _bitLabsApi.checkSurveys();
     var bitLabsResponse = BitLabsResponse<CheckSurveysResponse>.fromJson(
         jsonDecode(response.body));
@@ -30,7 +30,7 @@ class BitLabsRepository {
     onResponse(data.hasSurveys);
   }
 
-  void getSurveys(Function(List<Survey>?) onResponse) async {
+  void getSurveys(void Function(List<Survey>?) onResponse) async {
     var response = await _bitLabsApi.getActions();
     var bitLabsResponse =
         BitLabsResponse<GetActionsResponse>.fromJson(jsonDecode(response.body));

@@ -51,6 +51,9 @@ class _HomePageState extends State<HomePage> {
                 'in ${survey.details.category.name}')}');
       }
     });
+
+    BitLabs.instance.setOnReward(
+        (reward) => {log('[Example] Reward for this session: $reward')});
   }
 
   @override

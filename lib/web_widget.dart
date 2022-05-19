@@ -3,7 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class WebWidget extends StatefulWidget {
   final String url;
-  final Function(double) onReward;
+  final void Function(double) onReward;
 
   const WebWidget({Key? key, required this.url, required this.onReward})
       : super(key: key);
@@ -30,14 +30,27 @@ class _WebViewState extends State<WebWidget> {
       child: SafeArea(
         child: Scaffold(
           appBar: isPageOfferWall ? null : AppBar(),
-          body: WebView(
-            initialUrl: widget.url,
-            onPageStarted: _onPageStarted,
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (controller) {
-              _controller = controller;
-            },
-          ),
+          body: Stack(fit: StackFit.expand, children: [
+            WebView(
+              initialUrl: widget.url,
+              onPageStarted: _onPageStarted,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (controller) => (_controller = controller),
+            ),
+            !isPageOfferWall
+                ? const SizedBox.shrink()
+                : Align(
+                    alignment: const Alignment(1, -0.99),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.black,
+                        size: 24.0,
+                      ),
+                    ),
+                  ),
+          ]),
         ),
       ),
     );

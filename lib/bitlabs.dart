@@ -15,7 +15,7 @@ class BitLabs {
 
   Map<String, dynamic> _tags = {};
 
-  Function(double) _onReward = (double payout) {};
+  void Function(double) _onReward = (double payout) {};
 
   BitLabsRepository? _bitLabsRepository;
 
@@ -35,16 +35,16 @@ class BitLabs {
     _tags[key] = value;
   }
 
-  void setOnReward(Function(double) onReward) {
+  void setOnReward(void Function(double) onReward) {
     _onReward = onReward;
   }
 
-  void checkSurveys(Function(bool?) onResponse) => _ifInitialised(() {
+  void checkSurveys(void Function(bool?) onResponse) => _ifInitialised(() {
         _bitLabsRepository
             ?.checkSurveys((hasSurveys) => onResponse(hasSurveys));
       });
 
-  void getSurveys(Function(List<Survey>?) onResponse) => _ifInitialised(() {
+  void getSurveys(void Function(List<Survey>?) onResponse) => _ifInitialised(() {
         _bitLabsRepository?.getSurveys((surveys) => onResponse(surveys));
       });
 

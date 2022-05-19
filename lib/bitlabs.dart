@@ -1,21 +1,20 @@
 library bitlabs;
 
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
 import 'package:bitlabs/bitlabs_repository.dart';
 import 'package:bitlabs/models/Survey.dart';
-import 'package:bitlabs/models/bitlabs_response.dart';
-import 'package:bitlabs/api/bitlabs_api.dart';
-import 'package:flutter/foundation.dart';
+import 'package:bitlabs/utilities.dart';
+import 'package:bitlabs/webview_offerwall.dart';
+import 'package:flutter/material.dart';
 
 class BitLabs {
   static final BitLabs instance = BitLabs._();
 
-  // String _token = "";
-  // String _uid = "";
+  String _token = "";
+  String _uid = "";
 
-  Map _tags = {};
+  Map<String, dynamic> _tags = {};
 
   Function(Float) _onReward = (Float payout) {};
 
@@ -24,12 +23,12 @@ class BitLabs {
   BitLabs._();
 
   void init(String token, String uid) {
-    // _token = token;
-    // _uid = uid;
+    _token = token;
+    _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
   }
 
-  void setTags(Map tags) {
+  void setTags(Map<String, dynamic> tags) {
     _tags = tags;
   }
 
@@ -48,6 +47,15 @@ class BitLabs {
 
   void getSurveys(Function(List<Survey>?) onResponse) => _ifInitialised(() {
         _bitLabsRepository?.getSurveys((surveys) => onResponse(surveys));
+      });
+
+  void launchOfferWall(BuildContext context) => _ifInitialised(() {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return WebWidget(url: offerWallUrl(_token, _uid, _tags));
+          }),
+        );
       });
 
   void _ifInitialised(Function block) {

@@ -57,7 +57,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: const Center(child: Text("Hallo, BitLabs!")),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => BitLabs.instance.launchOfferWall(context),
+          child: const Text('Open OfferWall'),
+        ),
+      ),
     );
   }
 }

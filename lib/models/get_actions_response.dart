@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bitlabs/models/Survey.dart';
 import 'package:bitlabs/models/qualification.dart';

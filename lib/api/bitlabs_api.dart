@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:bitlabs/utililies.dart';
+import 'package:bitlabs/utilities.dart';
 import 'package:http/http.dart';
-
-import '../models/bitlabs_response.dart';
 
 class BitLabsApi {
   final Map<String, String> _headers;

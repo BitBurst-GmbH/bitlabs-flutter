@@ -1,3 +1,4 @@
+import 'package:bitlabs/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -24,7 +25,9 @@ class _WebViewState extends State<WebWidget> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (!isPageOfferWall) _controller?.loadUrl(widget.url);
+        if (!isPageOfferWall) {
+          await showDialog(context: context, builder: showLeaveSurveyDialog);
+        }
         return false;
       },
       child: SafeArea(
@@ -75,6 +78,27 @@ class _WebViewState extends State<WebWidget> {
       final segments = Uri.parse(url).pathSegments;
       networkId = segments[segments.indexOf('networks') + 1];
       surveyId = segments[segments.indexOf('surveys') + 1];
+    }
+  }
+
+  Widget showLeaveSurveyDialog(BuildContext context) {
+    return SimpleDialog(
+      title: const Text('Choose a reason for leaving the survey'),
+      children: [
+        ...leaveReasonOptions(leaveSurvey: leaveSurvey, context: context),
+        SimpleDialogOption(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Continue the survey'),
+        ),
+      ],
+    );
+  }
+
+  void leaveSurvey(String reason) {
+    _controller?.loadUrl(widget.url);
+
+    if (networkId != null && surveyId != null) {
+      print('Leaving with reason ~> $reason');
     }
   }
 }

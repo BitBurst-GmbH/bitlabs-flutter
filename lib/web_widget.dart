@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -98,7 +101,8 @@ class _WebViewState extends State<WebWidget> {
     _controller?.loadUrl(widget.url);
 
     if (networkId != null && surveyId != null) {
-      print('Leaving with reason ~> $reason');
+      log('Leaving with reason ~> $reason');
+      BitLabs.instance.leaveSurvey(networkId!, surveyId!, reason);
     }
   }
 }

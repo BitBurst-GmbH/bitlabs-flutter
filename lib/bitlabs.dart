@@ -1,7 +1,7 @@
 library bitlabs;
 
 import 'dart:developer';
-import 'package:bitlabs/bitlabs_repository.dart';
+import 'package:bitlabs/api/bitlabs_repository.dart';
 import 'package:bitlabs/models/Survey.dart';
 import 'package:bitlabs/utilities.dart';
 import 'package:bitlabs/web_widget.dart';
@@ -44,9 +44,14 @@ class BitLabs {
             ?.checkSurveys((hasSurveys) => onResponse(hasSurveys));
       });
 
-  void getSurveys(void Function(List<Survey>?) onResponse) => _ifInitialised(() {
+  void getSurveys(void Function(List<Survey>?) onResponse) =>
+      _ifInitialised(() {
         _bitLabsRepository?.getSurveys((surveys) => onResponse(surveys));
       });
+
+  void leaveSurvey(String networkId, String surveyId, String reason) {
+    _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
+  }
 
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
         Navigator.push(

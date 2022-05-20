@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bitlabs/utilities.dart';
 import 'package:http/http.dart';
 
@@ -17,4 +19,12 @@ class BitLabsApi {
       Uri.https(
           _url, 'v1/client/actions', {'platform': 'MOBILE', 'os': platform()}),
       headers: _headers);
+
+  Future<Response> leaveSurveys(
+          String networkId, String surveyId, String reason) =>
+      post(
+          Uri.https(
+              _url, '/v1/client/networks/$networkId/surveys/$surveyId/leave'),
+          headers: {..._headers, 'content-type': 'application/json'},
+          body: jsonEncode({'reason': reason}));
 }

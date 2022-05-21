@@ -16,7 +16,7 @@ class Qualification {
         questionId = json['question_id'],
         country = json['country'],
         language = json['language'],
-        question = json['question'],
+        question = Question(json['question']),
         isStandardProfile = json['is_standard_profile'],
         isStartBonus = json['is_start_bonus'],
         score = (json['score'] as num).toDouble(),

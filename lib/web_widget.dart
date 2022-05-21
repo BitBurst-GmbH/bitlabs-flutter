@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
@@ -17,10 +18,10 @@ class WebWidget extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebWidget> {
-  bool isPageOfferWall = false;
-  String? networkId;
-  String? surveyId;
-  double reward = 0.0;
+  bool _isPageOfferWall = false;
+  String? _networkId;
+  String? _surveyId;
+  double _reward = 0.0;
 
   WebViewController? _controller;
 
@@ -28,22 +29,27 @@ class _WebViewState extends State<WebWidget> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (!isPageOfferWall) {
+        if (!_isPageOfferWall) {
           await showDialog(context: context, builder: showLeaveSurveyDialog);
         }
         return false;
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: isPageOfferWall ? null : AppBar(),
+          appBar: _isPageOfferWall ? null : AppBar(),
           body: Stack(fit: StackFit.expand, children: [
             WebView(
               initialUrl: widget.url,
               onPageStarted: _onPageStarted,
+              navigationDelegate: (request) {
+                if (!_isPageOfferWall) _extractNetworkAndSurveyIds(request.url);
+
+                return NavigationDecision.navigate;
+              },
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (controller) => (_controller = controller),
             ),
-            !isPageOfferWall
+            !_isPageOfferWall
                 ? const SizedBox.shrink()
                 : Align(
                     alignment: const Alignment(1, -0.99),
@@ -64,31 +70,29 @@ class _WebViewState extends State<WebWidget> {
 
   @override
   void dispose() {
-    widget.onReward(reward);
+    widget.onReward(_reward);
     super.dispose();
   }
 
   void _onPageStarted(String url) {
     setState(() {
-      isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
+      _isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });
-
-    if (isPageOfferWall) return;
+    log('[WEB WIDGET] _onPageStarted init $url');
 
     if (url.contains('survey/compete') || url.contains('survey/screenout')) {
-      reward += (Uri.parse(url).queryParameters['val'] as double?) ?? 0.0;
-    } else {
-      final segments = Uri.parse(url).pathSegments;
-      networkId = segments[segments.indexOf('networks') + 1];
-      surveyId = segments[segments.indexOf('surveys') + 1];
+      log('[WEB WIDGET] _onPageStarted screenout $url');
+      _reward += double.parse(Uri.parse(url).queryParameters['val'] ?? '0.0');
     }
+
+    if (!_isPageOfferWall) _extractNetworkAndSurveyIds(url);
   }
 
   Widget showLeaveSurveyDialog(BuildContext context) {
     return SimpleDialog(
       title: const Text('Choose a reason for leaving the survey'),
       children: [
-        ...leaveReasonOptions(leaveSurvey: leaveSurvey, context: context),
+        ...leaveReasonOptions(leaveSurvey: _leaveSurvey, context: context),
         SimpleDialogOption(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Continue the survey'),
@@ -97,12 +101,28 @@ class _WebViewState extends State<WebWidget> {
     );
   }
 
-  void leaveSurvey(String reason) {
+  void _leaveSurvey(String reason) {
     _controller?.loadUrl(widget.url);
 
-    if (networkId != null && surveyId != null) {
+    if (_networkId != null && _surveyId != null) {
       log('Leaving with reason ~> $reason');
-      BitLabs.instance.leaveSurvey(networkId!, surveyId!, reason);
+      BitLabs.instance.leaveSurvey(_networkId!, _surveyId!, reason);
+      _networkId = null;
+      _surveyId = null;
     }
+  }
+
+  void _extractNetworkAndSurveyIds(String url) {
+    if (_networkId != null && _surveyId != null) return;
+
+    final segments = Uri.parse(url).pathSegments;
+    if (!segments.contains('networks') || !segments.contains('surveys')) {
+      return;
+    }
+
+    log('[WEB WIDGET] extractNetworkAndSurveyIds networkId $url');
+    log('[WEB WIDGET] $segments');
+    _networkId = segments[segments.indexOf('networks') + 1];
+    _surveyId = segments[segments.indexOf('surveys') + 1];
   }
 }

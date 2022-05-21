@@ -1,4 +1,3 @@
-
 import 'package:bitlabs/models/Survey.dart';
 import 'package:bitlabs/models/qualification.dart';
 import 'package:bitlabs/models/response_reason.dart';
@@ -20,8 +19,9 @@ class GetActionsResponse {
             : null,
         surveys =
             List<Survey>.from(json['surveys'].map((survey) => Survey(survey))),
-        qualification =
-            json.containsKey('qualification') ? json['qualification'] : null;
+        qualification = json.containsKey('qualification')
+            ? Qualification(json['qualification'])
+            : null;
 
   Map<String, dynamic> toJson() => {
         'is_new_user': isNewUser,

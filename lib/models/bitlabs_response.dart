@@ -1,22 +1,18 @@
 import 'dart:convert';
 
-import 'package:bitlabs/models/check_surveys_response.dart';
-import 'package:bitlabs/models/get_actions_response.dart';
+import 'package:bitlabs/models/serializable.dart';
 
 import 'bitlabs_error.dart';
 
-class BitLabsResponse<T> {
-  final dynamic data;
+class BitLabsResponse<T extends Serializable> {
+  final T? data;
   final BitLabsError? error;
   final String status;
   final String traceId;
 
-  BitLabsResponse.fromJson(Map<String, dynamic> json)
-      : data = json.containsKey('data')
-            ? (T == CheckSurveysResponse
-                ? CheckSurveysResponse(json['data'])
-                : GetActionsResponse(json['data']))
-            : null,
+  BitLabsResponse.fromJson(
+      Map<String, dynamic> json, T Function(Map<String, dynamic>?) create)
+      : data = json.containsKey('data') ? create(json['data']) : null,
         error = json.containsKey('error') ? BitLabsError(json['error']) : null,
         status = json['status'],
         traceId = json['trace_id'];

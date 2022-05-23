@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
@@ -42,7 +41,9 @@ class _WebViewState extends State<WebWidget> {
               initialUrl: widget.url,
               onPageStarted: _onPageStarted,
               navigationDelegate: (request) {
-                if (!_isPageOfferWall) _extractNetworkAndSurveyIds(request.url);
+                if (request.url.startsWith('https://api.bitlabs.ai')) {
+                  _extractNetworkAndSurveyIds(request.url);
+                }
 
                 return NavigationDecision.navigate;
               },
@@ -78,10 +79,8 @@ class _WebViewState extends State<WebWidget> {
     setState(() {
       _isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });
-    log('[WEB WIDGET] _onPageStarted init $url');
 
     if (url.contains('survey/compete') || url.contains('survey/screenout')) {
-      log('[WEB WIDGET] _onPageStarted screenout $url');
       _reward += double.parse(Uri.parse(url).queryParameters['val'] ?? '0.0');
     }
 
@@ -120,8 +119,6 @@ class _WebViewState extends State<WebWidget> {
       return;
     }
 
-    log('[WEB WIDGET] extractNetworkAndSurveyIds networkId $url');
-    log('[WEB WIDGET] $segments');
     _networkId = segments[segments.indexOf('networks') + 1];
     _surveyId = segments[segments.indexOf('surveys') + 1];
   }

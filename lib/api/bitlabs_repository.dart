@@ -5,8 +5,8 @@ import 'package:bitlabs/api/bitlabs_api.dart';
 import 'package:bitlabs/models/Survey.dart';
 import 'package:bitlabs/models/check_surveys_response.dart';
 import 'package:bitlabs/models/get_actions_response.dart';
+import 'package:bitlabs/models/serializable.dart';
 
-import '../models/bitlabs_error.dart';
 import '../models/bitlabs_response.dart';
 
 class BitLabsRepository {
@@ -18,7 +18,7 @@ class BitLabsRepository {
   void checkSurveys(void Function(bool?) onResponse) async {
     var response = await _bitLabsApi.checkSurveys();
     var body = BitLabsResponse<CheckSurveysResponse>.fromJson(
-        jsonDecode(response.body));
+        jsonDecode(response.body), (data) => CheckSurveysResponse(data!));
 
     var error = body.error;
     if (error != null) {
@@ -28,13 +28,13 @@ class BitLabsRepository {
       return;
     }
 
-    onResponse(body.data.hasSurveys);
+    onResponse(body.data?.hasSurveys);
   }
 
   void getSurveys(void Function(List<Survey>?) onResponse) async {
     var response = await _bitLabsApi.getActions();
-    var body =
-        BitLabsResponse<GetActionsResponse>.fromJson(jsonDecode(response.body));
+    var body = BitLabsResponse<GetActionsResponse>.fromJson(
+        jsonDecode(response.body), (data) => GetActionsResponse(data!));
 
     var error = body.error;
     if (error != null) {
@@ -44,12 +44,13 @@ class BitLabsRepository {
       return;
     }
 
-    onResponse(body.data.surveys);
+    onResponse(body.data?.surveys);
   }
 
   void leaveSurvey(String networkId, String surveyId, String reason) async {
     var response = await _bitLabsApi.leaveSurveys(networkId, surveyId, reason);
-    var body = BitLabsResponse<void>.fromJson(jsonDecode(response.body));
+    var body = BitLabsResponse<Serializable>.fromJson(
+        jsonDecode(response.body), (data) => Serializable());
 
     var error = body.error;
     if (error != null) {

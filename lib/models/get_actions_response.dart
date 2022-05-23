@@ -1,9 +1,10 @@
 import 'package:bitlabs/models/Survey.dart';
 import 'package:bitlabs/models/qualification.dart';
 import 'package:bitlabs/models/response_reason.dart';
+import 'package:bitlabs/models/serializable.dart';
 import 'package:bitlabs/models/start_bonus.dart';
 
-class GetActionsResponse {
+class GetActionsResponse extends Serializable {
   final bool isNewUser;
   final StartBonus? startBonus;
   final RestrictionReason? restrictionReason;

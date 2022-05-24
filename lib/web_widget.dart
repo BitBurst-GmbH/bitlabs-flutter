@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
-import 'package:bitlabs/utilities.dart';
+import 'package:bitlabs/utilities/Localization.dart';
+import 'package:bitlabs/utilities/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -89,12 +90,12 @@ class _WebViewState extends State<WebWidget> {
 
   Widget showLeaveSurveyDialog(BuildContext context) {
     return SimpleDialog(
-      title: const Text('Choose a reason for leaving the survey'),
+      title: Text(Localization.of(context).leaveDescription),
       children: [
         ...leaveReasonOptions(leaveSurvey: _leaveSurvey, context: context),
         SimpleDialogOption(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Continue the survey'),
+          child: Text(Localization.of(context).continueSurvey),
         ),
       ],
     );

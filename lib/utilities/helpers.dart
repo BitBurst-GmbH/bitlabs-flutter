@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:bitlabs/utilities/Localization.dart';
 import 'package:flutter/material.dart';
 
 String platform() => Platform.isAndroid ? 'ANDROID' : 'IOS';
@@ -12,26 +13,23 @@ String offerWallUrl(String token, String uid, Map<String, dynamic> tags) =>
       ...tags,
     }).toString();
 
-Map<String, String> leaveReasons() => {
-      "SENSITIVE": 'Too Sensitive',
-      "UNINTERESTING": 'Uninteresting',
-      "TECHNICAL": 'Technical Issues',
-      "TOO_LONG": 'Too Long',
-      "OTHER": 'Other Reasons',
+Map<String, String> _leaveReasons(BuildContext context) => {
+      "SENSITIVE": Localization.of(context).tooSensitive,
+      "UNINTERESTING": Localization.of(context).uninteresting,
+      "TECHNICAL": Localization.of(context).technicalIssues,
+      "TOO_LONG": Localization.of(context).tooLong,
+      "OTHER": Localization.of(context).otherReason,
     };
 
 List<Widget> leaveReasonOptions(
         {required void Function(String) leaveSurvey,
         required BuildContext context}) =>
-    leaveReasons()
+    _leaveReasons(context)
         .entries
-        .map(
-          (e) => SimpleDialogOption(
+        .map((e) => SimpleDialogOption(
             onPressed: () {
               leaveSurvey(e.key);
               Navigator.of(context).pop();
             },
-            child: Text(e.value),
-          ),
-        )
+            child: Text(e.value)))
         .toList();

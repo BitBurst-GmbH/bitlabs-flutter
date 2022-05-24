@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bitlabs/utilities.dart';
+import 'package:bitlabs/utilities/helpers.dart';
 import 'package:http/http.dart';
 
 class BitLabsApi {

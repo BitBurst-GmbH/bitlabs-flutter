@@ -1,4 +1,4 @@
-import 'package:bitlabs/models/answer.dart';
+import 'answer.dart';
 
 class Question {
   final int networkId;

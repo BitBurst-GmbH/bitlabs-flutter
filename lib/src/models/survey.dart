@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bitlabs/models/details.dart';
+import 'details.dart';
 
 class Survey {
   final int networkId;

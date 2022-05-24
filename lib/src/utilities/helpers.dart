@@ -1,7 +1,8 @@
 import 'dart:io' show Platform;
 
-import 'package:bitlabs/utilities/Localization.dart';
 import 'package:flutter/material.dart';
+
+import 'localization.dart';
 
 String platform() => Platform.isAndroid ? 'ANDROID' : 'IOS';
 

@@ -1,11 +1,14 @@
 library bitlabs;
 
 import 'dart:developer';
-import 'package:bitlabs/api/bitlabs_repository.dart';
-import 'package:bitlabs/models/Survey.dart';
-import 'package:bitlabs/utilities/helpers.dart';
-import 'package:bitlabs/web_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'src/api/bitlabs_repository.dart';
+import 'src/models/survey.dart';
+import 'src/utilities/helpers.dart';
+import 'src/web_widget.dart';
+
+export 'src/utilities/localization.dart' show LocalizationDelegate;
 
 class BitLabs {
   static final BitLabs instance = BitLabs._();

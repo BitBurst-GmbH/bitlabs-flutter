@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:bitlabs/models/serializable.dart';
-
 import 'bitlabs_error.dart';
+import 'serializable.dart';
 
 class BitLabsResponse<T extends Serializable> {
   final T? data;

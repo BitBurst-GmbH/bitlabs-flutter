@@ -1,4 +1,4 @@
-import 'package:bitlabs/models/serializable.dart';
+import 'serializable.dart';
 
 class CheckSurveysResponse extends Serializable {
   final bool hasSurveys;

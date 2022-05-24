@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:bitlabs/api/bitlabs_api.dart';
-import 'package:bitlabs/models/Survey.dart';
-import 'package:bitlabs/models/check_surveys_response.dart';
-import 'package:bitlabs/models/get_actions_response.dart';
-import 'package:bitlabs/models/serializable.dart';
-
+import '../models/survey.dart';
 import '../models/bitlabs_response.dart';
+import '../models/check_surveys_response.dart';
+import '../models/get_actions_response.dart';
+import '../models/serializable.dart';
+import 'bitlabs_api.dart';
 
 class BitLabsRepository {
   final BitLabsApi _bitLabsApi;

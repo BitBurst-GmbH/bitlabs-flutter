@@ -1,4 +1,4 @@
-import 'package:bitlabs/models/question.dart';
+import 'question.dart';
 
 class Qualification {
   final int networkId;

@@ -1,10 +1,11 @@
 import 'dart:developer';
 
-import 'package:bitlabs/bitlabs.dart';
-import 'package:bitlabs/utilities/Localization.dart';
-import 'package:bitlabs/utilities/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../bitlabs.dart';
+import 'utilities/helpers.dart';
+import 'utilities/localization.dart';
 
 class WebWidget extends StatefulWidget {
   final String url;

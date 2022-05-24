@@ -1,4 +1,4 @@
-import 'package:bitlabs/models/category.dart';
+import 'category.dart';
 
 class Details {
   final Category category;

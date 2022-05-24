@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:bitlabs/utilities/helpers.dart';
 import 'package:http/http.dart';
+
+import '../utilities/helpers.dart';
 
 class BitLabsApi {
   final Map<String, String> _headers;

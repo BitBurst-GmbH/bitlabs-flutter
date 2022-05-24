@@ -1,8 +1,8 @@
-import 'package:bitlabs/models/Survey.dart';
-import 'package:bitlabs/models/qualification.dart';
-import 'package:bitlabs/models/response_reason.dart';
-import 'package:bitlabs/models/serializable.dart';
-import 'package:bitlabs/models/start_bonus.dart';
+import 'survey.dart';
+import 'qualification.dart';
+import 'response_reason.dart';
+import 'serializable.dart';
+import 'start_bonus.dart';
 
 class GetActionsResponse extends Serializable {
   final bool isNewUser;

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
-import 'package:bitlabs/utilities/Localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 

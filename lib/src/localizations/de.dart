@@ -1,6 +1,6 @@
 part of '../utilities/localization.dart';
 
-const de = {
+const _de = {
   "too_sensitive": "Zu sensibel",
   "uninteresting": "Uninteressant",
   "technical_issues": "Technische Probleme",

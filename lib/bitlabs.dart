@@ -13,14 +13,14 @@ export 'src/utilities/localization.dart' show LocalizationDelegate;
 class BitLabs {
   static final BitLabs instance = BitLabs._();
 
-  String _token = "";
   String _uid = "";
+  String _token = "";
 
   Map<String, dynamic> _tags = {};
 
-  void Function(double) _onReward = (double payout) {};
-
   BitLabsRepository? _bitLabsRepository;
+
+  void Function(double) _onReward = (double payout) {};
 
   BitLabs._();
 
@@ -30,17 +30,11 @@ class BitLabs {
     _bitLabsRepository = BitLabsRepository(token, uid);
   }
 
-  void setTags(Map<String, dynamic> tags) {
-    _tags = tags;
-  }
+  void setTags(Map<String, dynamic> tags) => _tags = tags;
 
-  void addTag(String key, var value) {
-    _tags[key] = value;
-  }
+  void addTag(String key, var value) => _tags[key] = value;
 
-  void setOnReward(void Function(double) onReward) {
-    _onReward = onReward;
-  }
+  void setOnReward(void Function(double) onReward) => _onReward = onReward;
 
   void checkSurveys(void Function(bool?) onResponse) => _ifInitialised(() {
         _bitLabsRepository
@@ -52,9 +46,8 @@ class BitLabs {
         _bitLabsRepository?.getSurveys((surveys) => onResponse(surveys));
       });
 
-  void leaveSurvey(String networkId, String surveyId, String reason) {
-    _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
-  }
+  void leaveSurvey(String networkId, String surveyId, String reason) =>
+      _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
 
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
         Navigator.push(

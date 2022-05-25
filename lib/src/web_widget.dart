@@ -19,12 +19,12 @@ class WebWidget extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebWidget> {
-  bool _isPageOfferWall = false;
-  String? _networkId;
   String? _surveyId;
-  double _reward = 0.0;
-
+  String? _networkId;
   WebViewController? _controller;
+
+  double _reward = 0.0;
+  bool _isPageOfferWall = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,12 +105,12 @@ class _WebViewState extends State<WebWidget> {
   void _leaveSurvey(String reason) {
     _controller?.loadUrl(widget.url);
 
-    if (_networkId != null && _surveyId != null) {
-      log('Leaving with reason ~> $reason');
-      BitLabs.instance.leaveSurvey(_networkId!, _surveyId!, reason);
-      _networkId = null;
-      _surveyId = null;
-    }
+    if (_networkId == null || _surveyId == null) return;
+
+    log('Leaving with reason ~> $reason');
+    BitLabs.instance.leaveSurvey(_networkId!, _surveyId!, reason);
+    _networkId = null;
+    _surveyId = null;
   }
 
   void _extractNetworkAndSurveyIds(String url) {

@@ -21,11 +21,11 @@ class Localization {
       Localization(const Locale('en', ''));
 
   static const _localizedValues = <String, Map<String, String>>{
-    'en': en,
-    'de': de,
-    'es': es,
-    'fr': fr,
-    'it': it,
+    'en': _en,
+    'de': _de,
+    'es': _es,
+    'fr': _fr,
+    'it': _it,
   };
 
   static List<String> languages() => _localizedValues.keys.toList();

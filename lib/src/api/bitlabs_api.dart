@@ -20,7 +20,7 @@ class BitLabsApi {
           String networkId, String surveyId, String reason) =>
       post(_url('networks/$networkId/surveys/$surveyId/leave'),
           headers: {..._headers}, body: jsonEncode({'reason': reason}));
-}
 
-Uri _url(String path, [Map? query]) => Uri.https(
-    'api.bitlabs.ai', 'v1/client/$path', {...?query, 'platform': 'MOBILE'});
+  Uri _url(String path, [Map? queries]) => Uri.https(
+      'api.bitlabs.ai', 'v1/client/$path', {...?queries, 'platform': 'MOBILE'});
+}

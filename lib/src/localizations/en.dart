@@ -1,4 +1,4 @@
-part of '../utilities/localization.dart';
+part of '../utils/localization.dart';
 
 const _en = {
   "too_sensitive": "Too sensitive",

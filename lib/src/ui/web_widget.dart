@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../bitlabs.dart';
-import 'utilities/helpers.dart';
-import 'utilities/localization.dart';
+import '../../bitlabs.dart';
+import '../utils/helpers.dart';
+import '../utils/localization.dart';
 
+/// Launches the Offer Wall in a [WebView].
 class WebWidget extends StatefulWidget {
   final String url;
   final void Function(double) onReward;
@@ -31,7 +32,7 @@ class _WebViewState extends State<WebWidget> {
     return WillPopScope(
       onWillPop: () async {
         if (!_isPageOfferWall) {
-          await showDialog(context: context, builder: showLeaveSurveyDialog);
+          await showDialog(context: context, builder: _showLeaveSurveyDialog);
         }
         return false;
       },
@@ -89,7 +90,7 @@ class _WebViewState extends State<WebWidget> {
     if (!_isPageOfferWall) _extractNetworkAndSurveyIds(url);
   }
 
-  Widget showLeaveSurveyDialog(BuildContext context) {
+  Widget _showLeaveSurveyDialog(BuildContext context) {
     return SimpleDialog(
       title: Text(Localization.of(context).leaveDescription),
       children: [

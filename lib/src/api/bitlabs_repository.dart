@@ -8,6 +8,7 @@ import '../models/get_actions_response.dart';
 import '../models/serializable.dart';
 import 'bitlabs_api.dart';
 
+/// The point of communication between the data and [BitLabs].
 class BitLabsRepository {
   final BitLabsApi _bitLabsApi;
 

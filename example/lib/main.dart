@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
+    BitLabs.instance.init('YOUR_APP_TOKEN', 'USER_ID');
 
     BitLabs.instance.setOnReward(
         (reward) => {log('[Example] Reward for this session: $reward')});

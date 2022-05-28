@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'bitlabs_error.dart';
 import 'serializable.dart';
 
+/// Most likely used in all API responses in BitLabs API.
 class BitLabsResponse<T extends Serializable> {
   final T? data;
   final BitLabsError? error;

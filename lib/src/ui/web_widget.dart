@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../bitlabs.dart';
@@ -44,8 +45,16 @@ class _WebViewState extends State<WebWidget> {
               initialUrl: widget.url,
               onPageStarted: _onPageStarted,
               navigationDelegate: (request) {
-                if (request.url.startsWith('https://api.bitlabs.ai')) {
-                  _extractNetworkAndSurveyIds(request.url);
+                final url = request.url;
+                log(url);
+                if (url.startsWith('https://api.bitlabs.ai')) {
+                  _extractNetworkAndSurveyIds(url);
+                }
+
+                if (url.contains(RegExp('offers/.+/open'))) {
+                  launchUrlString(url, mode: LaunchMode.externalApplication);
+                  _controller?.loadUrl(widget.url);
+                  return NavigationDecision.prevent;
                 }
 
                 return NavigationDecision.navigate;

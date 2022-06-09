@@ -1,4 +1,4 @@
-package ai.bitburst.example
+package ai.bitlabs.example
 
 import io.flutter.embedding.android.FlutterActivity
 

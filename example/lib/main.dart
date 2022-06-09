@@ -54,6 +54,10 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
+                onPressed: BitLabs.instance.requestTrackingAuthorization,
+                child: const Text('Authorize Tracking(iOS)'),
+              ),
+              ElevatedButton(
                 onPressed: checkForSurveys,
                 child: const Text('Check for Surveys'),
               ),

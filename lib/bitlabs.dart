@@ -1,6 +1,7 @@
 library bitlabs;
 
 import 'dart:developer';
+import 'package:advertising_id/advertising_id.dart';
 import 'package:flutter/material.dart';
 
 import 'src/api/bitlabs_repository.dart';
@@ -20,9 +21,9 @@ export 'src/utils/localization.dart' show LocalizationDelegate;
 class BitLabs {
   static final BitLabs instance = BitLabs._();
 
-  String _uid = "";
-  String _token = "";
-
+  String _uid = '';
+  String _adId = '';
+  String _token = '';
   Map<String, dynamic> _tags = {};
 
   BitLabsRepository? _bitLabsRepository;
@@ -42,6 +43,16 @@ class BitLabs {
     _token = token;
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
+
+    _getAdId();
+  }
+
+  /// **FOR IOS ONLY.** Prompts the user to give Authorization for Tracking.
+  ///
+  /// If the user allows it, the ad Id will be stored and used for BitLabs Offers.
+  /// If the user rejects it nothing will be stored.
+  void requestTrackingAuthorization() {
+    _getAdId(true);
   }
 
   /// These will be added as query parameters to the OfferWall Link.
@@ -85,12 +96,21 @@ class BitLabs {
           context,
           MaterialPageRoute(builder: (context) {
             return WebWidget(
-              url: offerWallUrl(_token, _uid, _tags),
+              url: offerWallUrl(_token, _uid, _adId, _tags),
               onReward: _onReward,
             );
           }),
         );
       });
+
+  void _getAdId([bool requestTrackingAuthorization = false]) async {
+    try {
+      _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
+      log("[BitLabs] $_adId");
+    } on Exception catch (e) {
+      log("[BitLabs] Couldn't get adID: $_adId ~ Reason: $e)");
+    }
+  }
 
   /// Checks whether [token] and [uid] have been set and aren't blank/empty and
   /// thus [bitLabsRepo] is initialised and executes the [block] accordingly.

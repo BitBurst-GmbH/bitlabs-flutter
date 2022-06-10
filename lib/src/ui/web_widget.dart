@@ -46,7 +46,6 @@ class _WebViewState extends State<WebWidget> {
               onPageStarted: _onPageStarted,
               navigationDelegate: (request) {
                 final url = request.url;
-                log(url);
                 if (url.startsWith('https://api.bitlabs.ai')) {
                   _extractNetworkAndSurveyIds(url);
                 }

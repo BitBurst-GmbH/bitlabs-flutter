@@ -1,8 +1,10 @@
 library bitlabs;
 
 import 'dart:developer';
+import 'dart:io';
 import 'package:advertising_id/advertising_id.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
@@ -24,6 +26,7 @@ class BitLabs {
   String _uid = '';
   String _adId = '';
   String _token = '';
+  bool _hasOffers = false;
   Map<String, dynamic> _tags = {};
 
   BitLabsRepository? _bitLabsRepository;
@@ -44,6 +47,7 @@ class BitLabs {
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
 
+    _getHasOffers();
     _getAdId();
   }
 
@@ -91,17 +95,30 @@ class BitLabs {
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
 
   /// Launches the OfferWall from the [context] you pass.
+  ///
+  /// On iOS, if there are Offers available, the Offerwall will be launched in
+  /// the external browser.
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
+        final url = offerWallUrl(_token, _uid, _adId, _tags);
+
+        if (Platform.isIOS && _hasOffers) {
+          launchUrlString(url, mode: LaunchMode.externalApplication);
+          return;
+        }
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
             return WebWidget(
-              url: offerWallUrl(_token, _uid, _adId, _tags),
+              url: url,
               onReward: _onReward,
             );
           }),
         );
       });
+
+  void _getHasOffers() => _bitLabsRepository
+      ?.getHasOffers((hasOffers) => _hasOffers = hasOffers ?? false);
 
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     try {

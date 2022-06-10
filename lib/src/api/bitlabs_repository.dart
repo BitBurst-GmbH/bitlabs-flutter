@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import '../models/get_offers_response.dart';
 import '../models/survey.dart';
 import '../models/bitlabs_response.dart';
 import '../models/check_surveys_response.dart';
@@ -29,6 +30,22 @@ class BitLabsRepository {
     }
 
     onResponse(body.data?.hasSurveys);
+  }
+
+  void getHasOffers(void Function(bool?) onResponse) async {
+    var response = await _bitLabsApi.getOffers();
+    var body = BitLabsResponse<GetOffersResponse>.fromJson(
+        jsonDecode(response.body), (data) => GetOffersResponse(data!));
+
+    var error = body.error;
+    if (error != null) {
+      log('[BitLabs] GetOffers ${error.details.http}: '
+          ' ${error.details.msg}');
+      onResponse(null);
+      return;
+    }
+
+    onResponse(body.data?.offers.isNotEmpty);
   }
 
   void getSurveys(void Function(List<Survey>?) onResponse) async {

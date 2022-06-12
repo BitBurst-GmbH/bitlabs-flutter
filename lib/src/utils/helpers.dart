@@ -7,12 +7,16 @@ import 'localization.dart';
 String platform = Platform.isAndroid ? 'ANDROID' : 'IOS';
 
 // TODO: Add sdk='FLUTTER' parameter
-String offerWallUrl(String token, String uid, Map<String, dynamic> tags) =>
-    Uri.https('web.bitlabs.ai', '', {
-      'token': token,
-      'uid': uid,
-      ...tags,
-    }).toString();
+String offerWallUrl(
+    String token, String uid, String adId, Map<String, dynamic> tags) {
+  final queries = {
+    'token': token,
+    'uid': uid,
+    ...tags,
+  };
+  if (adId.isNotEmpty) queries['maid'] = adId;
+  return Uri.https('web.bitlabs.ai', '', queries).toString();
+}
 
 // TODO: Add sdk='FLUTTER' parameter
 Uri url(String path, [Map? queries]) => Uri.https(

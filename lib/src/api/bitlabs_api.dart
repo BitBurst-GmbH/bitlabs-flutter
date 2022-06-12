@@ -15,6 +15,8 @@ class BitLabsApi {
   Future<Response> getActions() =>
       get(url('actions', {'os': platform}), headers: _headers);
 
+  Future<Response> getOffers() => get(url('offers'), headers: _headers);
+
   Future<Response> leaveSurveys(
     String networkId,
     String surveyId,

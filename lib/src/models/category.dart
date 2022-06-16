@@ -2,7 +2,9 @@ class Category {
   final String name;
   final String iconUrl;
 
-  Category(Map<String, dynamic> json)
+  Category({required this.name, required this.iconUrl});
+
+  Category.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         iconUrl = json['icon_url'];
 

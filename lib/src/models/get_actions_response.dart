@@ -19,7 +19,7 @@ class GetActionsResponse extends Serializable {
             ? json['restriction_reason']
             : null,
         surveys =
-            List<Survey>.from(json['surveys'].map((survey) => Survey(survey))),
+            List<Survey>.from(json['surveys'].map((survey) => Survey.fromJson(survey))),
         qualification = json.containsKey('qualification')
             ? Qualification(json['qualification'])
             : null;

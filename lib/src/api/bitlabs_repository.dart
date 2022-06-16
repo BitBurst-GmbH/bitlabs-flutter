@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bitlabs/src/utils/helpers.dart';
+
 import '../models/get_offers_response.dart';
 import '../models/survey.dart';
 import '../models/bitlabs_response.dart';
@@ -61,7 +63,9 @@ class BitLabsRepository {
       return;
     }
 
-    onResponse(body.data?.surveys);
+    var surveys = body.data?.surveys ?? [];
+
+    onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
   }
 
   void leaveSurvey(String networkId, String surveyId, String reason) async {

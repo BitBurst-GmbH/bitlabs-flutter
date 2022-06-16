@@ -1,10 +1,35 @@
 import 'dart:io' show Platform;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../models/category.dart';
+import '../models/details.dart';
+import '../models/survey.dart';
 import 'localization.dart';
 
 String platform = Platform.isAndroid ? 'ANDROID' : 'IOS';
+
+List<Survey> randomSurveys() {
+  final random = Random();
+  var surveys = <Survey>[];
+
+  for (var i = 1; i <= 3; i++) {
+    surveys.add(Survey(
+        networkId: random.nextInt(1000),
+        id: i,
+        cpi: '0.5',
+        value: '0.5',
+        loi: random.nextDouble(),
+        remaining: 3,
+        details: Details(category: Category(name: 'General', iconUrl: '')),
+        rating: random.nextInt(5),
+        link: '',
+        missingQuestions: 0));
+  }
+
+  return surveys;
+}
 
 // TODO: Add sdk='FLUTTER' parameter
 String offerWallUrl(

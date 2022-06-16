@@ -31,14 +31,26 @@ class Survey {
   /// guaranteed to be openable by the user.
   final int? missingQuestions;
 
-  Survey(Map<String, dynamic> json)
+  Survey(
+      {required this.networkId,
+      required this.id,
+      required this.cpi,
+      required this.value,
+      required this.loi,
+      required this.remaining,
+      required this.details,
+      required this.rating,
+      required this.link,
+      this.missingQuestions});
+
+  Survey.fromJson(Map<String, dynamic> json)
       : networkId = json['network_id'],
         id = json['id'],
         cpi = json['cpi'],
         value = json['value'],
         loi = (json['loi'] as num).toDouble(),
         remaining = json['remaining'],
-        details = Details(json['details']),
+        details = Details.fromJson(json['details']),
         rating = json['rating'],
         link = json['link'],
         missingQuestions = json.containsKey('missing_questions')

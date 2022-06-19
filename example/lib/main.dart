@@ -77,25 +77,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkForSurveys() {
-    BitLabs.instance.checkSurveys((hasSurveys) {
-      if (hasSurveys == null) {
-        log('[Example] CheckSurveys Error. Check BitLabs logs.');
-        return;
-      }
-      log('[Example] Checking Surveys -> '
-          '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}');
-    });
+    BitLabs.instance.checkSurveys(
+        (hasSurveys) => log('[Example] Checking Surveys -> '
+            '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'),
+        (exception) => log('[Example] CheckSurveys $exception'));
   }
 
   void getSurveys() {
-    BitLabs.instance.getSurveys((surveys) {
-      if (surveys == null) {
-        log('[Example] GetSurveys Error. Check BitLabs logs.');
-        return;
-      }
-      log('[Example] Getting Surveys -> '
-          '${surveys.map((survey) => 'Survey ${survey.id} '
-              'in ${survey.details.category.name}')}');
-    });
+    BitLabs.instance.getSurveys(
+        (surveys) => log('[Example] Getting Surveys -> '
+            '${surveys.map((survey) => 'Survey ${survey.id} '
+                'in ${survey.details.category.name}')}'),
+        (exception) => log('[Example] GetSurveys $exception'));
   }
 }

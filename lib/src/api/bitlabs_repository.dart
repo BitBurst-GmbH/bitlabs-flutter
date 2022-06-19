@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bitlabs/src/utils/helpers.dart';
+import 'package:flutter/material.dart';
 
 import '../models/get_offers_response.dart';
 import '../models/survey.dart';
@@ -18,23 +19,23 @@ class BitLabsRepository {
   BitLabsRepository(String token, String uid)
       : _bitLabsApi = BitLabsApi(token, uid);
 
-  void checkSurveys(void Function(bool?) onResponse) async {
+  void checkSurveys(void Function(bool) onResponse,
+      void Function(Exception) onFailure) async {
     var response = await _bitLabsApi.checkSurveys();
     var body = BitLabsResponse<CheckSurveysResponse>.fromJson(
         jsonDecode(response.body), (data) => CheckSurveysResponse(data!));
 
-    var error = body.error;
+    final error = body.error;
     if (error != null) {
-      log('[BitLabs] CheckSurveys ${error.details.http}:'
-          ' ${error.details.msg}');
-      onResponse(null);
+      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
       return;
     }
 
-    onResponse(body.data?.hasSurveys);
+    final hasSurveys = body.data?.hasSurveys;
+    if (hasSurveys != null) onResponse(hasSurveys);
   }
 
-  void getHasOffers(void Function(bool?) onResponse) async {
+  void getHasOffers(void Function(bool) onResponse) async {
     var response = await _bitLabsApi.getOffers();
     var body = BitLabsResponse<GetOffersResponse>.fromJson(
         jsonDecode(response.body), (data) => GetOffersResponse(data!));
@@ -43,28 +44,27 @@ class BitLabsRepository {
     if (error != null) {
       log('[BitLabs] GetOffers ${error.details.http}: '
           ' ${error.details.msg}');
-      onResponse(null);
+      onResponse(false);
       return;
     }
 
-    onResponse(body.data?.offers.isNotEmpty);
+    final offers = body.data?.offers;
+    if (offers != null) onResponse(offers.isNotEmpty);
   }
 
-  void getSurveys(void Function(List<Survey>?) onResponse) async {
+  void getSurveys(void Function(List<Survey>) onResponse,
+      void Function(Exception) onFailure) async {
     var response = await _bitLabsApi.getActions();
     var body = BitLabsResponse<GetActionsResponse>.fromJson(
         jsonDecode(response.body), (data) => GetActionsResponse(data!));
 
     var error = body.error;
     if (error != null) {
-      log('[BitLabs] GetSurveys ${error.details.http}:'
-          ' ${error.details.msg}');
-      onResponse(null);
+      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
       return;
     }
 
     var surveys = body.data?.surveys ?? [];
-
     onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
   }
 

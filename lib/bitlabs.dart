@@ -76,9 +76,10 @@ class BitLabs {
   /// The boolean parameter in [onResponse] is `true` if an action can be performed
   /// and `false` otherwise. If it's `null`,then there has been an internal error
   /// which is most probably logged with 'BitLabs' as a tag.
-  void checkSurveys(void Function(bool?) onResponse) => _ifInitialised(() {
-        _bitLabsRepository
-            ?.checkSurveys((hasSurveys) => onResponse(hasSurveys));
+  void checkSurveys(
+          void Function(bool) onResponse, void Function(Exception) onFailure) =>
+      _ifInitialised(() {
+        _bitLabsRepository?.checkSurveys(onResponse, onFailure);
       });
 
   /// Fetches a list of surveys the user can open.
@@ -86,10 +87,10 @@ class BitLabs {
   /// The [onResponse] callback executes when a response is received.
   /// Its parameter is the list of surveys. If it's `null`, then there has been an internal error
   /// which is most probably logged with 'BitLabs' as a tag.
-  void getSurveys(void Function(List<Survey>?) onResponse) =>
-      _ifInitialised(() {
-        _bitLabsRepository?.getSurveys((surveys) => onResponse(surveys));
-      });
+  void getSurveys(void Function(List<Survey>) onResponse,
+          void Function(Exception) onFailure) =>
+      _ifInitialised(
+          () => _bitLabsRepository?.getSurveys(onResponse, onFailure));
 
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
@@ -117,8 +118,8 @@ class BitLabs {
         );
       });
 
-  void _getHasOffers() => _bitLabsRepository
-      ?.getHasOffers((hasOffers) => _hasOffers = hasOffers ?? false);
+  void _getHasOffers() =>
+      _bitLabsRepository?.getHasOffers((hasOffers) => _hasOffers = hasOffers);
 
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     try {

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bitlabs/src/utils/helpers.dart';
-import 'package:flutter/material.dart';
 
 import '../models/get_offers_response.dart';
 import '../models/survey.dart';

@@ -13,6 +13,7 @@ import 'src/ui/web_widget.dart';
 
 export 'src/models/survey.dart';
 export 'src/models/details.dart';
+export 'src/ui/survey_widget.dart';
 export 'src/models/category.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 

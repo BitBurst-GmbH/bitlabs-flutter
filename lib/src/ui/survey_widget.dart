@@ -1,3 +1,4 @@
+import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:flutter/material.dart';
 
 class SurveyWidget extends StatelessWidget {
@@ -8,7 +9,7 @@ class SurveyWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.blueAccent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
       ),
       width: 300,
       constraints: const BoxConstraints(minWidth: 300, maxHeight: 80),
@@ -28,7 +29,8 @@ class SurveyWidget extends StatelessWidget {
                 Text(' 1 minute', style: TextStyle(color: Colors.white)),
               ]),
               Row(children: const [
-                Text('*****  5', style: TextStyle(color: Colors.white)),
+                StarRating(rating: 1.5),
+                Text(' 5', style: TextStyle(color: Colors.white)),
               ]),
             ],
           ),
@@ -36,7 +38,7 @@ class SurveyWidget extends StatelessWidget {
             height: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: const [

@@ -2,7 +2,13 @@ import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:flutter/material.dart';
 
 class SurveyWidget extends StatelessWidget {
-  const SurveyWidget({Key? key}) : super(key: key);
+  final double rating;
+  final String reward;
+  final String loi;
+
+  const SurveyWidget(
+      {Key? key, required this.rating, required this.reward, required this.loi})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +26,17 @@ class SurveyWidget extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(children: const [
-                Icon(
+              Row(children: [
+                const Icon(
                   Icons.access_time,
                   size: 16,
                   color: Colors.white,
                 ),
-                Text(' 1 minute', style: TextStyle(color: Colors.white)),
+                Text(' $loi', style: const TextStyle(color: Colors.white)),
               ]),
-              Row(children: const [
-                StarRating(rating: 1.5),
-                Text(' 5', style: TextStyle(color: Colors.white)),
+              Row(children: [
+                StarRating(rating: rating),
+                Text(' $rating', style: const TextStyle(color: Colors.white)),
               ]),
             ],
           ),
@@ -41,14 +47,17 @@ class SurveyWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
-              children: const [
-                Padding(
+              children: [
+                const Padding(
                   padding: EdgeInsets.all(8),
                   child: Icon(Icons.play_circle_outlined, size: 32),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text('EARN\n0.50', style: TextStyle(fontSize: 16)),
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    'EARN\n$reward',
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
               ],
             ),

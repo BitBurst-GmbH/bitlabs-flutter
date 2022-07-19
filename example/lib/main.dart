@@ -46,33 +46,32 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: const Center(
-        child: SurveyWidget(),
-        // child: SizedBox(
-        //   width: 200,
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.stretch,
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       ElevatedButton(
-        //         onPressed: BitLabs.instance.requestTrackingAuthorization,
-        //         child: const Text('Authorize Tracking(iOS)'),
-        //       ),
-        //       ElevatedButton(
-        //         onPressed: checkForSurveys,
-        //         child: const Text('Check for Surveys'),
-        //       ),
-        //       ElevatedButton(
-        //         onPressed: () => BitLabs.instance.launchOfferWall(context),
-        //         child: const Text('Open OfferWall'),
-        //       ),
-        //       ElevatedButton(
-        //         onPressed: getSurveys,
-        //         child: const Text('Get Surveys'),
-        //       ),
-        //     ],
-        //   ),
-        // ),
+      body: Center(
+        child: SizedBox(
+          width: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: BitLabs.instance.requestTrackingAuthorization,
+                child: const Text('Authorize Tracking(iOS)'),
+              ),
+              ElevatedButton(
+                onPressed: checkForSurveys,
+                child: const Text('Check for Surveys'),
+              ),
+              ElevatedButton(
+                onPressed: () => BitLabs.instance.launchOfferWall(context),
+                child: const Text('Open OfferWall'),
+              ),
+              ElevatedButton(
+                onPressed: getSurveys,
+                child: const Text('Get Surveys'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

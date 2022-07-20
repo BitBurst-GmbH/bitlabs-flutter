@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StarRating extends StatelessWidget {
-  final double rating;
+  final int rating;
 
   const StarRating({Key? key, required this.rating}) : super(key: key);
 
@@ -12,28 +12,7 @@ class StarRating extends StatelessWidget {
     );
   }
 
-  buildStar(BuildContext context, int index) {
-    Icon icon;
-    if (index >= rating) {
-      icon = const Icon(
-        Icons.star_border_rounded,
-        color: Colors.white,
-        size: 16,
-      );
-    } else if (index > rating - 1 && index < rating) {
-      icon = const Icon(
-        Icons.star_half_rounded,
-        color: Colors.white,
-        size: 16,
-      );
-    } else {
-      icon = const Icon(
-        Icons.star_rounded,
-        color: Colors.white,
-        size: 16,
-      );
-    }
-
-    return icon;
-  }
+  buildStar(BuildContext context, int index) => index >= rating
+      ? const Icon(Icons.star_border_rounded, color: Colors.white, size: 16)
+      : const Icon(Icons.star_rounded, color: Colors.white, size: 16);
 }

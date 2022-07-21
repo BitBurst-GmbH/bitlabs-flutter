@@ -29,6 +29,7 @@ class BitLabs {
   String _adId = '';
   String _token = '';
   bool _hasOffers = false;
+  Color _widgetColor = Colors.blueAccent;
   Map<String, dynamic> _tags = {};
 
   BitLabsRepository? _bitLabsRepository;
@@ -48,6 +49,10 @@ class BitLabs {
     _token = token;
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
+
+    _bitLabsRepository?.getAppSettings(
+        (visual) => _widgetColor = colorFromHex(visual.surveyIconColor),
+        (error) => log(error.toString()));
 
     _getHasOffers();
     _getAdId();
@@ -101,6 +106,7 @@ class BitLabs {
         rating: survey.rating,
         reward: survey.value,
         loi: '${survey.loi} minutes',
+        color: _widgetColor,
       );
     });
   }

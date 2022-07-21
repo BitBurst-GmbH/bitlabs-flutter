@@ -71,3 +71,9 @@ Map<String, String> _reasons(BuildContext context) => {
       "TOO_LONG": Localization.of(context).tooLong,
       "OTHER": Localization.of(context).otherReason,
     };
+
+Color colorFromHex(String hex) {
+  hex = hex.replaceAll('#', '').toUpperCase();
+  if (hex.length == 6) hex = 'FF$hex';
+  return Color(int.parse(hex, radix: 16));
+}

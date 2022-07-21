@@ -92,17 +92,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getSurveys() {
-    BitLabs.instance.getSurveys((surveys) {
-      log('[Example] Getting Surveys -> '
-          '${surveys.map((survey) => 'Survey ${survey.id} '
-              'in ${survey.details.category.name}')}');
-
-      setState(() {
-        surveyWidgets = ListView(
-          scrollDirection: Axis.horizontal,
-          children: [...BitLabs.instance.getSurveyWidgets(surveys)],
-        );
-      });
-    }, (exception) => log('[Example] GetSurveys $exception'));
+    BitLabs.instance.getSurveys(
+        (surveys) => setState(() => surveyWidgets = ListView(
+              scrollDirection: Axis.horizontal,
+              children: [...BitLabs.instance.getSurveyWidgets(surveys)],
+            )),
+        (exception) => log('[Example] GetSurveys $exception'));
   }
 }

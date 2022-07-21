@@ -1,4 +1,5 @@
 import 'package:bitlabs/src/ui/star_rating.dart';
+import 'package:bitlabs/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
 import '../../bitlabs.dart';
@@ -7,9 +8,14 @@ class SurveyWidget extends StatelessWidget {
   final int rating;
   final String reward;
   final String loi;
+  final Color color;
 
   const SurveyWidget(
-      {Key? key, required this.rating, required this.reward, required this.loi})
+      {Key? key,
+      required this.rating,
+      required this.reward,
+      required this.loi,
+      required this.color})
       : super(key: key);
 
   @override
@@ -19,7 +25,7 @@ class SurveyWidget extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: Colors.blueAccent,
+          color: color,
           borderRadius: BorderRadius.circular(8),
         ),
         width: 300,
@@ -55,13 +61,17 @@ class SurveyWidget extends StatelessWidget {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8),
-                    child: Icon(Icons.play_circle_outlined, size: 32),
+                    child: Icon(Icons.play_circle_outline_outlined, size: 38),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
                     child: Text(
                       'EARN\n$reward',
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

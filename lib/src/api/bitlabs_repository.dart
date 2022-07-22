@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bitlabs/src/models/get_app_settings_response.dart';
+import 'package:bitlabs/src/models/visual.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
-import 'package:flutter/material.dart';
 
 import '../models/get_offers_response.dart';
 import '../models/survey.dart';
@@ -21,8 +22,8 @@ class BitLabsRepository {
 
   void checkSurveys(void Function(bool) onResponse,
       void Function(Exception) onFailure) async {
-    var response = await _bitLabsApi.checkSurveys();
-    var body = BitLabsResponse<CheckSurveysResponse>.fromJson(
+    final response = await _bitLabsApi.checkSurveys();
+    final body = BitLabsResponse<CheckSurveysResponse>.fromJson(
         jsonDecode(response.body), (data) => CheckSurveysResponse(data!));
 
     final error = body.error;
@@ -36,11 +37,11 @@ class BitLabsRepository {
   }
 
   void getHasOffers(void Function(bool) onResponse) async {
-    var response = await _bitLabsApi.getOffers();
-    var body = BitLabsResponse<GetOffersResponse>.fromJson(
+    final response = await _bitLabsApi.getOffers();
+    final body = BitLabsResponse<GetOffersResponse>.fromJson(
         jsonDecode(response.body), (data) => GetOffersResponse(data!));
 
-    var error = body.error;
+    final error = body.error;
     if (error != null) {
       log('[BitLabs] GetOffers ${error.details.http}: '
           ' ${error.details.msg}');
@@ -54,26 +55,27 @@ class BitLabsRepository {
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {
-    var response = await _bitLabsApi.getActions();
-    var body = BitLabsResponse<GetActionsResponse>.fromJson(
+    final response = await _bitLabsApi.getActions();
+    final body = BitLabsResponse<GetActionsResponse>.fromJson(
         jsonDecode(response.body), (data) => GetActionsResponse(data!));
 
-    var error = body.error;
+    final error = body.error;
     if (error != null) {
       onFailure(Exception('${error.details.http} - ${error.details.msg}'));
       return;
     }
 
-    var surveys = body.data?.surveys ?? [];
+    final surveys = body.data?.surveys ?? [];
     onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
   }
 
   void leaveSurvey(String networkId, String surveyId, String reason) async {
-    var response = await _bitLabsApi.leaveSurveys(networkId, surveyId, reason);
-    var body = BitLabsResponse<Serializable>.fromJson(
+    final response =
+        await _bitLabsApi.leaveSurveys(networkId, surveyId, reason);
+    final body = BitLabsResponse<Serializable>.fromJson(
         jsonDecode(response.body), (data) => Serializable());
 
-    var error = body.error;
+    final error = body.error;
     if (error != null) {
       log('[BitLabs] LeaveSurvey ${error.details.http}:'
           ' ${error.details.msg}');
@@ -81,5 +83,21 @@ class BitLabsRepository {
     }
 
     log('[BitLabs] LeaveSurvey Successful');
+  }
+
+  void getAppSettings(void Function(Visual) onResponse,
+      void Function(Exception) onFailure) async {
+    final response = await _bitLabsApi.getAppSettings();
+    final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
+        jsonDecode(response.body), (data) => GetAppSettingsResponse(data!));
+
+    final error = body.error;
+    if (error != null) {
+      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+      return;
+    }
+
+    final visual = body.data?.visual;
+    if (visual != null) onResponse(visual);
   }
 }

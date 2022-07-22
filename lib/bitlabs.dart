@@ -8,11 +8,13 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
+import 'src/ui/survey_widget.dart';
 import 'src/utils/helpers.dart';
 import 'src/ui/web_widget.dart';
 
 export 'src/models/survey.dart';
 export 'src/models/details.dart';
+export 'src/ui/survey_widget.dart';
 export 'src/models/category.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
@@ -27,6 +29,7 @@ class BitLabs {
   String _adId = '';
   String _token = '';
   bool _hasOffers = false;
+  Color _widgetColor = Colors.blueAccent;
   Map<String, dynamic> _tags = {};
 
   BitLabsRepository? _bitLabsRepository;
@@ -46,6 +49,10 @@ class BitLabs {
     _token = token;
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
+
+    _bitLabsRepository?.getAppSettings(
+        (visual) => _widgetColor = colorFromHex(visual.surveyIconColor),
+        (error) => log(error.toString()));
 
     _getHasOffers();
     _getAdId();
@@ -91,6 +98,18 @@ class BitLabs {
           void Function(Exception) onFailure) =>
       _ifInitialised(
           () => _bitLabsRepository?.getSurveys(onResponse, onFailure));
+
+  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys) {
+    return List.generate(surveys.length, (index) {
+      final survey = surveys[index];
+      return SurveyWidget(
+        rating: survey.rating,
+        reward: survey.value,
+        loi: '${survey.loi} minutes',
+        color: _widgetColor,
+      );
+    });
+  }
 
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);

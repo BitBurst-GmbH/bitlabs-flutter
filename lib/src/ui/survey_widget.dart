@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
 import '../../bitlabs.dart';
 
-class SurveyWidget extends StatelessWidget {
+class SurveyWidget extends StatefulWidget {
   final int rating;
   final String reward;
   final String loi;
@@ -19,10 +21,34 @@ class SurveyWidget extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<SurveyWidget> createState() => _SurveyWidgetState();
+}
+
+class _SurveyWidgetState extends State<SurveyWidget> {
+  late Color color;
+
+  @override
+  void initState() {
+    super.initState();
+    color = widget.color;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // color = widget.color;
     return GestureDetector(
-      onTap: () => BitLabs.instance.launchOfferWall(context),
-      child: Container(
+      onTap: () async {
+        // Start onTap Animation
+        setState(() => color = widget.color.withAlpha(100));
+        await Future.delayed(const Duration(milliseconds: 50));
+        setState(() => color = widget.color.withAlpha(255));
+        await Future.delayed(const Duration(milliseconds: 40));
+        // End onTap Animation
+
+        if (!mounted) return;
+        BitLabs.instance.launchOfferWall(context);
+      },
+      child: AnimatedContainer(
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: color,
@@ -31,6 +57,8 @@ class SurveyWidget extends StatelessWidget {
         width: 300,
         constraints: const BoxConstraints(minWidth: 300, maxHeight: 80),
         padding: const EdgeInsets.all(8),
+        duration: const Duration(milliseconds: 50),
+        curve: Curves.fastOutSlowIn,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -43,11 +71,17 @@ class SurveyWidget extends StatelessWidget {
                     size: 16,
                     color: Colors.white,
                   ),
-                  Text(' $loi', style: const TextStyle(color: Colors.white)),
+                  Text(
+                    ' ${widget.loi}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ]),
                 Row(children: [
-                  StarRating(rating: rating),
-                  Text(' $rating', style: const TextStyle(color: Colors.white)),
+                  StarRating(rating: widget.rating),
+                  Text(
+                    ' ${widget.rating}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ]),
               ],
             ),
@@ -66,7 +100,7 @@ class SurveyWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
                     child: Text(
-                      'EARN\n$reward',
+                      'EARN\n${widget.reward}',
                       style: TextStyle(
                         color: color,
                         fontSize: 16,

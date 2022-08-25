@@ -29,8 +29,8 @@ class BitLabs {
   String _adId = '';
   String _token = '';
   bool _hasOffers = false;
-  Color _widgetColor = Colors.blueAccent;
   Map<String, dynamic> _tags = {};
+  Color _widgetColor = Colors.blueAccent;
 
   BitLabsRepository? _bitLabsRepository;
 

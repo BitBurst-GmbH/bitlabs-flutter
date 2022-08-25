@@ -35,7 +35,6 @@ class _SurveyWidgetState extends State<SurveyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // color = widget.color;
     return GestureDetector(
       onTap: () async {
         // Start onTap Animation
@@ -52,7 +51,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(5),
         ),
         width: 300,
         constraints: const BoxConstraints(minWidth: 300, maxHeight: 80),
@@ -89,7 +88,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
               height: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Row(
                 children: [

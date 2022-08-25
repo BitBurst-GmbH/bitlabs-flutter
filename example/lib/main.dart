@@ -18,7 +18,13 @@ class MyApp extends StatelessWidget {
         ...GlobalMaterialLocalizations.delegates,
         LocalizationDelegate(),
       ],
-      supportedLocales: const [Locale('en', ''), Locale('es', '')],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('es', ''),
+        Locale('de', ''),
+        Locale('fr', ''),
+        Locale('it', ''),
+      ],
       home: const HomePage(title: 'BitLabs Example'),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(const MyApp());
@@ -17,7 +18,13 @@ class MyApp extends StatelessWidget {
         ...GlobalMaterialLocalizations.delegates,
         LocalizationDelegate(),
       ],
-      supportedLocales: const [Locale('en', ''), Locale('es', '')],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('es', ''),
+        Locale('de', ''),
+        Locale('fr', ''),
+        Locale('it', ''),
+      ],
       home: const HomePage(title: 'BitLabs Example'),
     );
   }
@@ -33,10 +40,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ListView? surveyWidgets;
+
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init('APP_TOKEN', 'USER_ID');
+    BitLabs.instance.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
 
     BitLabs.instance.setOnReward(
         (reward) => {log('[Example] Reward for this session: $reward')});
@@ -47,55 +56,53 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: Center(
-        child: SizedBox(
-          width: 200,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: BitLabs.instance.requestTrackingAuthorization,
-                child: const Text('Authorize Tracking(iOS)'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 250,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ElevatedButton(
+                    onPressed: BitLabs.instance.requestTrackingAuthorization,
+                    child: const Text('Authorize Tracking(iOS)'),
+                  ),
+                  ElevatedButton(
+                    onPressed: checkForSurveys,
+                    child: const Text('Check for Surveys'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => BitLabs.instance.launchOfferWall(context),
+                    child: const Text('Open OfferWall'),
+                  ),
+                  ElevatedButton(
+                    onPressed: getSurveys,
+                    child: const Text('Get Surveys'),
+                  ),
+                ],
               ),
-              ElevatedButton(
-                onPressed: checkForSurveys,
-                child: const Text('Check for Surveys'),
-              ),
-              ElevatedButton(
-                onPressed: () => BitLabs.instance.launchOfferWall(context),
-                child: const Text('Open OfferWall'),
-              ),
-              ElevatedButton(
-                onPressed: getSurveys,
-                child: const Text('Get Surveys'),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 80, child: surveyWidgets ?? const SizedBox()),
+          ],
         ),
       ),
     );
   }
 
   void checkForSurveys() {
-    BitLabs.instance.checkSurveys((hasSurveys) {
-      if (hasSurveys == null) {
-        log('[Example] CheckSurveys Error. Check BitLabs logs.');
-        return;
-      }
-      log('[Example] Checking Surveys -> '
-          '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}');
-    });
+    BitLabs.instance.checkSurveys(
+        (hasSurveys) => log('[Example] Checking Surveys -> '
+            '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'),
+        (exception) => log('[Example] CheckSurveys $exception'));
   }
 
   void getSurveys() {
-    BitLabs.instance.getSurveys((surveys) {
-      if (surveys == null) {
-        log('[Example] GetSurveys Error. Check BitLabs logs.');
-        return;
-      }
-      log('[Example] Getting Surveys -> '
-          '${surveys.map((survey) => 'Survey ${survey.id} '
-              'in ${survey.details.category.name}')}');
-    });
+    BitLabs.instance.getSurveys(
+        (surveys) => setState(() => surveyWidgets = ListView(
+              scrollDirection: Axis.horizontal,
+              children: [...BitLabs.instance.getSurveyWidgets(surveys)],
+            )),
+        (exception) => log('[Example] GetSurveys $exception'));
   }
 }

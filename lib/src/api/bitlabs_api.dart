@@ -28,4 +28,7 @@ class BitLabsApi {
       body: jsonEncode({'reason': reason}),
     );
   }
+
+  Future<Response> getAppSettings() =>
+      get(url('settings/v2'), headers: _headers);
 }

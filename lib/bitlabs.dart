@@ -131,6 +131,7 @@ class BitLabs {
           MaterialPageRoute(builder: (context) {
             return WebWidget(
               url: url,
+              color: _widgetColor,
               onReward: _onReward,
             );
           }),

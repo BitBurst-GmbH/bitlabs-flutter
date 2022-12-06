@@ -11,9 +11,10 @@ import '../utils/localization.dart';
 /// Launches the Offer Wall in a [WebView].
 class WebWidget extends StatefulWidget {
   final String url;
+  final Color color;
   final void Function(double) onReward;
 
-  const WebWidget({Key? key, required this.url, required this.onReward})
+  const WebWidget({Key? key, required this.url, required this.color, required this.onReward})
       : super(key: key);
 
   @override
@@ -39,7 +40,9 @@ class _WebViewState extends State<WebWidget> {
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: _isPageOfferWall ? null : AppBar(),
+          appBar: _isPageOfferWall ? null : AppBar(
+            backgroundColor: widget.color,
+          ),
           body: Stack(fit: StackFit.expand, children: [
             WebView(
               initialUrl: widget.url,

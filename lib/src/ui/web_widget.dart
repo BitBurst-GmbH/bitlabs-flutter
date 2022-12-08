@@ -71,8 +71,8 @@ class _WebViewState extends State<WebWidget> {
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(
-                        Icons.close,
-                        color: Colors.black,
+                        Icons.exit_to_app_outlined,
+                        color: Colors.white,
                         size: 24.0,
                       ),
                     ),

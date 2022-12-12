@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(const MyApp());
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init('YOUR_APP_TOKEN', 'USER_ID');
+    BitLabs.instance.init('46d31e1e-315a-4b52-b0de-eca6062163af', 'USER_ID');
 
     BitLabs.instance.setOnReward(
         (reward) => {log('[Example] Reward for this session: $reward')});
@@ -83,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 80, child: surveyWidgets ?? const SizedBox()),
+            SizedBox(height: 100, child: surveyWidgets ?? const SizedBox()),
           ],
         ),
       ),

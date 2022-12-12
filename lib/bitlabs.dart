@@ -3,18 +3,19 @@ library bitlabs;
 import 'dart:developer';
 import 'dart:io';
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/src/ui/simple_survey_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/ui/survey_widget.dart';
+import 'src/ui/compact_survey_widget.dart';
 import 'src/utils/helpers.dart';
 import 'src/ui/web_widget.dart';
 
 export 'src/models/survey.dart';
 export 'src/models/details.dart';
-export 'src/ui/survey_widget.dart';
+export 'src/ui/compact_survey_widget.dart';
 export 'src/models/category.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
@@ -99,11 +100,10 @@ class BitLabs {
       _ifInitialised(
           () => _bitLabsRepository?.getSurveys(onResponse, onFailure));
 
-  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys) {
+  List<SimpleSurveyWidget> getSurveyWidgets(List<Survey> surveys) {
     return List.generate(surveys.length, (index) {
       final survey = surveys[index];
-      return SurveyWidget(
-        rating: survey.rating,
+      return SimpleSurveyWidget(
         reward: survey.value,
         loi: '${survey.loi} minutes',
         color: _widgetColor,

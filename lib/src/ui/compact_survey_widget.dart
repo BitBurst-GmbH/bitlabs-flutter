@@ -1,18 +1,15 @@
-import 'dart:io';
-
 import 'package:bitlabs/src/ui/star_rating.dart';
-import 'package:bitlabs/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 
 import '../../bitlabs.dart';
 
-class SurveyWidget extends StatefulWidget {
+class CompactSurveyWidget extends StatefulWidget {
   final int rating;
   final String reward;
   final String loi;
   final Color color;
 
-  const SurveyWidget(
+  const CompactSurveyWidget(
       {Key? key,
       required this.rating,
       required this.reward,
@@ -21,10 +18,10 @@ class SurveyWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SurveyWidget> createState() => _SurveyWidgetState();
+  State<CompactSurveyWidget> createState() => _CompactSurveyWidgetState();
 }
 
-class _SurveyWidgetState extends State<SurveyWidget> {
+class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
   late Color color;
 
   @override

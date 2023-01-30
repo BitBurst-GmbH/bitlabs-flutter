@@ -14,7 +14,11 @@ class WebWidget extends StatefulWidget {
   final Color color;
   final void Function(double) onReward;
 
-  const WebWidget({Key? key, required this.url, required this.color, required this.onReward})
+  const WebWidget(
+      {Key? key,
+      required this.url,
+      required this.color,
+      required this.onReward})
       : super(key: key);
 
   @override
@@ -40,9 +44,16 @@ class _WebViewState extends State<WebWidget> {
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: _isPageOfferWall ? null : AppBar(
-            backgroundColor: widget.color,
-          ),
+          appBar: _isPageOfferWall
+              ? null
+              : AppBar(
+                  backgroundColor: widget.color,
+                  iconTheme: IconThemeData(
+                    color: widget.color.computeLuminance() > 0.729
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                ),
           body: Stack(fit: StackFit.expand, children: [
             WebView(
               initialUrl: widget.url,
@@ -70,9 +81,11 @@ class _WebViewState extends State<WebWidget> {
                     alignment: const Alignment(1, -0.99),
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close,
-                        color: Colors.black,
+                        color: widget.color.computeLuminance() > 0.729
+                            ? Colors.black
+                            : Colors.white,
                         size: 24.0,
                       ),
                     ),

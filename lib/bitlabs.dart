@@ -31,6 +31,7 @@ class BitLabs {
   bool _hasOffers = false;
   Map<String, dynamic> _tags = {};
   Color _widgetColor = Colors.blueAccent;
+  Color _headerColor = Colors.blueAccent;
 
   BitLabsRepository? _bitLabsRepository;
 
@@ -51,7 +52,9 @@ class BitLabs {
     _bitLabsRepository = BitLabsRepository(token, uid);
 
     _bitLabsRepository?.getAppSettings(
-        (visual) => _widgetColor = colorFromHex(visual.surveyIconColor),
+        (visual){
+          _widgetColor = colorFromHex(visual.surveyIconColor);
+          _headerColor = colorFromHex(visual.navigationColor);},
         (error) => log(error.toString()));
 
     _getHasOffers();
@@ -131,7 +134,7 @@ class BitLabs {
           MaterialPageRoute(builder: (context) {
             return WebWidget(
               url: url,
-              color: _widgetColor,
+              color: _headerColor,
               onReward: _onReward,
             );
           }),

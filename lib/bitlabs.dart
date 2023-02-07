@@ -3,6 +3,7 @@ library bitlabs;
 import 'dart:developer';
 import 'dart:io';
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -106,6 +107,7 @@ class BitLabs {
     return List.generate(surveys.length, (index) {
       final survey = surveys[index];
       return SurveyWidget(
+        type: WidgetType.simple,
         color: _widgetColor,
         reward: survey.value,
         rating: survey.rating,

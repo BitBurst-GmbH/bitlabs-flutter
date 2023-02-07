@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../bitlabs.dart';
+
 class SimpleSurveyWidget extends StatefulWidget {
   final String reward;
   final String loi;
@@ -24,27 +26,7 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        // Start onTap Animation
-        setState(() => color = widget.color.withAlpha(100));
-        await Future.delayed(const Duration(milliseconds: 50));
-        setState(() => color = widget.color.withAlpha(255));
-        await Future.delayed(const Duration(milliseconds: 40));
-        // End onTap Animation
-      },
-      child: AnimatedContainer(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        width: 300,
-        constraints: const BoxConstraints(minWidth: 300),
-        padding: const EdgeInsets.all(8),
-        duration: const Duration(milliseconds: 50),
-        curve: Curves.fastOutSlowIn,
-        child: Row(
+    return  Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Icon(
@@ -75,8 +57,6 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
               ],
             ),
           ],
-        ),
-      ),
-    );
+        );
   }
 }

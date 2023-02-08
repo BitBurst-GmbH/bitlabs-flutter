@@ -17,6 +17,7 @@ export 'src/models/survey.dart';
 export 'src/models/details.dart';
 export 'src/ui/compact_survey_widget.dart';
 export 'src/models/category.dart';
+export 'src/ui/full_width_survey_widget.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
 /// The main class including all the library functions to use in your code.

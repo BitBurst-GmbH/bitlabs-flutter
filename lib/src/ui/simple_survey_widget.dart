@@ -5,10 +5,9 @@ import '../../bitlabs.dart';
 class SimpleSurveyWidget extends StatefulWidget {
   final String reward;
   final String loi;
-  final Color color;
 
   const SimpleSurveyWidget(
-      {Key? key, required this.reward, required this.loi, required this.color})
+      {Key? key, required this.reward, required this.loi,})
       : super(key: key);
 
   @override
@@ -16,14 +15,6 @@ class SimpleSurveyWidget extends StatefulWidget {
 }
 
 class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
-  late Color color;
-
-  @override
-  void initState() {
-    super.initState();
-    color = widget.color;
-  }
-
   @override
   Widget build(BuildContext context) {
     return  Row(

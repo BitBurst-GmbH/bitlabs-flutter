@@ -1,8 +1,6 @@
 import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:flutter/material.dart';
 
-import '../../bitlabs.dart';
-
 class CompactSurveyWidget extends StatefulWidget {
   final int rating;
   final String reward;

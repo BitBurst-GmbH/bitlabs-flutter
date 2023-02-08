@@ -74,7 +74,7 @@ Widget getWidgetWithType(
     WidgetType type, int rating, String reward, String loi, Color color) {
   switch (type) {
     case WidgetType.simple:
-      return SimpleSurveyWidget(reward: reward, loi: loi, color: color);
+      return SimpleSurveyWidget(reward: reward, loi: loi);
     case WidgetType.compact:
     default:
       return CompactSurveyWidget(

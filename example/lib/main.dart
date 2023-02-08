@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(height: 100, child: surveyWidgets ?? const SizedBox()),
+            const FullWidthSurveyWidget(rating: 3, reward: '0.5', loi: '2'),
           ],
         ),
       ),

@@ -108,7 +108,7 @@ class BitLabs {
     return List.generate(surveys.length, (index) {
       final survey = surveys[index];
       return SurveyWidget(
-        type: WidgetType.simple,
+        type: WidgetType.fullWidth,
         color: _widgetColor,
         reward: survey.value,
         rating: survey.rating,

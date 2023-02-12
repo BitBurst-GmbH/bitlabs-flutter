@@ -48,16 +48,16 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         BitLabs.instance.launchOfferWall(context);
       },
       child: AnimatedContainer(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
+        curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 50),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(5),
         ),
-        width: 300,
-        constraints: const BoxConstraints(minWidth: 300),
+        height: 100,
+        width: MediaQuery.of(context).size.width * 0.96,
         padding: const EdgeInsets.all(8),
-        duration: const Duration(milliseconds: 50),
-        curve: Curves.fastOutSlowIn,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         child: getWidgetWithType(
           widget.type,
           widget.rating,
@@ -75,8 +75,10 @@ Widget getWidgetWithType(
   switch (type) {
     case WidgetType.simple:
       return SimpleSurveyWidget(reward: reward, loi: loi);
+    case WidgetType.fullWidth:
+      return FullWidthSurveyWidget(
+          rating: rating, reward: reward, loi: loi, color: color);
     case WidgetType.compact:
-    default:
       return CompactSurveyWidget(
           rating: rating, reward: reward, loi: loi, color: color);
   }

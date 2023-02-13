@@ -17,7 +17,7 @@ export 'src/models/survey.dart';
 export 'src/models/details.dart';
 export 'src/ui/compact_survey_widget.dart';
 export 'src/models/category.dart';
-export 'src/ui/full_width_survey_widget.dart';
+export 'src/models/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
 /// The main class including all the library functions to use in your code.
@@ -53,11 +53,10 @@ class BitLabs {
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
 
-    _bitLabsRepository?.getAppSettings(
-        (visual){
-          _widgetColor = colorFromHex(visual.surveyIconColor);
-          _headerColor = colorFromHex(visual.navigationColor);},
-        (error) => log(error.toString()));
+    _bitLabsRepository?.getAppSettings((visual) {
+      _widgetColor = colorFromHex(visual.surveyIconColor);
+      _headerColor = colorFromHex(visual.navigationColor);
+    }, (error) => log(error.toString()));
 
     _getHasOffers();
     _getAdId();
@@ -104,11 +103,11 @@ class BitLabs {
       _ifInitialised(
           () => _bitLabsRepository?.getSurveys(onResponse, onFailure));
 
-  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys) {
+  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys, WidgetType type) {
     return List.generate(surveys.length, (index) {
       final survey = surveys[index];
       return SurveyWidget(
-        type: WidgetType.fullWidth,
+        type: type,
         color: _widgetColor,
         reward: survey.value,
         rating: survey.rating,

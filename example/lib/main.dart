@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
+import 'package:example/secrets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init('APP_TOKEN', 'USER_ID');
+    BitLabs.instance.init(appToken, 'USER_ID');
 
     BitLabs.instance.setOnReward(
         (reward) => {log('[Example] Reward for this session: $reward')});

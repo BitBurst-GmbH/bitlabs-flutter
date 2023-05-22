@@ -116,6 +116,10 @@ class BitLabs {
     });
   }
 
+  void getLeaderboard() => _bitLabsRepository?.getLeaderboard(
+      (leaderboard) => log("Leaderboard: $leaderboard"),
+      (error) => log(error.toString()));
+
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
 

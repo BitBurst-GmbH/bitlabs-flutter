@@ -17,6 +17,9 @@ class BitLabsApi {
 
   Future<Response> getOffers() => get(url('offers'), headers: _headers);
 
+  Future<Response> getLeaderboard() =>
+      get(url('leaderboard'), headers: _headers);
+
   Future<Response> leaveSurveys(
     String networkId,
     String surveyId,

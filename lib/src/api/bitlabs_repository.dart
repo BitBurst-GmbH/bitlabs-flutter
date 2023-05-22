@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
+import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/visual.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
 
@@ -67,6 +68,22 @@ class BitLabsRepository {
 
     final surveys = body.data?.surveys ?? [];
     onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
+  }
+
+  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse,
+      void Function(Exception) onFailure) async {
+    final response = await _bitLabsApi.getLeaderboard();
+    final body = BitLabsResponse<GetLeaderboardResponse>.fromJson(
+        jsonDecode(response.body), (data) => GetLeaderboardResponse(data!));
+
+    final error = body.error;
+    if (error != null) {
+      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+      return;
+    }
+
+    final leaderboard = body.data;
+    if (leaderboard != null) onResponse(leaderboard);
   }
 
   void leaveSurvey(String networkId, String surveyId, String reason) async {

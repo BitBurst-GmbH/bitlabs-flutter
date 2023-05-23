@@ -2,7 +2,7 @@ import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/ui/simple_survey_widget.dart';
 import 'package:flutter/widgets.dart';
 
-import '../models/widget_type.dart';
+import 'compact_survey_widget.dart';
 import 'full_width_survey_widget.dart';
 
 class SurveyWidget extends StatefulWidget {

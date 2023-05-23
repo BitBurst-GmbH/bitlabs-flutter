@@ -13,9 +13,9 @@ import 'src/models/survey.dart';
 import 'src/utils/helpers.dart';
 import 'src/ui/web_widget.dart';
 
+export 'src/ui/leaderboard.dart';
 export 'src/models/survey.dart';
 export 'src/models/details.dart';
-export 'src/ui/compact_survey_widget.dart';
 export 'src/models/category.dart';
 export 'src/models/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;

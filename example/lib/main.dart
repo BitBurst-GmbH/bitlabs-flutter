@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const Leaderboard(),
             SizedBox(
               width: 250,
               child: Column(
@@ -103,7 +104,10 @@ class _HomePageState extends State<HomePage> {
     BitLabs.instance.getSurveys(
         (surveys) => setState(() => surveyWidgets = ListView(
               scrollDirection: Axis.horizontal,
-              children: [...BitLabs.instance.getSurveyWidgets(surveys, WidgetType.fullWidth)],
+              children: [
+                ...BitLabs.instance
+                    .getSurveyWidgets(surveys, WidgetType.fullWidth)
+              ],
             )),
         (exception) => log('[Example] GetSurveys $exception'));
   }

@@ -4,8 +4,10 @@ import '../models/User.dart';
 
 class LeaderboardItem extends StatelessWidget {
   final User user;
+  final User? ownUser;
 
-  const LeaderboardItem({Key? key, required this.user}) : super(key: key);
+  const LeaderboardItem({Key? key, required this.user, required this.ownUser})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,12 @@ class LeaderboardItem extends StatelessWidget {
           Text('${user.rank}', style: const TextStyle(fontSize: 16)),
           const Spacer(flex: 4),
           Text(user.name, style: const TextStyle(fontSize: 16)),
-          const Spacer(),
-          const Text(
-            '(You)',
-            style: TextStyle(color: Colors.blueAccent, fontSize: 14),
-          ),
+          if (user.rank == ownUser?.rank ) const Spacer(),
+          if (user.rank == ownUser?.rank)
+            const Text(
+              '(You)',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 14),
+            ),
           const Spacer(),
           getTrophy(user.rank),
           const Spacer(flex: 15),

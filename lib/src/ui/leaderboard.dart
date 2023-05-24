@@ -13,13 +13,16 @@ class Leaderboard extends StatefulWidget {
 
 class _LeaderboardState extends State<Leaderboard> {
   List<User> topUsers = [];
+  User? ownUser;
 
   @override
   void initState() {
     super.initState();
 
-    BitLabs.instance.getLeaderboard(
-        (leaderboard) => setState(() => topUsers = leaderboard.topUsers));
+    BitLabs.instance.getLeaderboard((leaderboard) => setState(() {
+          ownUser = leaderboard.ownUser;
+          topUsers = leaderboard.topUsers;
+        }));
   }
 
   @override
@@ -29,11 +32,15 @@ class _LeaderboardState extends State<Leaderboard> {
       height: 200,
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         const Text('Leaderboard', style: TextStyle(fontSize: 25)),
-        const Text('You are currently ranked 6 on our leaderboard.'),
+        ownUser == null
+            ? const Text('Participate in a survey to join the leaderboard.')
+            : Text(
+                'You are currently ranked ${ownUser!.rank} on our leaderboard.'),
         const SizedBox(height: 4),
         Expanded(
           child: ListView(children: [
-            for (User user in topUsers) LeaderboardItem(user: user),
+            for (User user in topUsers)
+              LeaderboardItem(user: user, ownUser: ownUser),
           ]),
         )
       ]),

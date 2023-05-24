@@ -49,8 +49,6 @@ class _HomePageState extends State<HomePage> {
 
     BitLabs.instance.setOnReward(
         (reward) => {log('[Example] Reward for this session: $reward')});
-
-    BitLabs.instance.getLeaderboard();
   }
 
   @override

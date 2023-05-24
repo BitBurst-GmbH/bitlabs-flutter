@@ -2,7 +2,9 @@ library bitlabs;
 
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +12,14 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/utils/helpers.dart';
 import 'src/ui/web_widget.dart';
+import 'src/utils/helpers.dart';
 
-export 'src/ui/leaderboard.dart';
-export 'src/models/survey.dart';
-export 'src/models/details.dart';
 export 'src/models/category.dart';
+export 'src/models/details.dart';
+export 'src/models/survey.dart';
 export 'src/models/widget_type.dart';
+export 'src/ui/leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
 /// The main class including all the library functions to use in your code.
@@ -116,9 +118,9 @@ class BitLabs {
     });
   }
 
-  void getLeaderboard() => _bitLabsRepository?.getLeaderboard(
-      (leaderboard) => log("Leaderboard: $leaderboard"),
-      (error) => log(error.toString()));
+  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
+      _bitLabsRepository?.getLeaderboard(
+          onResponse, (error) => log(error.toString()));
 
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);

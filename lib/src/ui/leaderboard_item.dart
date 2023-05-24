@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../models/User.dart';
+
 class LeaderboardItem extends StatelessWidget {
-  const LeaderboardItem({Key? key}) : super(key: key);
+  final User user;
+
+  const LeaderboardItem({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,35 +19,34 @@ class LeaderboardItem extends StatelessWidget {
       ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Text('1', style: TextStyle(fontSize: 16)),
-            const Spacer(flex: 4),
-            const Text('anonymous', style: TextStyle(fontSize: 16)),
-            const Spacer(),
-            const Text(
-              '(You)',
-              style: TextStyle(color: Colors.blueAccent, fontSize: 14),
-            ),
-            const Spacer(),
-            getTrophy(1),
-            const Spacer(flex: 15),
-            const Text('25000', style: TextStyle(fontSize: 16)),
-          ],
-        ),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Text('${user.rank}', style: const TextStyle(fontSize: 16)),
+          const Spacer(flex: 4),
+          Text(user.name, style: const TextStyle(fontSize: 16)),
+          const Spacer(),
+          const Text(
+            '(You)',
+            style: TextStyle(color: Colors.blueAccent, fontSize: 14),
+          ),
+          const Spacer(),
+          getTrophy(user.rank),
+          const Spacer(flex: 15),
+          Text('${user.earningsRaw}', style: const TextStyle(fontSize: 16)),
+        ]),
       ),
     ]);
   }
 
-  Widget getTrophy(int rank) => Stack(alignment: Alignment.center, children: [
-        const Icon(Icons.emoji_events_sharp, size: 20),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4.0),
-          child: Text(
-            rank.toString(),
-            style: const TextStyle(color: Colors.white, fontSize: 10),
-          ),
-        )
-      ]);
+  Widget getTrophy(int rank) => rank < 4
+      ? Stack(alignment: Alignment.center, children: [
+          const Icon(Icons.emoji_events_sharp, size: 20),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4.0),
+            child: Text(
+              rank.toString(),
+              style: const TextStyle(color: Colors.white, fontSize: 10),
+            ),
+          )
+        ])
+      : const SizedBox.shrink();
 }

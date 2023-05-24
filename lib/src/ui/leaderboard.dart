@@ -1,5 +1,7 @@
+import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
 
+import '../models/User.dart';
 import 'leaderboard_item.dart';
 
 class Leaderboard extends StatefulWidget {
@@ -10,6 +12,16 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
+  List<User> topUsers = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    BitLabs.instance.getLeaderboard(
+        (leaderboard) => setState(() => topUsers = leaderboard.topUsers));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,7 +33,7 @@ class _LeaderboardState extends State<Leaderboard> {
         const SizedBox(height: 4),
         Expanded(
           child: ListView(children: [
-            for (int i = 0; i < 10; i++) const LeaderboardItem(),
+            for (User user in topUsers) LeaderboardItem(user: user),
           ]),
         )
       ]),

@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Leaderboard(),
+            const BitLabsLeaderboard(),
             SizedBox(
               width: 250,
               child: Column(

@@ -5,9 +5,14 @@ import '../models/user.dart';
 class LeaderboardItem extends StatelessWidget {
   final User user;
   final User? ownUser;
+  final Color color;
 
-  const LeaderboardItem({Key? key, required this.user, required this.ownUser})
-      : super(key: key);
+  const LeaderboardItem({
+    Key? key,
+    required this.user,
+    required this.ownUser,
+    required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +30,14 @@ class LeaderboardItem extends StatelessWidget {
           Text('${user.rank}', style: const TextStyle(fontSize: 16)),
           const Spacer(flex: 4),
           Text(user.name, style: const TextStyle(fontSize: 16)),
-          if (user.rank == ownUser?.rank ) const Spacer(),
+          if (user.rank == ownUser?.rank) const Spacer(),
           if (user.rank == ownUser?.rank)
             const Text(
               '(You)',
               style: TextStyle(color: Colors.blueAccent, fontSize: 14),
             ),
           const Spacer(),
-          getTrophy(user.rank),
+          getTrophy(user.rank, color),
           const Spacer(flex: 15),
           Text('${user.earningsRaw}', style: const TextStyle(fontSize: 16)),
         ]),
@@ -40,9 +45,9 @@ class LeaderboardItem extends StatelessWidget {
     ]);
   }
 
-  Widget getTrophy(int rank) => rank < 4
+  Widget getTrophy(int rank, Color color) => rank < 4
       ? Stack(alignment: Alignment.center, children: [
-          const Icon(Icons.emoji_events_sharp, size: 20),
+          Icon(Icons.emoji_events_sharp, size: 20, color: color),
           Padding(
             padding: const EdgeInsets.only(bottom: 4.0),
             child: Text(

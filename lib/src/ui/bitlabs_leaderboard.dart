@@ -2,27 +2,41 @@ import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
+import '../utils/notifiers.dart';
 import 'leaderboard_item.dart';
 
-class Leaderboard extends StatefulWidget {
-  const Leaderboard({Key? key}) : super(key: key);
+class BitLabsLeaderboard extends StatefulWidget {
+  const BitLabsLeaderboard({Key? key}) : super(key: key);
 
   @override
-  State<Leaderboard> createState() => _LeaderboardState();
+  State<BitLabsLeaderboard> createState() => _BitLabsLeaderboardState();
 }
 
-class _LeaderboardState extends State<Leaderboard> {
+class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   List<User> topUsers = [];
   User? ownUser;
+  Color color = Colors.blueAccent;
+
+  void _updateColor() {
+    setState(() => color = widgetColor.value.first);
+  }
 
   @override
   void initState() {
     super.initState();
 
+    widgetColor.addListener(_updateColor);
+
     BitLabs.instance.getLeaderboard((leaderboard) => setState(() {
           ownUser = leaderboard.ownUser;
           topUsers = leaderboard.topUsers;
         }));
+  }
+
+  @override
+  void dispose() {
+    widgetColor.removeListener(_updateColor);
+    super.dispose();
   }
 
   @override
@@ -40,7 +54,11 @@ class _LeaderboardState extends State<Leaderboard> {
         Expanded(
           child: ListView(children: [
             for (User user in topUsers)
-              LeaderboardItem(user: user, ownUser: ownUser),
+              LeaderboardItem(
+                user: user,
+                ownUser: ownUser,
+                color: color,
+              ),
           ]),
         )
       ]),

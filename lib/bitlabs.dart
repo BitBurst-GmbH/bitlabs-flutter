@@ -13,13 +13,14 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
 import 'src/ui/web_widget.dart';
+import 'src/utils/notifiers.dart';
 import 'src/utils/helpers.dart';
 
 export 'src/models/category.dart';
 export 'src/models/details.dart';
 export 'src/models/survey.dart';
 export 'src/models/widget_type.dart';
-export 'src/ui/leaderboard.dart';
+export 'src/ui/bitlabs_leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
 /// The main class including all the library functions to use in your code.
@@ -34,7 +35,6 @@ class BitLabs {
   String _token = '';
   bool _hasOffers = false;
   Map<String, dynamic> _tags = {};
-  List<Color> _widgetColor = [Colors.blueAccent, Colors.blueAccent];
   List<Color> _headerColor = [Colors.blueAccent, Colors.blueAccent];
 
   BitLabsRepository? _bitLabsRepository;
@@ -56,7 +56,7 @@ class BitLabs {
     _bitLabsRepository = BitLabsRepository(token, uid);
 
     _bitLabsRepository?.getAppSettings((visual) {
-      _widgetColor = colorsFromCSS(visual.surveyIconColor);
+      widgetColor.value = colorsFromCSS(visual.surveyIconColor);
       _headerColor = colorsFromCSS(visual.navigationColor);
     }, (error) => log(error.toString()));
 
@@ -110,7 +110,7 @@ class BitLabs {
       final survey = surveys[index];
       return SurveyWidget(
         type: type,
-        color: _widgetColor,
+        color: widgetColor.value,
         reward: survey.value,
         rating: survey.rating,
         loi: '${survey.loi.toStringAsFixed(2)} minutes',

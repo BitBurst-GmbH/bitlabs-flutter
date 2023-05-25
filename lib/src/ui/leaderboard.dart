@@ -1,7 +1,7 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
 
-import '../models/User.dart';
+import '../models/user.dart';
 import 'leaderboard_item.dart';
 
 class Leaderboard extends StatefulWidget {

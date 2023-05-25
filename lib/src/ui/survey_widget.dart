@@ -8,7 +8,7 @@ import 'full_width_survey_widget.dart';
 class SurveyWidget extends StatefulWidget {
   final String loi;
   final int rating;
-  final Color color;
+  final List<Color> color;
   final String reward;
   final WidgetType type;
 
@@ -26,12 +26,13 @@ class SurveyWidget extends StatefulWidget {
 }
 
 class _SurveyWidgetState extends State<SurveyWidget> {
-  late Color color;
+  late List<Color> colors;
+  var opacity = 1.0;
 
   @override
   void initState() {
     super.initState();
-    color = widget.color;
+    colors = widget.color;
   }
 
   @override
@@ -39,9 +40,9 @@ class _SurveyWidgetState extends State<SurveyWidget> {
     return GestureDetector(
       onTap: () async {
         // Start onTap Animation
-        setState(() => color = widget.color.withAlpha(100));
+        setState(() => opacity = .5);
         await Future.delayed(const Duration(milliseconds: 50));
-        setState(() => color = widget.color.withAlpha(255));
+        setState(() => opacity = 1.0);
         await Future.delayed(const Duration(milliseconds: 40));
         // End onTap Animation
 
@@ -52,7 +53,11 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         curve: Curves.fastOutSlowIn,
         duration: const Duration(milliseconds: 50),
         decoration: BoxDecoration(
-          color: color,
+          gradient: LinearGradient(
+            colors: colors.map((c) => c.withOpacity(opacity)).toList(),
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
           borderRadius: BorderRadius.circular(5),
         ),
         height: 100,
@@ -64,7 +69,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           widget.rating,
           widget.reward,
           widget.loi,
-          color,
+          colors.first,
         ),
       ),
     );

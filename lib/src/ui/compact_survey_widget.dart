@@ -64,9 +64,13 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
           ),
           child: Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: Icon(Icons.play_circle_outline_outlined, size: 38),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  Icons.play_circle_outline_outlined,
+                  size: 38,
+                  color: color,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),

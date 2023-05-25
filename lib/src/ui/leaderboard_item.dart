@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/User.dart';
+import '../models/user.dart';
 
 class LeaderboardItem extends StatelessWidget {
   final User user;

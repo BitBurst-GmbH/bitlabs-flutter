@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 50, child: surveyWidgets ?? const SizedBox()),
+            SizedBox(height: 80, child: surveyWidgets ?? const SizedBox()),
           ],
         ),
       ),
@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               children: [
                 ...BitLabs.instance
-                    .getSurveyWidgets(surveys, WidgetType.fullWidth)
+                    .getSurveyWidgets(surveys, WidgetType.compact)
               ],
             )),
         (exception) => log('[Example] GetSurveys $exception'));

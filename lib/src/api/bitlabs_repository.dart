@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
-import 'package:bitlabs/src/models/visual.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -104,7 +103,7 @@ class BitLabsRepository {
     log('[BitLabs] LeaveSurvey Successful');
   }
 
-  void getAppSettings(void Function(Visual) onResponse,
+  void getAppSettings(void Function(GetAppSettingsResponse) onResponse,
       void Function(Exception) onFailure) async {
     final response = await _bitLabsApi.getAppSettings();
     final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
@@ -116,8 +115,7 @@ class BitLabsRepository {
       return;
     }
 
-    final visual = body.data?.visual;
-    if (visual != null) onResponse(visual);
+    if (body.data != null) onResponse(body.data!);
   }
 
   static void getCurrencyIcon(

@@ -3,7 +3,7 @@ import 'package:bitlabs/src/api/bitlabs_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
-import '../utils/notifiers.dart';
+import '../utils/notifiers.dart' as notifiers;
 import 'leaderboard_item.dart';
 
 class BitLabsLeaderboard extends StatefulWidget {
@@ -16,22 +16,28 @@ class BitLabsLeaderboard extends StatefulWidget {
 class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   List<User> topUsers = [];
   User? ownUser;
+
   Color color = Colors.blueAccent;
-  String url = '';
   Widget? image;
 
   void _updateColor() {
-    setState(() => color = widgetColor.value.first);
+    setState(() => color = notifiers.widgetColor.value.first);
+  }
+
+  void _updateImageWidget() {
+    BitLabsRepository.getCurrencyIcon(
+      notifiers.currencyIconURL.value,
+      (imageData) => setState(() => image = imageData),
+    );
   }
 
   @override
   void initState() {
     super.initState();
 
-    widgetColor.addListener(_updateColor);
+    notifiers.widgetColor.addListener(_updateColor);
 
-    BitLabsRepository.getCurrencyIcon(
-        url, (imageData) => setState(() => image = imageData));
+    notifiers.currencyIconURL.addListener(_updateImageWidget);
 
     BitLabs.instance.getLeaderboard((leaderboard) => setState(() {
           ownUser = leaderboard.ownUser;
@@ -41,7 +47,8 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
 
   @override
   void dispose() {
-    widgetColor.removeListener(_updateColor);
+    notifiers.currencyIconURL.removeListener(_updateImageWidget);
+    notifiers.widgetColor.removeListener(_updateColor);
     super.dispose();
   }
 

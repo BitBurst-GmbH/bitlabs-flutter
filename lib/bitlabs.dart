@@ -14,7 +14,7 @@ import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
 import 'src/ui/web_widget.dart';
 import 'src/utils/helpers.dart';
-import 'src/utils/notifiers.dart';
+import 'src/utils/notifiers.dart' as notifiers;
 
 export 'src/models/category.dart';
 export 'src/models/details.dart';
@@ -55,9 +55,14 @@ class BitLabs {
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
 
-    _bitLabsRepository?.getAppSettings((visual) {
-      widgetColor.value = colorsFromCSS(visual.surveyIconColor);
-      _headerColor = colorsFromCSS(visual.navigationColor);
+    _bitLabsRepository?.getAppSettings((settings) {
+      notifiers.widgetColor.value =
+          colorsFromCSS(settings.visual.surveyIconColor);
+      _headerColor = colorsFromCSS(settings.visual.navigationColor);
+
+      notifiers.currencyIconURL.value = settings.currency.symbol.isImage
+          ? settings.currency.symbol.content
+          : '';
     }, (error) => log(error.toString()));
 
     _getHasOffers();
@@ -110,7 +115,7 @@ class BitLabs {
       final survey = surveys[index];
       return SurveyWidget(
         type: type,
-        color: widgetColor.value,
+        color: notifiers.widgetColor.value,
         reward: survey.value,
         rating: survey.rating,
         loi: '${survey.loi.toStringAsFixed(2)} minutes',

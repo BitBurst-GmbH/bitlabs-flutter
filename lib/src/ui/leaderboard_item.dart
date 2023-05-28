@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
@@ -6,12 +8,14 @@ class LeaderboardItem extends StatelessWidget {
   final User user;
   final User? ownUser;
   final Color color;
+  final Uint8List? image;
 
   const LeaderboardItem({
     Key? key,
     required this.user,
     required this.ownUser,
     required this.color,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -40,6 +44,9 @@ class LeaderboardItem extends StatelessWidget {
           getTrophy(user.rank, color),
           const Spacer(flex: 15),
           Text('${user.earningsRaw}', style: const TextStyle(fontSize: 16)),
+          image == null
+              ? const SizedBox.shrink()
+              : Image.memory(image!, width: 20),
         ]),
       ),
     ]);

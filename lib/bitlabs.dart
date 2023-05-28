@@ -13,8 +13,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
 import 'src/ui/web_widget.dart';
-import 'src/utils/notifiers.dart';
 import 'src/utils/helpers.dart';
+import 'src/utils/notifiers.dart';
 
 export 'src/models/category.dart';
 export 'src/models/details.dart';

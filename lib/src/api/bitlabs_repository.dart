@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/visual.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
 
-import '../models/get_offers_response.dart';
-import '../models/survey.dart';
 import '../models/bitlabs_response.dart';
 import '../models/check_surveys_response.dart';
 import '../models/get_actions_response.dart';
+import '../models/get_offers_response.dart';
 import '../models/serializable.dart';
+import '../models/survey.dart';
 import 'bitlabs_api.dart';
 
 /// The point of communication between the data and [BitLabs].
@@ -116,5 +117,12 @@ class BitLabsRepository {
 
     final visual = body.data?.visual;
     if (visual != null) onResponse(visual);
+  }
+
+  static void getCurrencyIcon(
+      String url, void Function(Uint8List) onResponse) async {
+    final response = await BitLabsApi.getCurrencyIcon(url);
+
+    onResponse(response.bodyBytes);
   }
 }

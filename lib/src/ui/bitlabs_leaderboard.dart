@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:bitlabs/bitlabs.dart';
+import 'package:bitlabs/src/api/bitlabs_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
@@ -16,6 +19,8 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   List<User> topUsers = [];
   User? ownUser;
   Color color = Colors.blueAccent;
+  String url = '';
+  Uint8List? image;
 
   void _updateColor() {
     setState(() => color = widgetColor.value.first);
@@ -26,6 +31,9 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
     super.initState();
 
     widgetColor.addListener(_updateColor);
+
+    BitLabsRepository.getCurrencyIcon(
+        url, (imageData) => setState(() => image = imageData));
 
     BitLabs.instance.getLeaderboard((leaderboard) => setState(() {
           ownUser = leaderboard.ownUser;
@@ -58,6 +66,7 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
                 user: user,
                 ownUser: ownUser,
                 color: color,
+                image: image,
               ),
           ]),
         )

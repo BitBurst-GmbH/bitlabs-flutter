@@ -34,4 +34,6 @@ class BitLabsApi {
 
   Future<Response> getAppSettings() =>
       get(url('settings/v2'), headers: _headers);
+
+  static Future<Response> getCurrencyIcon(String url) => get(Uri.parse(url));
 }

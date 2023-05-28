@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,7 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   User? ownUser;
   Color color = Colors.blueAccent;
   String url = '';
-  Uint8List? image;
+  Widget? image;
 
   void _updateColor() {
     setState(() => color = widgetColor.value.first);

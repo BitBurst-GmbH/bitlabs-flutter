@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:typed_data';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/visual.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../models/bitlabs_response.dart';
 import '../models/check_surveys_response.dart';
@@ -120,9 +121,29 @@ class BitLabsRepository {
   }
 
   static void getCurrencyIcon(
-      String url, void Function(Uint8List) onResponse) async {
+      String url, void Function(Widget) onResponse) async {
     final response = await BitLabsApi.getCurrencyIcon(url);
 
-    onResponse(response.bodyBytes);
+    if (response.reasonPhrase != 'OK') {
+      log('[BitLabs] GetCurrencyIcon ${response.statusCode}:'
+          ' ${response.reasonPhrase}');
+      return;
+    }
+
+    if (response.headers['content-type'] == 'image/svg+xml') {
+      onResponse(SvgPicture.string(
+        response.body,
+        fit: BoxFit.contain,
+        width: 24,
+        height: 24,
+      ));
+    } else {
+      onResponse(Image.memory(
+        response.bodyBytes,
+        fit: BoxFit.contain,
+        width: 24,
+        height: 24,
+      ));
+    }
   }
 }

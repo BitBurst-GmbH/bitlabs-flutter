@@ -71,15 +71,15 @@ class BitLabsRepository {
     onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
   }
 
-  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse,
-      void Function(Exception) onFailure) async {
+  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) async {
     final response = await _bitLabsApi.getLeaderboard();
     final body = BitLabsResponse<GetLeaderboardResponse>.fromJson(
         jsonDecode(response.body), (data) => GetLeaderboardResponse(data!));
 
     final error = body.error;
     if (error != null) {
-      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+      log('[BitLabs] GetLeaderboard ${error.details.http}:'
+          ' ${error.details.msg}');
       return;
     }
 

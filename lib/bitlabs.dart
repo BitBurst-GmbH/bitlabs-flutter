@@ -124,8 +124,7 @@ class BitLabs {
   }
 
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
-      _bitLabsRepository?.getLeaderboard(
-          onResponse, (error) => log(error.toString()));
+      _bitLabsRepository?.getLeaderboard(onResponse);
 
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);

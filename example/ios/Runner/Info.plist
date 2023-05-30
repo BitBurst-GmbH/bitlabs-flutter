@@ -47,5 +47,7 @@
 	<true/>
 	<key>NSUserTrackingUsageDescription</key>
     <string>Request tracking...</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>

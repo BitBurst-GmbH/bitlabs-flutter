@@ -28,10 +28,34 @@ class WebWidget extends StatefulWidget {
 class _WebViewState extends State<WebWidget> {
   String? _surveyId;
   String? _networkId;
-  WebViewController? _controller;
+  late WebViewController _controller;
 
   double _reward = 0.0;
   bool _isPageOfferWall = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setNavigationDelegate(NavigationDelegate(
+          onPageStarted: _onPageStarted,
+          onNavigationRequest: (request) {
+            final url = request.url;
+            if (url.startsWith('https://api.bitlabs.ai')) {
+              _extractNetworkAndSurveyIds(url);
+            }
+
+            if (url.contains(RegExp('offers/.+/open'))) {
+              launchUrlString(url, mode: LaunchMode.externalApplication);
+              _controller.loadRequest(Uri.parse(widget.url));
+              return NavigationDecision.prevent;
+            }
+
+            return NavigationDecision.navigate;
+          }))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(widget.url));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,26 +79,7 @@ class _WebViewState extends State<WebWidget> {
                   ),
                 ),
           body: Stack(fit: StackFit.expand, children: [
-            WebView(
-              initialUrl: widget.url,
-              onPageStarted: _onPageStarted,
-              navigationDelegate: (request) {
-                final url = request.url;
-                if (url.startsWith('https://api.bitlabs.ai')) {
-                  _extractNetworkAndSurveyIds(url);
-                }
-
-                if (url.contains(RegExp('offers/.+/open'))) {
-                  launchUrlString(url, mode: LaunchMode.externalApplication);
-                  _controller?.loadUrl(widget.url);
-                  return NavigationDecision.prevent;
-                }
-
-                return NavigationDecision.navigate;
-              },
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (controller) => (_controller = controller),
-            ),
+            WebViewWidget(controller: _controller),
             !_isPageOfferWall
                 ? const SizedBox.shrink()
                 : Align(
@@ -128,7 +133,7 @@ class _WebViewState extends State<WebWidget> {
   }
 
   void _leaveSurvey(String reason) {
-    _controller?.loadUrl(widget.url);
+    _controller.loadRequest(Uri.parse(widget.url));
 
     if (_networkId == null || _surveyId == null) return;
 

@@ -1,23 +1,24 @@
-import 'dart:io';
+import 'package:bitlabs/bitlabs.dart';
+import 'package:bitlabs/src/ui/simple_survey_widget.dart';
+import 'package:flutter/widgets.dart';
 
-import 'package:bitlabs/src/ui/star_rating.dart';
-import 'package:bitlabs/src/utils/helpers.dart';
-import 'package:flutter/material.dart';
-
-import '../../bitlabs.dart';
+import 'compact_survey_widget.dart';
+import 'full_width_survey_widget.dart';
 
 class SurveyWidget extends StatefulWidget {
-  final int rating;
-  final String reward;
   final String loi;
-  final Color color;
+  final int rating;
+  final List<Color> color;
+  final String reward;
+  final WidgetType type;
 
   const SurveyWidget(
       {Key? key,
-      required this.rating,
       required this.reward,
       required this.loi,
-      required this.color})
+      required this.color,
+      required this.rating,
+      required this.type})
       : super(key: key);
 
   @override
@@ -25,22 +26,16 @@ class SurveyWidget extends StatefulWidget {
 }
 
 class _SurveyWidgetState extends State<SurveyWidget> {
-  late Color color;
-
-  @override
-  void initState() {
-    super.initState();
-    color = widget.color;
-  }
+  var opacity = 1.0;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         // Start onTap Animation
-        setState(() => color = widget.color.withAlpha(100));
+        setState(() => opacity = .5);
         await Future.delayed(const Duration(milliseconds: 50));
-        setState(() => color = widget.color.withAlpha(255));
+        setState(() => opacity = 1.0);
         await Future.delayed(const Duration(milliseconds: 40));
         // End onTap Animation
 
@@ -48,71 +43,52 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         BitLabs.instance.launchOfferWall(context);
       },
       child: AnimatedContainer(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
+        curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 50),
         decoration: BoxDecoration(
-          color: color,
+          gradient: LinearGradient(
+            colors: widget.color.map((c) => c.withOpacity(opacity)).toList(),
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
           borderRadius: BorderRadius.circular(5),
         ),
-        width: 300,
-        constraints: const BoxConstraints(minWidth: 300, maxHeight: 80),
+        width: getWidgetWidth(widget.type, context),
         padding: const EdgeInsets.all(8),
-        duration: const Duration(milliseconds: 50),
-        curve: Curves.fastOutSlowIn,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(children: [
-                  const Icon(
-                    Icons.access_time,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    ' ${widget.loi}',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ]),
-                Row(children: [
-                  StarRating(rating: widget.rating),
-                  Text(
-                    ' ${widget.rating}',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ]),
-              ],
-            ),
-            Container(
-              height: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Icon(Icons.play_circle_outline_outlined, size: 38),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-                    child: Text(
-                      'EARN\n${widget.reward}',
-                      style: TextStyle(
-                        color: color,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: getWidgetWithType(
+          widget.type,
+          widget.rating,
+          widget.reward,
+          widget.loi,
+          widget.color.first,
         ),
       ),
     );
+  }
+}
+
+double getWidgetWidth(WidgetType type, BuildContext context) {
+  switch (type) {
+    case WidgetType.simple:
+      return MediaQuery.of(context).size.width * .8;
+    case WidgetType.fullWidth:
+      return MediaQuery.of(context).size.width * .95;
+    case WidgetType.compact:
+      return MediaQuery.of(context).size.width * .7;
+  }
+}
+
+Widget getWidgetWithType(
+    WidgetType type, int rating, String reward, String loi, Color color) {
+  switch (type) {
+    case WidgetType.simple:
+      return SimpleSurveyWidget(reward: reward, loi: loi);
+    case WidgetType.fullWidth:
+      return FullWidthSurveyWidget(
+          rating: rating, reward: reward, loi: loi, color: color);
+    case WidgetType.compact:
+      return CompactSurveyWidget(
+          rating: rating, reward: reward, loi: loi, color: color);
   }
 }

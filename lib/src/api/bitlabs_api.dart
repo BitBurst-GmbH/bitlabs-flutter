@@ -17,6 +17,9 @@ class BitLabsApi {
 
   Future<Response> getOffers() => get(url('offers'), headers: _headers);
 
+  Future<Response> getLeaderboard() =>
+      get(url('leaderboard'), headers: _headers);
+
   Future<Response> leaveSurveys(
     String networkId,
     String surveyId,
@@ -31,4 +34,6 @@ class BitLabsApi {
 
   Future<Response> getAppSettings() =>
       get(url('settings/v2'), headers: _headers);
+
+  static Future<Response> getCurrencyIcon(String url) => get(Uri.parse(url));
 }

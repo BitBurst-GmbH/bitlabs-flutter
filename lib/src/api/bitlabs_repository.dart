@@ -2,15 +2,17 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
-import 'package:bitlabs/src/models/visual.dart';
+import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
-import '../models/get_offers_response.dart';
-import '../models/survey.dart';
 import '../models/bitlabs_response.dart';
 import '../models/check_surveys_response.dart';
 import '../models/get_actions_response.dart';
+import '../models/get_offers_response.dart';
 import '../models/serializable.dart';
+import '../models/survey.dart';
 import 'bitlabs_api.dart';
 
 /// The point of communication between the data and [BitLabs].
@@ -69,6 +71,22 @@ class BitLabsRepository {
     onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
   }
 
+  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) async {
+    final response = await _bitLabsApi.getLeaderboard();
+    final body = BitLabsResponse<GetLeaderboardResponse>.fromJson(
+        jsonDecode(response.body), (data) => GetLeaderboardResponse(data!));
+
+    final error = body.error;
+    if (error != null) {
+      log('[BitLabs] GetLeaderboard ${error.details.http}:'
+          ' ${error.details.msg}');
+      return;
+    }
+
+    final leaderboard = body.data;
+    if (leaderboard != null) onResponse(leaderboard);
+  }
+
   void leaveSurvey(String networkId, String surveyId, String reason) async {
     final response =
         await _bitLabsApi.leaveSurveys(networkId, surveyId, reason);
@@ -85,7 +103,7 @@ class BitLabsRepository {
     log('[BitLabs] LeaveSurvey Successful');
   }
 
-  void getAppSettings(void Function(Visual) onResponse,
+  void getAppSettings(void Function(GetAppSettingsResponse) onResponse,
       void Function(Exception) onFailure) async {
     final response = await _bitLabsApi.getAppSettings();
     final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
@@ -97,7 +115,33 @@ class BitLabsRepository {
       return;
     }
 
-    final visual = body.data?.visual;
-    if (visual != null) onResponse(visual);
+    if (body.data != null) onResponse(body.data!);
+  }
+
+  static void getCurrencyIcon(
+      String url, void Function(Widget) onResponse) async {
+    final response = await BitLabsApi.getCurrencyIcon(url);
+
+    if (response.reasonPhrase != 'OK') {
+      log('[BitLabs] GetCurrencyIcon ${response.statusCode}:'
+          ' ${response.reasonPhrase}');
+      return;
+    }
+
+    if (response.headers['content-type'] == 'image/svg+xml') {
+      onResponse(SvgPicture.string(
+        response.body,
+        fit: BoxFit.contain,
+        width: 24,
+        height: 24,
+      ));
+    } else {
+      onResponse(Image.memory(
+        response.bodyBytes,
+        fit: BoxFit.contain,
+        width: 24,
+        height: 24,
+      ));
+    }
   }
 }

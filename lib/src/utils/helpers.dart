@@ -72,7 +72,20 @@ Map<String, String> _reasons(BuildContext context) => {
       "OTHER": Localization.of(context).otherReason,
     };
 
-Color colorFromHex(String hex) {
+List<Color> colorsFromCSS(String colorStr) {
+  final colors = RegExp(r'linear-gradient\((\d+)deg,\s*(.+)\)')
+          .firstMatch(colorStr)
+          ?.group(2)
+          ?.replaceAll(RegExp(r'([0-9]+)%'), '')
+          .split(RegExp(r',\s'))
+          .map((e) => _colorFromHex(e.trim()))
+          .toList() ??
+      [_colorFromHex(colorStr), _colorFromHex(colorStr)];
+
+  return colors.length == 2 ? colors : [Colors.blueAccent, Colors.blueAccent];
+}
+
+Color _colorFromHex(String hex) {
   hex = hex.replaceAll('#', '').toUpperCase();
   if (hex.length == 6) hex = 'FF$hex';
   return Color(int.parse(hex, radix: 16));

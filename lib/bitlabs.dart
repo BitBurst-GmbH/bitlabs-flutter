@@ -2,20 +2,22 @@ library bitlabs;
 
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/src/models/get_leaderboard_response.dart';
+import 'package:bitlabs/src/models/widget_type.dart';
+import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/ui/survey_widget.dart';
-import 'src/utils/helpers.dart';
 import 'src/ui/web_widget.dart';
+import 'src/utils/helpers.dart';
+import 'src/utils/notifiers.dart' as notifiers;
 
-export 'src/models/survey.dart';
-export 'src/models/details.dart';
-export 'src/ui/survey_widget.dart';
-export 'src/models/category.dart';
+export 'src/models/widget_type.dart';
+export 'src/ui/bitlabs_leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
 /// The main class including all the library functions to use in your code.
@@ -30,7 +32,7 @@ class BitLabs {
   String _token = '';
   bool _hasOffers = false;
   Map<String, dynamic> _tags = {};
-  Color _widgetColor = Colors.blueAccent;
+  List<Color> _headerColor = [Colors.blueAccent, Colors.blueAccent];
 
   BitLabsRepository? _bitLabsRepository;
 
@@ -50,9 +52,15 @@ class BitLabs {
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(token, uid);
 
-    _bitLabsRepository?.getAppSettings(
-        (visual) => _widgetColor = colorFromHex(visual.surveyIconColor),
-        (error) => log(error.toString()));
+    _bitLabsRepository?.getAppSettings((settings) {
+      notifiers.widgetColor.value =
+          colorsFromCSS(settings.visual.surveyIconColor);
+      _headerColor = colorsFromCSS(settings.visual.navigationColor);
+
+      notifiers.currencyIconURL.value = settings.currency.symbol.isImage
+          ? settings.currency.symbol.content
+          : '';
+    }, (error) => log(error.toString()));
 
     _getHasOffers();
     _getAdId();
@@ -99,17 +107,23 @@ class BitLabs {
       _ifInitialised(
           () => _bitLabsRepository?.getSurveys(onResponse, onFailure));
 
-  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys) {
+  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys, WidgetType type) {
     return List.generate(surveys.length, (index) {
       final survey = surveys[index];
       return SurveyWidget(
-        rating: survey.rating,
+        type: type,
+        color: notifiers.widgetColor.value,
         reward: survey.value,
-        loi: '${survey.loi} minutes',
-        color: _widgetColor,
+        rating: survey.rating,
+        loi: '${survey.loi.round()} minutes',
       );
     });
   }
+
+  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
+      _ifInitialised(() {
+        _bitLabsRepository?.getLeaderboard(onResponse);
+      });
 
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
@@ -131,7 +145,7 @@ class BitLabs {
           MaterialPageRoute(builder: (context) {
             return WebWidget(
               url: url,
-              color: _widgetColor,
+              color: _headerColor,
               onReward: _onReward,
             );
           }),

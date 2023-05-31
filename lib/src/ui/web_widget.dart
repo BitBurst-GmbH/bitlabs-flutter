@@ -11,10 +11,14 @@ import '../utils/localization.dart';
 /// Launches the Offer Wall in a [WebView].
 class WebWidget extends StatefulWidget {
   final String url;
-  final Color color;
+  final List<Color> color;
   final void Function(double) onReward;
 
-  const WebWidget({Key? key, required this.url, required this.color, required this.onReward})
+  const WebWidget(
+      {Key? key,
+      required this.url,
+      required this.color,
+      required this.onReward})
       : super(key: key);
 
   @override
@@ -24,10 +28,40 @@ class WebWidget extends StatefulWidget {
 class _WebViewState extends State<WebWidget> {
   String? _surveyId;
   String? _networkId;
-  WebViewController? _controller;
+
+  late bool isColorBright;
+  late WebViewController _controller;
 
   double _reward = 0.0;
   bool _isPageOfferWall = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    isColorBright = widget.color.first.computeLuminance() > 0.729 ||
+        widget.color.last.computeLuminance() > 0.729;
+
+    _controller = WebViewController()
+      ..setNavigationDelegate(NavigationDelegate(
+          onPageStarted: _onPageStarted,
+          onNavigationRequest: (request) {
+            final url = request.url;
+            if (url.startsWith('https://api.bitlabs.ai')) {
+              _extractNetworkAndSurveyIds(url);
+            }
+
+            if (url.contains(RegExp('offers/.+/open'))) {
+              launchUrlString(url, mode: LaunchMode.externalApplication);
+              _controller.loadRequest(Uri.parse(widget.url));
+              return NavigationDecision.prevent;
+            }
+
+            return NavigationDecision.navigate;
+          }))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(widget.url));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,39 +74,33 @@ class _WebViewState extends State<WebWidget> {
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: _isPageOfferWall ? null : AppBar(
-            backgroundColor: widget.color,
-          ),
+          appBar: _isPageOfferWall
+              ? null
+              : AppBar(
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: widget.color,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
+                  iconTheme: IconThemeData(
+                    color: isColorBright ? Colors.black : Colors.white,
+                  ),
+                ),
           body: Stack(fit: StackFit.expand, children: [
-            WebView(
-              initialUrl: widget.url,
-              onPageStarted: _onPageStarted,
-              navigationDelegate: (request) {
-                final url = request.url;
-                if (url.startsWith('https://api.bitlabs.ai')) {
-                  _extractNetworkAndSurveyIds(url);
-                }
-
-                if (url.contains(RegExp('offers/.+/open'))) {
-                  launchUrlString(url, mode: LaunchMode.externalApplication);
-                  _controller?.loadUrl(widget.url);
-                  return NavigationDecision.prevent;
-                }
-
-                return NavigationDecision.navigate;
-              },
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (controller) => (_controller = controller),
-            ),
+            WebViewWidget(controller: _controller),
             !_isPageOfferWall
                 ? const SizedBox.shrink()
                 : Align(
                     alignment: const Alignment(1, -0.99),
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.exit_to_app_outlined,
-                        color: Colors.white,
+                        color: isColorBright ? Colors.black : Colors.white,
                         size: 24.0,
                       ),
                     ),
@@ -115,7 +143,7 @@ class _WebViewState extends State<WebWidget> {
   }
 
   void _leaveSurvey(String reason) {
-    _controller?.loadUrl(widget.url);
+    _controller.loadRequest(Uri.parse(widget.url));
 
     if (_networkId == null || _surveyId == null) return;
 

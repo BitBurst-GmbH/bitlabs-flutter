@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
+import 'package:example/secrets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(const MyApp());
@@ -45,10 +45,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init('YOUR_APP_TOKEN', 'USER_ID');
+    BitLabs.instance.init(appToken, 'USER_ID');
 
     BitLabs.instance.setOnReward(
-        (reward) => {log('[Example] Reward for this session: $reward')});
+        (reward) => log('[Example] Reward for this session: $reward'));
   }
 
   @override
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const BitLabsLeaderboard(),
             SizedBox(
               width: 250,
               child: Column(
@@ -90,19 +91,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void checkForSurveys() {
-    BitLabs.instance.checkSurveys(
-        (hasSurveys) => log('[Example] Checking Surveys -> '
-            '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'),
-        (exception) => log('[Example] CheckSurveys $exception'));
-  }
+  void checkForSurveys() => BitLabs.instance.checkSurveys(
+      (hasSurveys) => log('[Example] Checking Surveys -> '
+          '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'),
+      (exception) => log('[Example] CheckSurveys $exception'));
 
-  void getSurveys() {
-    BitLabs.instance.getSurveys(
-        (surveys) => setState(() => surveyWidgets = ListView(
-              scrollDirection: Axis.horizontal,
-              children: [...BitLabs.instance.getSurveyWidgets(surveys)],
-            )),
-        (exception) => log('[Example] GetSurveys $exception'));
-  }
+  void getSurveys() => BitLabs.instance.getSurveys(
+      (surveys) => setState(() {
+            surveyWidgets = ListView(
+                scrollDirection: Axis.horizontal,
+                children: BitLabs.instance
+                    .getSurveyWidgets(surveys, WidgetType.compact));
+          }),
+      (exception) => log('[Example] GetSurveys $exception'));
 }

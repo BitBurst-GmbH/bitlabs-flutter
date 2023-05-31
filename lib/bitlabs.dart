@@ -121,7 +121,9 @@ class BitLabs {
   }
 
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
-      _bitLabsRepository?.getLeaderboard(onResponse);
+      _ifInitialised(() {
+        _bitLabsRepository?.getLeaderboard(onResponse);
+      });
 
   void leaveSurvey(String networkId, String surveyId, String reason) =>
       _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
@@ -143,7 +145,7 @@ class BitLabs {
           MaterialPageRoute(builder: (context) {
             return WebWidget(
               url: url,
-              color: _headerColor.first,
+              color: _headerColor,
               onReward: _onReward,
             );
           }),

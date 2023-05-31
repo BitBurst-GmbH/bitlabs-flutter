@@ -11,7 +11,7 @@ import '../utils/localization.dart';
 /// Launches the Offer Wall in a [WebView].
 class WebWidget extends StatefulWidget {
   final String url;
-  final Color color;
+  final List<Color> color;
   final void Function(double) onReward;
 
   const WebWidget(
@@ -29,6 +29,7 @@ class _WebViewState extends State<WebWidget> {
   String? _surveyId;
   String? _networkId;
 
+  late bool isColorBright;
   late WebViewController _controller;
 
   double _reward = 0.0;
@@ -37,6 +38,10 @@ class _WebViewState extends State<WebWidget> {
   @override
   void initState() {
     super.initState();
+
+    isColorBright = widget.color.first.computeLuminance() > 0.729 ||
+        widget.color.last.computeLuminance() > 0.729;
+
     _controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
           onPageStarted: _onPageStarted,
@@ -72,11 +77,17 @@ class _WebViewState extends State<WebWidget> {
           appBar: _isPageOfferWall
               ? null
               : AppBar(
-                  backgroundColor: widget.color,
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: widget.color,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
                   iconTheme: IconThemeData(
-                    color: widget.color.computeLuminance() > 0.729
-                        ? Colors.black
-                        : Colors.white,
+                    color: isColorBright ? Colors.black : Colors.white,
                   ),
                 ),
           body: Stack(fit: StackFit.expand, children: [
@@ -88,10 +99,8 @@ class _WebViewState extends State<WebWidget> {
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
                       icon: Icon(
-                        Icons.close,
-                        color: widget.color.computeLuminance() > 0.729
-                            ? Colors.black
-                            : Colors.white,
+                        Icons.exit_to_app_outlined,
+                        color: isColorBright ? Colors.black : Colors.white,
                         size: 24.0,
                       ),
                     ),

@@ -118,7 +118,7 @@ class BitLabs {
         color: notifiers.widgetColor.value,
         reward: survey.value,
         rating: survey.rating,
-        loi: '${survey.loi.toStringAsFixed(2)} minutes',
+        loi: '${survey.loi.round()} minutes',
       );
     });
   }

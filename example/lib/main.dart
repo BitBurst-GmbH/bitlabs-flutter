@@ -101,12 +101,9 @@ class _HomePageState extends State<HomePage> {
   void getSurveys() {
     BitLabs.instance.getSurveys(
         (surveys) => setState(() => surveyWidgets = ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                ...BitLabs.instance
-                    .getSurveyWidgets(surveys, WidgetType.compact)
-              ],
-            )),
+            scrollDirection: Axis.horizontal,
+            children: BitLabs.instance
+                .getSurveyWidgets(surveys, WidgetType.compact))),
         (exception) => log('[Example] GetSurveys $exception'));
   }
 }

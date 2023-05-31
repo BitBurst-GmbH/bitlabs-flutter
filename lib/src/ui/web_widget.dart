@@ -28,6 +28,7 @@ class WebWidget extends StatefulWidget {
 class _WebViewState extends State<WebWidget> {
   String? _surveyId;
   String? _networkId;
+
   late WebViewController _controller;
 
   double _reward = 0.0;

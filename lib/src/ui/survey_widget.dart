@@ -26,14 +26,7 @@ class SurveyWidget extends StatefulWidget {
 }
 
 class _SurveyWidgetState extends State<SurveyWidget> {
-  late List<Color> colors;
   var opacity = 1.0;
-
-  @override
-  void initState() {
-    super.initState();
-    colors = widget.color;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +47,13 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         duration: const Duration(milliseconds: 50),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: colors.map((c) => c.withOpacity(opacity)).toList(),
+            colors: widget.color.map((c) => c.withOpacity(opacity)).toList(),
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           ),
           borderRadius: BorderRadius.circular(5),
         ),
-        height: 100,
-        width: MediaQuery.of(context).size.width * 0.96,
+        width: getWidgetWidth(widget.type, context),
         padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.symmetric(horizontal: 4),
         child: getWidgetWithType(
@@ -69,10 +61,21 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           widget.rating,
           widget.reward,
           widget.loi,
-          colors.first,
+          widget.color.first,
         ),
       ),
     );
+  }
+}
+
+double getWidgetWidth(WidgetType type, BuildContext context) {
+  switch (type) {
+    case WidgetType.simple:
+      return MediaQuery.of(context).size.width * .8;
+    case WidgetType.fullWidth:
+      return MediaQuery.of(context).size.width * .95;
+    case WidgetType.compact:
+      return MediaQuery.of(context).size.width * .7;
   }
 }
 

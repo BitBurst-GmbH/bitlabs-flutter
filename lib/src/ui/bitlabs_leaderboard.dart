@@ -14,7 +14,7 @@ class BitLabsLeaderboard extends StatefulWidget {
 }
 
 class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
-  List<User> topUsers = [];
+  List<User>? topUsers;
   User? ownUser;
 
   Color color = Colors.blueAccent;
@@ -53,29 +53,33 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 200,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        const Text('Leaderboard', style: TextStyle(fontSize: 25)),
-        ownUser == null
-            ? const Text('Participate in a survey to join the leaderboard.')
-            : Text(
-                'You are currently ranked ${ownUser!.rank} on our leaderboard.'),
-        const SizedBox(height: 4),
-        Expanded(
-          child: ListView(children: [
-            for (User user in topUsers)
-              LeaderboardItem(
-                user: user,
-                ownUser: ownUser,
-                color: color,
-                image: image,
-              ),
-          ]),
-        )
-      ]),
-    );
-  }
+  Widget build(BuildContext context) => topUsers == null
+      ? const SizedBox.shrink()
+      : SizedBox(
+          width: double.infinity,
+          height: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('Leaderboard', style: TextStyle(fontSize: 25)),
+              ownUser == null
+                  ? const Text('Participate in a survey to '
+                      'join the leaderboard.')
+                  : Text('You are currently ranked ${ownUser!.rank}'
+                      ' on our leaderboard.'),
+              const SizedBox(height: 4),
+              Expanded(
+                child: ListView(children: [
+                  for (User user in topUsers!)
+                    LeaderboardItem(
+                      user: user,
+                      ownUser: ownUser,
+                      color: color,
+                      image: image,
+                    ),
+                ]),
+              )
+            ],
+          ),
+        );
 }

@@ -91,19 +91,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void checkForSurveys() {
-    BitLabs.instance.checkSurveys(
-        (hasSurveys) => log('[Example] Checking Surveys -> '
-            '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'),
-        (exception) => log('[Example] CheckSurveys $exception'));
-  }
+  void checkForSurveys() => BitLabs.instance.checkSurveys(
+      (hasSurveys) => log('[Example] Checking Surveys -> '
+          '${hasSurveys ? 'Surveys Available!' : 'No Surveys!'}'),
+      (exception) => log('[Example] CheckSurveys $exception'));
 
-  void getSurveys() {
-    BitLabs.instance.getSurveys(
-        (surveys) => setState(() => surveyWidgets = ListView(
-            scrollDirection: Axis.horizontal,
-            children: BitLabs.instance
-                .getSurveyWidgets(surveys, WidgetType.compact))),
-        (exception) => log('[Example] GetSurveys $exception'));
-  }
+  void getSurveys() => BitLabs.instance.getSurveys(
+      (surveys) => setState(() {
+            surveyWidgets = ListView(
+                scrollDirection: Axis.horizontal,
+                children: BitLabs.instance
+                    .getSurveyWidgets(surveys, WidgetType.compact));
+          }),
+      (exception) => log('[Example] GetSurveys $exception'));
 }

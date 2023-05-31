@@ -16,9 +16,6 @@ import 'src/ui/web_widget.dart';
 import 'src/utils/helpers.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 
-export 'src/models/category.dart';
-export 'src/models/details.dart';
-export 'src/models/survey.dart';
 export 'src/models/widget_type.dart';
 export 'src/ui/bitlabs_leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;

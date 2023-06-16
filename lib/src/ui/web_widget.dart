@@ -51,7 +51,7 @@ class _WebViewState extends State<WebWidget> {
               _extractNetworkAndSurveyIds(url);
             }
 
-            if (url.contains(RegExp('offers/.+/open'))) {
+            if (url.contains('/offers/')) {
               launchUrlString(url, mode: LaunchMode.externalApplication);
               _controller.loadRequest(Uri.parse(widget.url));
               return NavigationDecision.prevent;

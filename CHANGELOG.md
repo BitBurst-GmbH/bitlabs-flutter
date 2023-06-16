@@ -1,3 +1,6 @@
+## 2.1.1
+- **Bugfixes and improvements**
+
 ## 2.1.0
 - **Add Simple and Full Width widgets**
 - **Add Leaderboard widget**

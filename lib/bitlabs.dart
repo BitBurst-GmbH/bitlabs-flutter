@@ -123,8 +123,8 @@ class BitLabs {
         _bitLabsRepository?.getLeaderboard(onResponse);
       });
 
-  void leaveSurvey(String networkId, String surveyId, String reason) =>
-      _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
+  void leaveSurvey(String clickId, String reason) =>
+      _bitLabsRepository?.leaveSurvey(clickId, reason);
 
   /// Launches the OfferWall from the [context] you pass.
   ///

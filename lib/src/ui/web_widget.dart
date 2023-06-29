@@ -26,14 +26,13 @@ class WebWidget extends StatefulWidget {
 }
 
 class _WebViewState extends State<WebWidget> {
-  String? _surveyId;
-  String? _networkId;
+  String? clickId;
 
   late bool isColorBright;
-  late WebViewController _controller;
+  late WebViewController controller;
 
-  double _reward = 0.0;
-  bool _isPageOfferWall = false;
+  double reward = 0.0;
+  bool isPageOfferWall = false;
 
   @override
   void initState() {
@@ -42,18 +41,15 @@ class _WebViewState extends State<WebWidget> {
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
 
-    _controller = WebViewController()
+    controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
           onPageStarted: _onPageStarted,
           onNavigationRequest: (request) {
             final url = request.url;
-            if (url.startsWith('https://api.bitlabs.ai')) {
-              _extractNetworkAndSurveyIds(url);
-            }
 
             if (url.contains('/offers/')) {
               launchUrlString(url, mode: LaunchMode.externalApplication);
-              _controller.loadRequest(Uri.parse(widget.url));
+              controller.loadRequest(Uri.parse(widget.url));
               return NavigationDecision.prevent;
             }
 
@@ -67,14 +63,14 @@ class _WebViewState extends State<WebWidget> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (!_isPageOfferWall) {
+        if (!isPageOfferWall) {
           await showDialog(context: context, builder: _showLeaveSurveyDialog);
         }
         return false;
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: _isPageOfferWall
+          appBar: isPageOfferWall
               ? null
               : AppBar(
                   flexibleSpace: Container(
@@ -91,8 +87,8 @@ class _WebViewState extends State<WebWidget> {
                   ),
                 ),
           body: Stack(fit: StackFit.expand, children: [
-            WebViewWidget(controller: _controller),
-            !_isPageOfferWall
+            WebViewWidget(controller: controller),
+            !isPageOfferWall
                 ? const SizedBox.shrink()
                 : Align(
                     alignment: const Alignment(1, -0.99),
@@ -113,20 +109,24 @@ class _WebViewState extends State<WebWidget> {
 
   @override
   void dispose() {
-    widget.onReward(_reward);
+    widget.onReward(reward);
     super.dispose();
   }
 
   void _onPageStarted(String url) {
     setState(() {
-      _isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
+      isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });
 
-    if (url.contains('survey/compete') || url.contains('survey/screenout')) {
-      _reward += double.parse(Uri.parse(url).queryParameters['val'] ?? '0.0');
+    if (url.contains('survey-compete') ||
+        url.contains('survey-screenout') ||
+        url.contains('start-bonus')) {
+      reward += double.parse(Uri.parse(url).queryParameters['val'] ?? '0.0');
     }
 
-    if (!_isPageOfferWall) _extractNetworkAndSurveyIds(url);
+    if (!isPageOfferWall) {
+      clickId = Uri.parse(url).queryParameters['clk'] ?? clickId;
+    }
   }
 
   Widget _showLeaveSurveyDialog(BuildContext context) {
@@ -143,25 +143,12 @@ class _WebViewState extends State<WebWidget> {
   }
 
   void _leaveSurvey(String reason) {
-    _controller.loadRequest(Uri.parse(widget.url));
+    controller.loadRequest(Uri.parse(widget.url));
 
-    if (_networkId == null || _surveyId == null) return;
+    if (clickId == null) return;
 
-    log('Leaving with reason ~> $reason');
-    BitLabs.instance.leaveSurvey(_networkId!, _surveyId!, reason);
-    _networkId = null;
-    _surveyId = null;
-  }
-
-  void _extractNetworkAndSurveyIds(String url) {
-    if (_networkId != null && _surveyId != null) return;
-
-    final segments = Uri.parse(url).pathSegments;
-    if (!segments.contains('networks') || !segments.contains('surveys')) {
-      return;
-    }
-
-    _networkId = segments[segments.indexOf('networks') + 1];
-    _surveyId = segments[segments.indexOf('surveys') + 1];
+    log('[BitLabs] Leaving with reason ~> $reason');
+    BitLabs.instance.leaveSurvey(clickId!, reason);
+    clickId = null;
   }
 }

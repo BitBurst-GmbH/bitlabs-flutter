@@ -19,15 +19,16 @@ class BitLabsApi {
   Future<Response> getLeaderboard() =>
       get(url('v1/client/leaderboard'), headers: _headers);
 
-  Future<Response> leaveSurveys(
-    String networkId,
-    String surveyId,
+  Future<Response> updateClick(
+    String clickId,
     String reason,
   ) {
     return post(
-      url('v1/client/networks/$networkId/surveys/$surveyId/leave'),
+      url('v2/client/clicks/$clickId'),
       headers: {..._headers},
-      body: jsonEncode({'reason': reason}),
+      body: jsonEncode({
+        'leave_survey': {'reason': reason}
+      }),
     );
   }
 

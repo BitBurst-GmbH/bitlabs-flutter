@@ -69,9 +69,8 @@ class BitLabsRepository {
     if (leaderboard != null) onResponse(leaderboard);
   }
 
-  void leaveSurvey(String networkId, String surveyId, String reason) async {
-    final response =
-        await _bitLabsApi.leaveSurveys(networkId, surveyId, reason);
+  void leaveSurvey(String clickId, String reason) async {
+    final response = await _bitLabsApi.updateClick(clickId, reason);
     final body = BitLabsResponse<Serializable>.fromJson(
         jsonDecode(response.body), (data) => Serializable());
 

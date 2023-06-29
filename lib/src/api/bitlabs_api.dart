@@ -14,7 +14,7 @@ class BitLabsApi {
       get(url('v2/client/surveys', {'os': platform}), headers: _headers);
 
   Future<Response> getOffers() =>
-      get(url('v1/client/offers'), headers: _headers);
+      get(url('v2/client/offers'), headers: _headers);
 
   Future<Response> getLeaderboard() =>
       get(url('v1/client/leaderboard'), headers: _headers);
@@ -23,13 +23,11 @@ class BitLabsApi {
     String clickId,
     String reason,
   ) {
-    return post(
-      url('v2/client/clicks/$clickId'),
-      headers: {..._headers},
-      body: jsonEncode({
-        'leave_survey': {'reason': reason}
-      }),
-    );
+    return post(url('v2/client/clicks/$clickId'),
+        headers: {..._headers},
+        body: jsonEncode({
+          'leave_survey': {'reason': reason}
+        }));
   }
 
   Future<Response> getAppSettings() =>

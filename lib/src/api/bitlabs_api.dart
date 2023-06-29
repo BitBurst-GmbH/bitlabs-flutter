@@ -10,9 +10,6 @@ class BitLabsApi {
   BitLabsApi(String token, String uid)
       : _headers = {'X-Api-Token': token, 'X-User-Id': uid};
 
-  Future<Response> checkSurveys() =>
-      get(url('v1/client/check'), headers: _headers);
-
   Future<Response> getSurveys() =>
       get(url('v2/client/surveys', {'os': platform}), headers: _headers);
 

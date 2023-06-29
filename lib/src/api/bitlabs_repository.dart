@@ -3,14 +3,12 @@ import 'dart:developer';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
-import 'package:bitlabs/src/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../models/bitlabs_response.dart';
-import '../models/check_surveys_response.dart';
-import '../models/get_surveys_response.dart';
 import '../models/get_offers_response.dart';
+import '../models/get_surveys_response.dart';
 import '../models/serializable.dart';
 import '../models/survey.dart';
 import 'bitlabs_api.dart';
@@ -21,22 +19,6 @@ class BitLabsRepository {
 
   BitLabsRepository(String token, String uid)
       : _bitLabsApi = BitLabsApi(token, uid);
-
-  void checkSurveys(void Function(bool) onResponse,
-      void Function(Exception) onFailure) async {
-    final response = await _bitLabsApi.checkSurveys();
-    final body = BitLabsResponse<CheckSurveysResponse>.fromJson(
-        jsonDecode(response.body), (data) => CheckSurveysResponse(data!));
-
-    final error = body.error;
-    if (error != null) {
-      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
-      return;
-    }
-
-    final hasSurveys = body.data?.hasSurveys;
-    if (hasSurveys != null) onResponse(hasSurveys);
-  }
 
   void getHasOffers(void Function(bool) onResponse) async {
     final response = await _bitLabsApi.getOffers();
@@ -68,7 +50,7 @@ class BitLabsRepository {
     }
 
     final surveys = body.data?.surveys ?? [];
-    onResponse(surveys.isNotEmpty ? surveys : randomSurveys());
+    onResponse(surveys);
   }
 
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) async {

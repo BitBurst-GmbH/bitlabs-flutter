@@ -1,3 +1,6 @@
+## 2.1.2
+- **Migrate to API v2**
+
 ## 2.1.1
 - **Bugfix**: Offers aren't opening.
 

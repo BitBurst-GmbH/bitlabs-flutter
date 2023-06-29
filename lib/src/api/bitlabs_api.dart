@@ -10,15 +10,17 @@ class BitLabsApi {
   BitLabsApi(String token, String uid)
       : _headers = {'X-Api-Token': token, 'X-User-Id': uid};
 
-  Future<Response> checkSurveys() => get(url('check'), headers: _headers);
+  Future<Response> checkSurveys() =>
+      get(url('v1/client/check'), headers: _headers);
 
-  Future<Response> getActions() =>
-      get(url('actions', {'os': platform}), headers: _headers);
+  Future<Response> getSurveys() =>
+      get(url('v2/client/surveys', {'os': platform}), headers: _headers);
 
-  Future<Response> getOffers() => get(url('offers'), headers: _headers);
+  Future<Response> getOffers() =>
+      get(url('v1/client/offers'), headers: _headers);
 
   Future<Response> getLeaderboard() =>
-      get(url('leaderboard'), headers: _headers);
+      get(url('v1/client/leaderboard'), headers: _headers);
 
   Future<Response> leaveSurveys(
     String networkId,
@@ -26,14 +28,14 @@ class BitLabsApi {
     String reason,
   ) {
     return post(
-      url('networks/$networkId/surveys/$surveyId/leave'),
+      url('v1/client/networks/$networkId/surveys/$surveyId/leave'),
       headers: {..._headers},
       body: jsonEncode({'reason': reason}),
     );
   }
 
   Future<Response> getAppSettings() =>
-      get(url('settings/v2'), headers: _headers);
+      get(url('v1/client/settings/v2'), headers: _headers);
 
   static Future<Response> getCurrencyIcon(String url) => get(Uri.parse(url));
 }

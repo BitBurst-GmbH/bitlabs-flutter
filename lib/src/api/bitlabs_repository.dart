@@ -9,7 +9,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../models/bitlabs_response.dart';
 import '../models/check_surveys_response.dart';
-import '../models/get_actions_response.dart';
+import '../models/get_surveys_response.dart';
 import '../models/get_offers_response.dart';
 import '../models/serializable.dart';
 import '../models/survey.dart';
@@ -57,9 +57,9 @@ class BitLabsRepository {
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {
-    final response = await _bitLabsApi.getActions();
-    final body = BitLabsResponse<GetActionsResponse>.fromJson(
-        jsonDecode(response.body), (data) => GetActionsResponse(data!));
+    final response = await _bitLabsApi.getSurveys();
+    final body = BitLabsResponse<GetSurveysResponse>.fromJson(
+        jsonDecode(response.body), (data) => GetSurveysResponse(data!));
 
     final error = body.error;
     if (error != null) {

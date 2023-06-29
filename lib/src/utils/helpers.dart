@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../models/category.dart';
-import '../models/details.dart';
 import '../models/survey.dart';
 import 'localization.dart';
 
@@ -16,16 +15,22 @@ List<Survey> randomSurveys() {
 
   for (var i = 1; i <= 3; i++) {
     surveys.add(Survey(
-        networkId: random.nextInt(1000),
-        id: i,
+        id: i.toString(),
+        type: 'survey',
+        clickUrl: '',
         cpi: '0.5',
         value: '0.5',
         loi: random.nextDouble(),
-        remaining: 3,
-        details: Details(category: Category(name: 'General', iconUrl: '')),
+        country: 'US',
+        language: 'en',
         rating: random.nextInt(5),
-        link: '',
-        missingQuestions: 0));
+        category: Category(
+          name: 'General',
+          iconUrl: '',
+          iconName: '',
+          nameInternal: '',
+        ),
+        tags: ['recontact', 'pii']));
   }
 
   return surveys;
@@ -46,7 +51,7 @@ String offerWallUrl(
 // TODO: Add sdk='FLUTTER' parameter
 Uri url(String path, [Map? queries]) => Uri.https(
       'api.bitlabs.ai',
-      'v1/client/$path',
+      path,
       {...?queries, 'platform': 'MOBILE'},
     );
 

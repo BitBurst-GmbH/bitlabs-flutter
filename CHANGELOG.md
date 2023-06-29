@@ -1,5 +1,5 @@
 ## 2.1.1
-- **Bugfixes and improvements**
+- **Bugfix**: Offers aren't opening.
 
 ## 2.1.0
 - **Add Simple and Full Width widgets**

@@ -83,29 +83,27 @@ class BitLabs {
   /// Registers a reward callback to be invoked when the OfferWall is exited by the user.
   void setOnReward(void Function(double) onReward) => _onReward = onReward;
 
-  /// Determines whether the user can perform an action in the OfferWall
-  /// (either opening a survey or answering qualifications) and then executes [onResponse].
+  /// Determines whether the user has surveys available.
   ///
-  /// If you want to perform background checks if surveys are available, this is the best option.
-  ///
-  /// The boolean parameter in [onResponse] is `true` if an action can be performed
-  /// and `false` otherwise. If it's `null`,then there has been an internal error
-  /// which is most probably logged with 'BitLabs' as a tag.
+  /// The boolean parameter in [onResponse] is `true` if there are surveys available
+  /// and `false` otherwise.
   void checkSurveys(
           void Function(bool) onResponse, void Function(Exception) onFailure) =>
       _ifInitialised(() {
-        _bitLabsRepository?.checkSurveys(onResponse, onFailure);
+        _bitLabsRepository?.getSurveys(
+            (surveys) => onResponse(surveys.isNotEmpty), onFailure);
       });
 
   /// Fetches a list of surveys the user can open.
   ///
   /// The [onResponse] callback executes when a response is received.
-  /// Its parameter is the list of surveys. If it's `null`, then there has been an internal error
-  /// which is most probably logged with 'BitLabs' as a tag.
+  /// Its parameter is the list of surveys.
   void getSurveys(void Function(List<Survey>) onResponse,
           void Function(Exception) onFailure) =>
-      _ifInitialised(
-          () => _bitLabsRepository?.getSurveys(onResponse, onFailure));
+      _ifInitialised(() => _bitLabsRepository?.getSurveys(
+          (surveys) =>
+              onResponse(surveys.isNotEmpty ? surveys : randomSurveys()),
+          onFailure));
 
   List<SurveyWidget> getSurveyWidgets(List<Survey> surveys, WidgetType type) {
     return List.generate(surveys.length, (index) {
@@ -125,8 +123,8 @@ class BitLabs {
         _bitLabsRepository?.getLeaderboard(onResponse);
       });
 
-  void leaveSurvey(String networkId, String surveyId, String reason) =>
-      _bitLabsRepository?.leaveSurvey(networkId, surveyId, reason);
+  void leaveSurvey(String clickId, String reason) =>
+      _bitLabsRepository?.leaveSurvey(clickId, reason);
 
   /// Launches the OfferWall from the [context] you pass.
   ///

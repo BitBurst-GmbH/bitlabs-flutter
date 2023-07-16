@@ -1,5 +1,6 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
+import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
@@ -61,7 +62,7 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Leaderboard', style: TextStyle(fontSize: 25)),
+              const StyledText('Leaderboard', fontSize: 25),
               ownUser == null
                   ? const Text('Participate in a survey to '
                       'join the leaderboard.')

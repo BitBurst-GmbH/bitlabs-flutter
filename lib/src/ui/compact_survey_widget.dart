@@ -1,4 +1,5 @@
 import 'package:bitlabs/src/ui/star_rating.dart';
+import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class CompactSurveyWidget extends StatefulWidget {
@@ -42,17 +43,11 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                 size: 16,
                 color: Colors.white,
               ),
-              Text(
-                ' ${widget.loi}',
-                style: const TextStyle(color: Colors.white),
-              ),
+              StyledText(' ${widget.loi}', color: Colors.white),
             ]),
             Row(children: [
               StarRating(rating: widget.rating),
-              Text(
-                ' ${widget.rating}',
-                style: const TextStyle(color: Colors.white),
-              ),
+              StyledText(' ${widget.rating}', color: Colors.white),
             ]),
           ],
         ),
@@ -62,26 +57,41 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Icon(
-                  Icons.play_circle_outline_outlined,
-                  size: 38,
-                  color: color,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-                child: Text(
-                  'EARN\n${widget.reward}',
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      Icons.play_circle_outline_outlined,
+                      size: 38,
+                      color: color,
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StyledText(
+                          'EARN',
+                          color: color,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        StyledText(
+                          widget.reward,
+                          color: color,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

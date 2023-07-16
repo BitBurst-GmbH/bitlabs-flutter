@@ -1,3 +1,4 @@
+import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class SimpleSurveyWidget extends StatefulWidget {
@@ -29,21 +30,17 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            StyledText(
               'EARN ${widget.reward}',
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
+            StyledText(
               'Now in ${widget.loi}!',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ],
         ),

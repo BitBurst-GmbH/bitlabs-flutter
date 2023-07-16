@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 80, child: surveyWidgets ?? const SizedBox()),
+            SizedBox(height: 90, child: surveyWidgets ?? const SizedBox()),
           ],
         ),
       ),

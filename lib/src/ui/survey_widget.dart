@@ -71,7 +71,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
 double getWidgetWidth(WidgetType type, BuildContext context) {
   switch (type) {
     case WidgetType.simple:
-      return MediaQuery.of(context).size.width * .8;
+      return MediaQuery.of(context).size.width * .7;
     case WidgetType.fullWidth:
       return MediaQuery.of(context).size.width * .95;
     case WidgetType.compact:
@@ -83,7 +83,7 @@ Widget getWidgetWithType(
     WidgetType type, int rating, String reward, String loi, Color color) {
   switch (type) {
     case WidgetType.simple:
-      return SimpleSurveyWidget(reward: reward, loi: loi);
+      return SimpleSurveyWidget(reward: reward, loi: loi, color: color);
     case WidgetType.fullWidth:
       return FullWidthSurveyWidget(
           rating: rating, reward: reward, loi: loi, color: color);

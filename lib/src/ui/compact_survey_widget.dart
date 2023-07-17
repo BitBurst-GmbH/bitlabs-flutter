@@ -1,3 +1,4 @@
+import 'package:bitlabs/src/ui/promotion_view.dart';
 import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
@@ -92,30 +93,7 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  StyledText(
-                    '0.05',
-                    color: color,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
-                    child: const StyledText(
-                      '+20%',
-                      color: Colors.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+              PromotionView(color: color, accentColor: Colors.white),
             ],
           ),
         ),

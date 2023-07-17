@@ -51,19 +51,19 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
             ]),
           ],
         ),
-        Container(
-          height: double.infinity,
+        DecoratedBox(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Icon(
                       Icons.play_circle_outline_outlined,
                       size: 38,
@@ -71,9 +71,8 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+                    padding: const EdgeInsets.only(right: 8),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         StyledText(
@@ -89,6 +88,30 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                           fontWeight: FontWeight.bold,
                         ),
                       ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  StyledText(
+                    '0.05',
+                    color: color,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
+                    child: const StyledText(
+                      '+20%',
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],

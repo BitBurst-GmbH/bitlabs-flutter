@@ -113,15 +113,11 @@ class BitLabsRepository {
       onResponse(SvgPicture.string(
         response.body,
         fit: BoxFit.contain,
-        width: 24,
-        height: 24,
       ));
     } else {
       onResponse(Image.memory(
         response.bodyBytes,
         fit: BoxFit.contain,
-        width: 24,
-        height: 24,
       ));
     }
   }

@@ -1,4 +1,5 @@
 import 'package:bitlabs/src/ui/promotion_view.dart';
+import 'package:bitlabs/src/ui/reward_view.dart';
 import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,15 @@ class FullWidthSurveyWidget extends StatefulWidget {
   final String reward;
   final String loi;
   final Color color;
+  final Widget? image;
 
   const FullWidthSurveyWidget(
       {Key? key,
       required this.rating,
       required this.reward,
       required this.loi,
-      required this.color})
+      required this.color,
+      this.image})
       : super(key: key);
 
   @override
@@ -60,12 +63,21 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              PromotionView(color: Colors.white, accentColor: color),
-              StyledText(widget.reward, color: Colors.white),
-            ]),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PromotionView(
+                  accentColor: color,
+                  color: Colors.white,
+                  currencyIcon: widget.image,
+                ),
+                RewardView(
+                  size: 16,
+                  reward: widget.reward,
+                  currencyIcon: widget.image,
+                )
+              ],
+            ),
           ),
         ]),
         TextButton(

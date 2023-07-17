@@ -2,16 +2,20 @@ import 'package:bitlabs/src/ui/promotion_view.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
+import 'reward_view.dart';
+
 class SimpleSurveyWidget extends StatefulWidget {
   final String reward;
   final Color color;
   final String loi;
+  final Widget? image;
 
   const SimpleSurveyWidget({
     Key? key,
-    required this.reward,
-    required this.color,
+    this.image,
     required this.loi,
+    required this.color,
+    required this.reward,
   }) : super(key: key);
 
   @override
@@ -37,18 +41,20 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
               PromotionView(
                 color: Colors.white,
                 accentColor: widget.color,
+                currencyIcon: widget.image,
               ),
-              StyledText(
-                'EARN ${widget.reward}',
-                fontSize: 20,
+              RewardView(
+                reward: 'EARN ${widget.reward}',
+                currencyIcon: widget.image,
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                size: 18,
               ),
               StyledText(
                 'Now in ${widget.loi}!',
-                fontSize: 16,
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 16,
               ),
             ],
           ),

@@ -2,6 +2,8 @@ import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/ui/simple_survey_widget.dart';
 import 'package:flutter/widgets.dart';
 
+import '../api/bitlabs_repository.dart';
+import '../utils/notifiers.dart' as notifiers;
 import 'compact_survey_widget.dart';
 import 'full_width_survey_widget.dart';
 
@@ -27,6 +29,22 @@ class SurveyWidget extends StatefulWidget {
 
 class _SurveyWidgetState extends State<SurveyWidget> {
   var opacity = 1.0;
+  Widget? image;
+
+  void _updateImageWidget() {
+    BitLabsRepository.getCurrencyIcon(notifiers.currencyIconURL.value,
+        (imageData) => setState(() => image = imageData));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (notifiers.currencyIconURL.value.isNotEmpty) {
+      _updateImageWidget();
+    } else {
+      notifiers.currencyIconURL.addListener(_updateImageWidget);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +80,16 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           widget.reward,
           widget.loi,
           widget.color.first,
+          image,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    notifiers.currencyIconURL.removeListener(_updateImageWidget);
+    super.dispose();
   }
 }
 
@@ -79,16 +104,17 @@ double getWidgetWidth(WidgetType type, BuildContext context) {
   }
 }
 
-Widget getWidgetWithType(
-    WidgetType type, int rating, String reward, String loi, Color color) {
+Widget getWidgetWithType(WidgetType type, int rating, String reward, String loi,
+    Color color, Widget? image) {
   switch (type) {
     case WidgetType.simple:
-      return SimpleSurveyWidget(reward: reward, loi: loi, color: color);
+      return SimpleSurveyWidget(
+          reward: reward, loi: loi, color: color, image: image);
     case WidgetType.fullWidth:
       return FullWidthSurveyWidget(
-          rating: rating, reward: reward, loi: loi, color: color);
+          rating: rating, reward: reward, loi: loi, color: color, image: image);
     case WidgetType.compact:
       return CompactSurveyWidget(
-          rating: rating, reward: reward, loi: loi, color: color);
+          rating: rating, reward: reward, loi: loi, color: color, image: image);
   }
 }

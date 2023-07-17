@@ -1,21 +1,24 @@
 import 'package:bitlabs/src/ui/promotion_view.dart';
+import 'package:bitlabs/src/ui/reward_view.dart';
 import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class CompactSurveyWidget extends StatefulWidget {
   final int rating;
-  final String reward;
   final String loi;
   final Color color;
+  final String reward;
+  final Widget? image;
 
-  const CompactSurveyWidget(
-      {Key? key,
-      required this.rating,
-      required this.reward,
-      required this.loi,
-      required this.color})
-      : super(key: key);
+  const CompactSurveyWidget({
+    Key? key,
+    this.image,
+    required this.loi,
+    required this.color,
+    required this.rating,
+    required this.reward,
+  }) : super(key: key);
 
   @override
   State<CompactSurveyWidget> createState() => _CompactSurveyWidgetState();
@@ -82,18 +85,23 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
-                        StyledText(
-                          widget.reward,
+                        RewardView(
+                          size: 16,
                           color: color,
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                          reward: widget.reward,
+                          currencyIcon: widget.image,
+                        )
                       ],
                     ),
                   ),
                 ],
               ),
-              PromotionView(color: color, accentColor: Colors.white),
+              PromotionView(
+                color: color,
+                accentColor: Colors.white,
+                currencyIcon: widget.image,
+              ),
             ],
           ),
         ),

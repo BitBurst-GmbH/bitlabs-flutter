@@ -1,3 +1,4 @@
+import 'package:bitlabs/src/ui/promotion_view.dart';
 import 'package:bitlabs/src/ui/star_rating.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,13 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: StyledText(widget.reward, color: Colors.white),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+              PromotionView(color: Colors.white, accentColor: color),
+              StyledText(widget.reward, color: Colors.white),
+            ]),
           ),
         ]),
         TextButton(

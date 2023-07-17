@@ -20,6 +20,7 @@ class PromotionView extends StatelessWidget {
           color: color,
           fontSize: 11,
           fontWeight: FontWeight.bold,
+          decoration: TextDecoration.lineThrough,
         ),
         Container(
           decoration: BoxDecoration(
@@ -27,7 +28,7 @@ class PromotionView extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           margin: const EdgeInsets.symmetric(horizontal: 4),
-          padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
           child: StyledText(
             '+20%',
             color: accentColor,

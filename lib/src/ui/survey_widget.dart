@@ -73,7 +73,7 @@ double getWidgetWidth(WidgetType type, BuildContext context) {
     case WidgetType.simple:
       return MediaQuery.of(context).size.width * .7;
     case WidgetType.fullWidth:
-      return MediaQuery.of(context).size.width * .95;
+      return MediaQuery.of(context).size.width * 1.05;
     case WidgetType.compact:
       return MediaQuery.of(context).size.width * .7;
   }

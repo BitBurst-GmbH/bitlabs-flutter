@@ -4,10 +4,11 @@ class StyledText extends StatelessWidget {
   final String text;
   final Color? color;
   final double? fontSize;
+  final TextDecoration? decoration;
   final FontWeight? fontWeight;
 
   const StyledText(this.text,
-      {Key? key, this.color, this.fontSize, this.fontWeight})
+      {Key? key, this.color, this.fontSize, this.fontWeight, this.decoration})
       : super(key: key);
 
   @override
@@ -18,6 +19,7 @@ class StyledText extends StatelessWidget {
         color: color,
         fontSize: fontSize,
         fontWeight: fontWeight,
+        decoration: decoration,
       ),
     );
   }

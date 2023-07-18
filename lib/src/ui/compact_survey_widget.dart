@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 class CompactSurveyWidget extends StatefulWidget {
   final int rating;
   final String loi;
-  final Color color;
   final String reward;
   final Widget? image;
+  final String oldReward;
+  final List<Color> color;
+  final int bonusPercentage;
 
   const CompactSurveyWidget({
     Key? key,
@@ -18,6 +20,8 @@ class CompactSurveyWidget extends StatefulWidget {
     required this.color,
     required this.rating,
     required this.reward,
+    required this.oldReward,
+    required this.bonusPercentage,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class CompactSurveyWidget extends StatefulWidget {
 }
 
 class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
-  late Color color;
+  late List<Color> color;
 
   @override
   void initState() {
@@ -71,7 +75,7 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                     child: Icon(
                       Icons.play_circle_outline_outlined,
                       size: 38,
-                      color: color,
+                      color: color.first,
                     ),
                   ),
                   Padding(
@@ -81,14 +85,14 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                       children: [
                         StyledText(
                           'EARN',
-                          color: color,
                           fontSize: 16,
+                          color: color.first,
                           fontWeight: FontWeight.bold,
                         ),
                         RewardView(
                           size: 16,
-                          color: color,
                           fontSize: 16,
+                          color: color.first,
                           reward: widget.reward,
                           currencyIcon: widget.image,
                         )
@@ -99,8 +103,10 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
               ),
               PromotionView(
                 color: color,
+                reward: widget.oldReward,
                 accentColor: Colors.white,
                 currencyIcon: widget.image,
+                bonusPercentage: widget.bonusPercentage,
               ),
             ],
           ),

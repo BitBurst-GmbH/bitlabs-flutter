@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'styled_text.dart';
 
 class PromotionView extends StatelessWidget {
-  final Color color;
+  final String reward;
+  final List<Color> color;
   final Color accentColor;
+  final int bonusPercentage;
   final Widget? currencyIcon;
 
   const PromotionView({
     Key? key,
     this.currencyIcon,
     required this.color,
+    required this.reward,
     required this.accentColor,
+    required this.bonusPercentage,
   }) : super(key: key);
 
   @override
@@ -22,23 +26,27 @@ class PromotionView extends StatelessWidget {
       children: [
         RewardView(
           size: 12,
-          color: color,
           fontSize: 11,
-          reward: '0.05',
+          reward: reward,
+          color: color.first,
           currencyIcon: currencyIcon,
           decoration: TextDecoration.lineThrough,
         ),
         Container(
           decoration: BoxDecoration(
-            color: color,
+            gradient: LinearGradient(
+              colors: color,
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
             borderRadius: BorderRadius.circular(5),
           ),
           margin: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
           child: StyledText(
-            '+20%',
-            color: accentColor,
+            '+$bonusPercentage%',
             fontSize: 11,
+            color: accentColor,
             fontWeight: FontWeight.bold,
           ),
         ),

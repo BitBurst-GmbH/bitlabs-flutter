@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'reward_view.dart';
 
 class SimpleSurveyWidget extends StatefulWidget {
-  final String reward;
-  final Color color;
   final String loi;
+  final Color color;
+  final String reward;
   final Widget? image;
+  final String oldReward;
+  final int bonusPercentage;
 
   const SimpleSurveyWidget({
     Key? key,
@@ -16,6 +18,8 @@ class SimpleSurveyWidget extends StatefulWidget {
     required this.loi,
     required this.color,
     required this.reward,
+    required this.oldReward,
+    required this.bonusPercentage,
   }) : super(key: key);
 
   @override
@@ -39,9 +43,11 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               PromotionView(
-                color: Colors.white,
+                reward: widget.oldReward,
                 accentColor: widget.color,
                 currencyIcon: widget.image,
+                color: const [Colors.white, Colors.white],
+                bonusPercentage: widget.bonusPercentage,
               ),
               RewardView(
                 reward: 'EARN ${widget.reward}',

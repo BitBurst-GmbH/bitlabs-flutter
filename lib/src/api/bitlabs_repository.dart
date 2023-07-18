@@ -110,15 +110,9 @@ class BitLabsRepository {
     }
 
     if (response.headers['content-type'] == 'image/svg+xml') {
-      onResponse(SvgPicture.string(
-        response.body,
-        fit: BoxFit.contain,
-      ));
+      onResponse(SvgPicture.string(response.body, fit: BoxFit.contain));
     } else {
-      onResponse(Image.memory(
-        response.bodyBytes,
-        fit: BoxFit.contain,
-      ));
+      onResponse(Image.memory(response.bodyBytes, fit: BoxFit.contain));
     }
   }
 }

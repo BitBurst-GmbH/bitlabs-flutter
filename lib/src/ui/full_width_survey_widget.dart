@@ -6,19 +6,23 @@ import 'package:flutter/material.dart';
 
 class FullWidthSurveyWidget extends StatefulWidget {
   final int rating;
-  final String reward;
   final String loi;
   final Color color;
+  final String reward;
   final Widget? image;
+  final String oldReward;
+  final int bonusPercentage;
 
-  const FullWidthSurveyWidget(
-      {Key? key,
-      required this.rating,
-      required this.reward,
-      required this.loi,
-      required this.color,
-      this.image})
-      : super(key: key);
+  const FullWidthSurveyWidget({
+    Key? key,
+    this.image,
+    required this.loi,
+    required this.color,
+    required this.rating,
+    required this.reward,
+    required this.oldReward,
+    required this.bonusPercentage,
+  }) : super(key: key);
 
   @override
   State<FullWidthSurveyWidget> createState() => _FullWidthSurveyWidgetState();
@@ -68,8 +72,10 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
               children: [
                 PromotionView(
                   accentColor: color,
-                  color: Colors.white,
+                  reward: widget.oldReward,
                   currencyIcon: widget.image,
+                  bonusPercentage: widget.bonusPercentage,
+                  color: const [Colors.white, Colors.white],
                 ),
                 RewardView(
                   size: 16,

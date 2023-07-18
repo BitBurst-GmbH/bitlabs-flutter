@@ -28,8 +28,13 @@ class SurveyWidget extends StatefulWidget {
 }
 
 class _SurveyWidgetState extends State<SurveyWidget> {
-  var opacity = 1.0;
   Widget? image;
+  var opacity = 1.0;
+  double bonusPercentage = 0.0;
+
+  void _updateBonusPercentage() {
+    setState(() => bonusPercentage = notifiers.bonusPercentage.value);
+  }
 
   void _updateImageWidget() {
     BitLabsRepository.getCurrencyIcon(notifiers.currencyIconURL.value,
@@ -43,6 +48,12 @@ class _SurveyWidgetState extends State<SurveyWidget> {
       _updateImageWidget();
     } else {
       notifiers.currencyIconURL.addListener(_updateImageWidget);
+    }
+
+    if (notifiers.bonusPercentage.value > 0.0) {
+      _updateBonusPercentage();
+    } else {
+      notifiers.bonusPercentage.addListener(_updateBonusPercentage);
     }
   }
 
@@ -71,16 +82,18 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           ),
           borderRadius: BorderRadius.circular(5),
         ),
-        width: getWidgetWidth(widget.type, context),
+        width: _getWidgetWidth(widget.type, context),
         padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.symmetric(horizontal: 4),
-        child: getWidgetWithType(
+        child: _getWidgetWithType(
           widget.type,
           widget.rating,
           widget.reward,
+          (double.parse(widget.reward) / (1 + bonusPercentage)).toString(),
           widget.loi,
-          widget.color.first,
+          widget.color,
           image,
+          (bonusPercentage * 100).toInt(),
         ),
       ),
     );
@@ -89,11 +102,12 @@ class _SurveyWidgetState extends State<SurveyWidget> {
   @override
   void dispose() {
     notifiers.currencyIconURL.removeListener(_updateImageWidget);
+    notifiers.bonusPercentage.removeListener(_updateBonusPercentage);
     super.dispose();
   }
 }
 
-double getWidgetWidth(WidgetType type, BuildContext context) {
+double _getWidgetWidth(WidgetType type, BuildContext context) {
   switch (type) {
     case WidgetType.simple:
       return MediaQuery.of(context).size.width * .7;
@@ -104,17 +118,44 @@ double getWidgetWidth(WidgetType type, BuildContext context) {
   }
 }
 
-Widget getWidgetWithType(WidgetType type, int rating, String reward, String loi,
-    Color color, Widget? image) {
+Widget _getWidgetWithType(
+    WidgetType type,
+    int rating,
+    String reward,
+    String oldReward,
+    String loi,
+    List<Color> color,
+    Widget? image,
+    int bonusPercentage) {
   switch (type) {
     case WidgetType.simple:
       return SimpleSurveyWidget(
-          reward: reward, loi: loi, color: color, image: image);
+        loi: loi,
+        color: color.first,
+        image: image,
+        reward: reward,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
     case WidgetType.fullWidth:
       return FullWidthSurveyWidget(
-          rating: rating, reward: reward, loi: loi, color: color, image: image);
+        rating: rating,
+        reward: reward,
+        loi: loi,
+        color: color.first,
+        image: image,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
     case WidgetType.compact:
       return CompactSurveyWidget(
-          rating: rating, reward: reward, loi: loi, color: color, image: image);
+        rating: rating,
+        reward: reward,
+        loi: loi,
+        color: color,
+        image: image,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
   }
 }

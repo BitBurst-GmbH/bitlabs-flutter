@@ -60,6 +60,8 @@ class BitLabs {
       notifiers.currencyIconURL.value = settings.currency.symbol.isImage
           ? settings.currency.symbol.content
           : '';
+
+      notifiers.bonusPercentage.value = settings.currency.bonusPercentage / 100;
     }, (error) => log(error.toString()));
 
     _getHasOffers();

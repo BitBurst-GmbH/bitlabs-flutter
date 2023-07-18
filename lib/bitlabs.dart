@@ -61,7 +61,15 @@ class BitLabs {
           ? settings.currency.symbol.content
           : '';
 
-      notifiers.bonusPercentage.value = settings.currency.bonusPercentage / 100;
+      var bonus = settings.currency.bonusPercentage / 100;
+
+      final promotion = settings.promotion;
+      if (promotion != null) {
+        bonus += promotion.bonusPercentage / 100 +
+            (bonus * promotion.bonusPercentage) / 100;
+      }
+
+      notifiers.bonusPercentage.value = bonus;
     }, (error) => log(error.toString()));
 
     _getHasOffers();

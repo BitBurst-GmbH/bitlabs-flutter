@@ -10,9 +10,9 @@ import 'full_width_survey_widget.dart';
 class SurveyWidget extends StatefulWidget {
   final String loi;
   final int rating;
-  final List<Color> color;
   final String reward;
   final WidgetType type;
+  final List<Color> color;
 
   const SurveyWidget(
       {Key? key,
@@ -89,7 +89,8 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           widget.type,
           widget.rating,
           widget.reward,
-          (double.parse(widget.reward) / (1 + bonusPercentage)).toString(),
+          (double.parse(widget.reward) / (1 + bonusPercentage))
+              .toStringAsFixed(2),
           widget.loi,
           widget.color,
           image,

@@ -1,5 +1,6 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/ui/simple_survey_widget.dart';
+import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/widgets.dart';
 
 import '../api/bitlabs_repository.dart';
@@ -89,8 +90,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           widget.type,
           widget.rating,
           widget.reward,
-          (double.parse(widget.reward) / (1 + bonusPercentage))
-              .toStringAsFixed(2),
+          (double.parse(widget.reward) / (1 + bonusPercentage)).rounded(),
           widget.loi,
           widget.color,
           image,

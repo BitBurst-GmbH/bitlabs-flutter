@@ -18,8 +18,8 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   List<User>? topUsers;
   User? ownUser;
 
-  Color color = Colors.blueAccent;
   Widget? image;
+  Color color = notifiers.widgetColor.value.first;
 
   void _updateColor() {
     setState(() => color = notifiers.widgetColor.value.first);
@@ -63,11 +63,9 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const StyledText('Leaderboard', fontSize: 25),
-              ownUser == null
-                  ? const Text('Participate in a survey to '
-                      'join the leaderboard.')
-                  : Text('You are currently ranked ${ownUser!.rank}'
-                      ' on our leaderboard.'),
+              Text(ownUser == null
+                  ? 'Participate in a survey to join the leaderboard.'
+                  : 'You are currently ranked ${ownUser!.rank} on our leaderboard.'),
               const SizedBox(height: 4),
               Expanded(
                 child: ListView(children: [

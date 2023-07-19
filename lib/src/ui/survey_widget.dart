@@ -1,16 +1,19 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/ui/simple_survey_widget.dart';
+import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/widgets.dart';
 
+import '../api/bitlabs_repository.dart';
+import '../utils/notifiers.dart' as notifiers;
 import 'compact_survey_widget.dart';
 import 'full_width_survey_widget.dart';
 
 class SurveyWidget extends StatefulWidget {
   final String loi;
   final int rating;
-  final List<Color> color;
   final String reward;
   final WidgetType type;
+  final List<Color> color;
 
   const SurveyWidget(
       {Key? key,
@@ -26,7 +29,34 @@ class SurveyWidget extends StatefulWidget {
 }
 
 class _SurveyWidgetState extends State<SurveyWidget> {
+  Widget? image;
   var opacity = 1.0;
+  double bonusPercentage = 0.0;
+
+  void _updateBonusPercentage() {
+    setState(() => bonusPercentage = notifiers.bonusPercentage.value);
+  }
+
+  void _updateImageWidget() {
+    BitLabsRepository.getCurrencyIcon(notifiers.currencyIconURL.value,
+        (imageData) => setState(() => image = imageData));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (notifiers.currencyIconURL.value.isNotEmpty) {
+      _updateImageWidget();
+    } else {
+      notifiers.currencyIconURL.addListener(_updateImageWidget);
+    }
+
+    if (notifiers.bonusPercentage.value > 0.0) {
+      _updateBonusPercentage();
+    } else {
+      notifiers.bonusPercentage.addListener(_updateBonusPercentage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,42 +83,80 @@ class _SurveyWidgetState extends State<SurveyWidget> {
           ),
           borderRadius: BorderRadius.circular(5),
         ),
-        width: getWidgetWidth(widget.type, context),
+        width: _getWidgetWidth(widget.type, context),
         padding: const EdgeInsets.all(8),
         margin: const EdgeInsets.symmetric(horizontal: 4),
-        child: getWidgetWithType(
+        child: _getWidgetWithType(
           widget.type,
           widget.rating,
           widget.reward,
+          (double.parse(widget.reward) / (1 + bonusPercentage)).rounded(),
           widget.loi,
-          widget.color.first,
+          widget.color,
+          image,
+          (bonusPercentage * 100).toInt(),
         ),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    notifiers.currencyIconURL.removeListener(_updateImageWidget);
+    notifiers.bonusPercentage.removeListener(_updateBonusPercentage);
+    super.dispose();
+  }
 }
 
-double getWidgetWidth(WidgetType type, BuildContext context) {
+double _getWidgetWidth(WidgetType type, BuildContext context) {
   switch (type) {
     case WidgetType.simple:
-      return MediaQuery.of(context).size.width * .8;
+      return MediaQuery.of(context).size.width * .7;
     case WidgetType.fullWidth:
-      return MediaQuery.of(context).size.width * .95;
+      return MediaQuery.of(context).size.width * 1.05;
     case WidgetType.compact:
       return MediaQuery.of(context).size.width * .7;
   }
 }
 
-Widget getWidgetWithType(
-    WidgetType type, int rating, String reward, String loi, Color color) {
+Widget _getWidgetWithType(
+    WidgetType type,
+    int rating,
+    String reward,
+    String oldReward,
+    String loi,
+    List<Color> color,
+    Widget? image,
+    int bonusPercentage) {
   switch (type) {
     case WidgetType.simple:
-      return SimpleSurveyWidget(reward: reward, loi: loi);
+      return SimpleSurveyWidget(
+        loi: loi,
+        color: color.first,
+        image: image,
+        reward: reward,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
     case WidgetType.fullWidth:
       return FullWidthSurveyWidget(
-          rating: rating, reward: reward, loi: loi, color: color);
+        rating: rating,
+        reward: reward,
+        loi: loi,
+        color: color.first,
+        image: image,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
     case WidgetType.compact:
       return CompactSurveyWidget(
-          rating: rating, reward: reward, loi: loi, color: color);
+        rating: rating,
+        reward: reward,
+        loi: loi,
+        color: color,
+        image: image,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
   }
 }

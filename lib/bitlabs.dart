@@ -7,6 +7,7 @@ import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/ui/survey_widget.dart';
+import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -54,12 +55,22 @@ class BitLabs {
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =
-          colorsFromCSS(settings.visual.surveyIconColor);
-      _headerColor = colorsFromCSS(settings.visual.navigationColor);
+          settings.visual.surveyIconColor.colorsFromCSS();
+      _headerColor = settings.visual.navigationColor.colorsFromCSS();
 
       notifiers.currencyIconURL.value = settings.currency.symbol.isImage
           ? settings.currency.symbol.content
           : '';
+
+      var bonus = settings.currency.bonusPercentage / 100;
+
+      final promotion = settings.promotion;
+      if (promotion != null) {
+        bonus += promotion.bonusPercentage / 100 +
+            (bonus * promotion.bonusPercentage) / 100;
+      }
+
+      notifiers.bonusPercentage.value = bonus;
     }, (error) => log(error.toString()));
 
     _getHasOffers();
@@ -110,9 +121,9 @@ class BitLabs {
       final survey = surveys[index];
       return SurveyWidget(
         type: type,
-        color: notifiers.widgetColor.value,
         reward: survey.value,
         rating: survey.rating,
+        color: notifiers.widgetColor.value,
         loi: '${survey.loi.round()} minutes',
       );
     });

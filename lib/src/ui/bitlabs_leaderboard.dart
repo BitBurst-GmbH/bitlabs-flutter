@@ -1,5 +1,7 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
+import 'package:bitlabs/src/models/reward.dart';
+import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
@@ -14,11 +16,11 @@ class BitLabsLeaderboard extends StatefulWidget {
 }
 
 class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
-  List<User>? topUsers;
   User? ownUser;
+  List<User>? topUsers;
 
-  Color color = Colors.blueAccent;
   Widget? image;
+  Color color = notifiers.widgetColor.value.first;
 
   void _updateColor() {
     setState(() => color = notifiers.widgetColor.value.first);
@@ -46,40 +48,38 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   }
 
   @override
-  void dispose() {
-    notifiers.currencyIconURL.removeListener(_updateImageWidget);
-    notifiers.widgetColor.removeListener(_updateColor);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => topUsers == null
       ? const SizedBox.shrink()
       : SizedBox(
-          width: double.infinity,
           height: 200,
+          width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Leaderboard', style: TextStyle(fontSize: 25)),
-              ownUser == null
-                  ? const Text('Participate in a survey to '
-                      'join the leaderboard.')
-                  : Text('You are currently ranked ${ownUser!.rank}'
-                      ' on our leaderboard.'),
+              const StyledText('Leaderboard', fontSize: 25),
+              Text(ownUser == null
+                  ? 'Participate in a survey to join the leaderboard.'
+                  : 'You are currently ranked ${ownUser!.rank} on our leaderboard.'),
               const SizedBox(height: 4),
               Expanded(
                 child: ListView(children: [
                   for (User user in topUsers!)
                     LeaderboardItem(
                       user: user,
-                      ownUser: ownUser,
                       color: color,
                       image: image,
+                      ownUser: ownUser,
                     ),
                 ]),
               )
             ],
           ),
         );
+
+  @override
+  void dispose() {
+    notifiers.currencyIconURL.removeListener(_updateImageWidget);
+    notifiers.widgetColor.removeListener(_updateColor);
+    super.dispose();
+  }
 }

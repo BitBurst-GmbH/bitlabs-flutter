@@ -43,7 +43,7 @@ class _WebViewState extends State<WebWidget> {
 
     controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
-          onPageStarted: _onPageStarted,
+          onPageStarted: onPageStarted,
           onNavigationRequest: (request) {
             final url = request.url;
 
@@ -64,7 +64,7 @@ class _WebViewState extends State<WebWidget> {
     return WillPopScope(
       onWillPop: () async {
         if (!isPageOfferWall) {
-          await showDialog(context: context, builder: _showLeaveSurveyDialog);
+          await showDialog(context: context, builder: showLeaveSurveyDialog);
         }
         return false;
       },
@@ -88,19 +88,18 @@ class _WebViewState extends State<WebWidget> {
                 ),
           body: Stack(fit: StackFit.expand, children: [
             WebViewWidget(controller: controller),
-            !isPageOfferWall
-                ? const SizedBox.shrink()
-                : Align(
-                    alignment: const Alignment(1, -0.99),
-                    child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(
-                        Icons.exit_to_app_outlined,
-                        color: isColorBright ? Colors.black : Colors.white,
-                        size: 24.0,
-                      ),
-                    ),
+            if (isPageOfferWall)
+              Align(
+                alignment: const Alignment(1, -0.99),
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Icon(
+                    Icons.exit_to_app_outlined,
+                    color: isColorBright ? Colors.black : Colors.white,
+                    size: 24.0,
                   ),
+                ),
+              ),
           ]),
         ),
       ),
@@ -113,7 +112,7 @@ class _WebViewState extends State<WebWidget> {
     super.dispose();
   }
 
-  void _onPageStarted(String url) {
+  void onPageStarted(String url) {
     setState(() {
       isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });
@@ -129,11 +128,11 @@ class _WebViewState extends State<WebWidget> {
     }
   }
 
-  Widget _showLeaveSurveyDialog(BuildContext context) {
+  Widget showLeaveSurveyDialog(BuildContext context) {
     return SimpleDialog(
       title: Text(Localization.of(context).leaveDescription),
       children: [
-        ...leaveReasonOptions(leaveSurvey: _leaveSurvey, context: context),
+        ...leaveReasonOptions(leaveSurvey: leaveSurvey, context: context),
         SimpleDialogOption(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(Localization.of(context).continueSurvey),
@@ -142,7 +141,7 @@ class _WebViewState extends State<WebWidget> {
     );
   }
 
-  void _leaveSurvey(String reason) {
+  void leaveSurvey(String reason) {
     controller.loadRequest(Uri.parse(widget.url));
 
     if (clickId == null) return;

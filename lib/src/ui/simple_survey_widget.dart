@@ -1,13 +1,25 @@
+import 'package:bitlabs/src/ui/promotion_view.dart';
+import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
+import 'reward_view.dart';
+
 class SimpleSurveyWidget extends StatefulWidget {
-  final String reward;
   final String loi;
+  final Color color;
+  final String reward;
+  final Widget? image;
+  final String oldReward;
+  final int bonusPercentage;
 
   const SimpleSurveyWidget({
     Key? key,
-    required this.reward,
+    this.image,
     required this.loi,
+    required this.color,
+    required this.reward,
+    required this.oldReward,
+    required this.bonusPercentage,
   }) : super(key: key);
 
   @override
@@ -25,27 +37,34 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
           size: 62,
           color: Colors.white,
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'EARN ${widget.reward}',
-              style: const TextStyle(
+        IntrinsicWidth(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (widget.bonusPercentage > 0)
+                PromotionView(
+                  reward: widget.oldReward,
+                  accentColor: widget.color,
+                  currencyIcon: widget.image,
+                  color: const [Colors.white, Colors.white],
+                  bonusPercentage: widget.bonusPercentage,
+                ),
+              RewardView(
+                reward: 'EARN ${widget.reward}',
+                currencyIcon: widget.image,
+                color: Colors.white,
                 fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+                size: 18,
               ),
-            ),
-            Text(
-              'Now in ${widget.loi}!',
-              style: const TextStyle(
+              StyledText(
+                'Now in ${widget.loi}!',
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
                 fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

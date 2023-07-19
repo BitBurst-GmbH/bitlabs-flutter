@@ -1,15 +1,28 @@
+import 'package:bitlabs/src/ui/promotion_view.dart';
+import 'package:bitlabs/src/ui/reward_view.dart';
 import 'package:bitlabs/src/ui/star_rating.dart';
+import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class FullWidthSurveyWidget extends StatefulWidget {
   final int rating;
-  final String reward;
   final String loi;
   final Color color;
+  final String reward;
+  final Widget? image;
+  final String oldReward;
+  final int bonusPercentage;
 
-  const FullWidthSurveyWidget(
-      {Key? key, required this.rating, required this.reward, required this.loi, required this.color})
-      : super(key: key);
+  const FullWidthSurveyWidget({
+    Key? key,
+    this.image,
+    required this.loi,
+    required this.color,
+    required this.rating,
+    required this.reward,
+    required this.oldReward,
+    required this.bonusPercentage,
+  }) : super(key: key);
 
   @override
   State<FullWidthSurveyWidget> createState() => _FullWidthSurveyWidgetState();
@@ -17,7 +30,6 @@ class FullWidthSurveyWidget extends StatefulWidget {
 
 class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
   late Color color;
-
 
   @override
   void initState() {
@@ -35,10 +47,7 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(children: [
               StarRating(rating: widget.rating),
-              Text(
-                ' ${widget.rating}',
-                style: const TextStyle(color: Colors.white),
-              ),
+              StyledText(' ${widget.rating}', color: Colors.white)
             ]),
           ),
           Padding(
@@ -51,18 +60,30 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Text(
-                  widget.loi,
-                  style: const TextStyle(color: Colors.white),
-                ),
+                child: StyledText(widget.loi, color: Colors.white),
               ),
             ]),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              widget.reward,
-              style: const TextStyle(color: Colors.white),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.bonusPercentage > 0)
+                  PromotionView(
+                    accentColor: color,
+                    reward: widget.oldReward,
+                    currencyIcon: widget.image,
+                    bonusPercentage: widget.bonusPercentage,
+                    color: const [Colors.white, Colors.white],
+                  ),
+                RewardView(
+                  size: 16,
+                  reward: widget.reward,
+                  currencyIcon: widget.image,
+                ),
+              ],
             ),
           ),
         ]),
@@ -71,7 +92,7 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
               backgroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 16)),
           onPressed: null,
-          child: Text('EARN NOW', style: TextStyle(color: color),),
+          child: StyledText('EARN NOW', color: color),
         ),
       ],
     );

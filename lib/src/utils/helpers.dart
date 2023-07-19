@@ -7,7 +7,7 @@ import '../models/category.dart';
 import '../models/survey.dart';
 import 'localization.dart';
 
-String platform = Platform.isAndroid ? 'ANDROID' : 'IOS';
+String system = Platform.isAndroid ? 'ANDROID' : 'IOS';
 
 List<Survey> randomSurveys() {
   final random = Random();
@@ -36,19 +36,18 @@ List<Survey> randomSurveys() {
   return surveys;
 }
 
-// TODO: Add sdk='FLUTTER' parameter
 String offerWallUrl(
     String token, String uid, String adId, Map<String, dynamic> tags) {
   final queries = {
-    'token': token,
-    'uid': uid,
     ...tags,
+    'uid': uid,
+    'token': token,
+    'sdk': 'FLUTTER',
   };
   if (adId.isNotEmpty) queries['maid'] = adId;
   return Uri.https('web.bitlabs.ai', '', queries).toString();
 }
 
-// TODO: Add sdk='FLUTTER' parameter
 Uri url(String path, [Map? queries]) => Uri.https(
       'api.bitlabs.ai',
       path,

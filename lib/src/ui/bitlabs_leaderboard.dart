@@ -47,13 +47,6 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   }
 
   @override
-  void dispose() {
-    notifiers.currencyIconURL.removeListener(_updateImageWidget);
-    notifiers.widgetColor.removeListener(_updateColor);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => topUsers == null
       ? const SizedBox.shrink()
       : SizedBox(
@@ -81,4 +74,11 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
             ],
           ),
         );
+
+  @override
+  void dispose() {
+    notifiers.currencyIconURL.removeListener(_updateImageWidget);
+    notifiers.widgetColor.removeListener(_updateColor);
+    super.dispose();
+  }
 }

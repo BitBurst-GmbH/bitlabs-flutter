@@ -16,9 +16,8 @@ class GetLeaderboardResponse extends Serializable {
         ownUser = json.containsKey('own_user') ? User(json['own_user']) : null,
         rewards = List<Reward>.from(
             json['rewards'].map((reward) => Reward(reward)).toList()),
-        topUsers = json.containsKey('own_user')
-            ? List<User>.from(
-                json['top_users'].map((user) => User(user)).toList())
+        topUsers = json.containsKey('top_users') && json['top_users'] != null
+            ? List<User>.from(json['top_users'].map((u) => User(u)).toList())
             : null;
 
   Map<String, dynamic> toJson() => {

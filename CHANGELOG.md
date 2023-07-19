@@ -1,3 +1,8 @@
+## 2.1.3
+- **Promotion View**: Show a promotion in the survey widgets to your users when available in you Dashboard.
+- **Bugfix**: Leaderboard not showing when there is user data.
+- **Code Optimisation and improvements**
+
 ## 2.1.2
 - **Migrate to API v2**
 

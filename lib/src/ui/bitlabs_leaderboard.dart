@@ -1,6 +1,5 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
-import 'package:bitlabs/src/models/reward.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 

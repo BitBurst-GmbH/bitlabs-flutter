@@ -1,4 +1,4 @@
-import 'Promotion.dart';
+import 'promotion.dart';
 import 'currency.dart';
 import 'serializable.dart';
 import 'visual.dart';

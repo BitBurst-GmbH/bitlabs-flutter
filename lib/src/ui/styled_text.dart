@@ -4,8 +4,8 @@ class StyledText extends StatelessWidget {
   final String text;
   final Color? color;
   final double? fontSize;
-  final TextDecoration? decoration;
   final FontWeight? fontWeight;
+  final TextDecoration? decoration;
 
   const StyledText(this.text,
       {Key? key, this.color, this.fontSize, this.fontWeight, this.decoration})

@@ -42,15 +42,14 @@ class _SimpleSurveyWidgetState extends State<SimpleSurveyWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              widget.bonusPercentage > 0
-                  ? PromotionView(
-                      reward: widget.oldReward,
-                      accentColor: widget.color,
-                      currencyIcon: widget.image,
-                      color: const [Colors.white, Colors.white],
-                      bonusPercentage: widget.bonusPercentage,
-                    )
-                  : const SizedBox.shrink(),
+              if (widget.bonusPercentage > 0)
+                PromotionView(
+                  reward: widget.oldReward,
+                  accentColor: widget.color,
+                  currencyIcon: widget.image,
+                  color: const [Colors.white, Colors.white],
+                  bonusPercentage: widget.bonusPercentage,
+                ),
               RewardView(
                 reward: 'EARN ${widget.reward}',
                 currencyIcon: widget.image,

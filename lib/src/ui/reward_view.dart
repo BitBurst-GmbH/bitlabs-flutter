@@ -30,12 +30,12 @@ class RewardView extends StatelessWidget {
         decoration: decoration,
         fontWeight: FontWeight.w500,
       ),
-      Padding(
-        padding: const EdgeInsets.only(left: 2),
-        child: currencyIcon != null
-            ? SizedBox(width: size, height: size, child: currencyIcon)
-            : const SizedBox.shrink(),
-      ),
+      if (currencyIcon != null)
+        Padding(
+          padding: const EdgeInsets.only(left: 2),
+          child:
+              SizedBox.fromSize(size: Size.square(size), child: currencyIcon),
+        ),
     ]);
   }
 }

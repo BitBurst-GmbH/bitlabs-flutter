@@ -1,5 +1,6 @@
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
+import 'package:bitlabs/src/models/reward.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,8 @@ class BitLabsLeaderboard extends StatefulWidget {
 }
 
 class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
-  List<User>? topUsers;
   User? ownUser;
+  List<User>? topUsers;
 
   Widget? image;
   Color color = notifiers.widgetColor.value.first;
@@ -50,8 +51,8 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   Widget build(BuildContext context) => topUsers == null
       ? const SizedBox.shrink()
       : SizedBox(
-          width: double.infinity,
           height: 200,
+          width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -65,9 +66,9 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
                   for (User user in topUsers!)
                     LeaderboardItem(
                       user: user,
-                      ownUser: ownUser,
                       color: color,
                       image: image,
+                      ownUser: ownUser,
                     ),
                 ]),
               )

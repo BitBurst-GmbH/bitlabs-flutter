@@ -1,3 +1,4 @@
+import 'package:bitlabs/src/ui/reward_view.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
 import 'package:flutter/material.dart';
 
@@ -22,10 +23,10 @@ class LeaderboardItem extends StatelessWidget {
     return Column(children: [
       const Divider(
         height: 1,
-        thickness: 1,
-        color: Colors.black,
         indent: 4,
+        thickness: 1,
         endIndent: 4,
+        color: Colors.black,
       ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -35,28 +36,41 @@ class LeaderboardItem extends StatelessWidget {
           StyledText(user.name, fontSize: 16),
           if (user.rank == ownUser?.rank) const Spacer(),
           if (user.rank == ownUser?.rank)
-            const StyledText('(You)', color: Colors.blueAccent, fontSize: 14),
+            const StyledText('(You)', color: Colors.blueAccent),
           const Spacer(),
-          getTrophy(user.rank, color),
+          if (user.rank < 4) Trophy(rank: user.rank, color: color),
           const Spacer(flex: 15),
-          StyledText('${user.earningsRaw}', fontSize: 16),
-          image ?? const SizedBox.shrink()
+          RewardView(
+            size: 16,
+            fontSize: 16,
+            color: Colors.black,
+            currencyIcon: image,
+            reward: user.earningsRaw.toString(),
+          ),
         ]),
       ),
     ]);
   }
+}
 
-  Widget getTrophy(int rank, Color color) => rank < 4
-      ? Stack(alignment: Alignment.center, children: [
-          Icon(Icons.emoji_events_sharp, size: 20, color: color),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: StyledText(
-              rank.toString(),
-              color: Colors.white,
-              fontSize: 10,
-            ),
-          )
-        ])
-      : const SizedBox.shrink();
+class Trophy extends StatelessWidget {
+  final int rank;
+  final Color color;
+
+  const Trophy({Key? key, required this.rank, required this.color})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) =>
+      Stack(alignment: Alignment.center, children: [
+        Icon(Icons.emoji_events_sharp, size: 20, color: color),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          child: StyledText(
+            rank.toString(),
+            fontSize: 10,
+            color: Colors.white,
+          ),
+        )
+      ]);
 }

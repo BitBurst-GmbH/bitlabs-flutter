@@ -101,15 +101,14 @@ class _CompactSurveyWidgetState extends State<CompactSurveyWidget> {
                   ),
                 ],
               ),
-              widget.bonusPercentage > 0
-                  ? PromotionView(
-                      color: color,
-                      reward: widget.oldReward,
-                      accentColor: Colors.white,
-                      currencyIcon: widget.image,
-                      bonusPercentage: widget.bonusPercentage,
-                    )
-                  : const SizedBox.shrink(),
+              if (widget.bonusPercentage > 0)
+                PromotionView(
+                  color: color,
+                  reward: widget.oldReward,
+                  accentColor: Colors.white,
+                  currencyIcon: widget.image,
+                  bonusPercentage: widget.bonusPercentage,
+                ),
             ],
           ),
         ),

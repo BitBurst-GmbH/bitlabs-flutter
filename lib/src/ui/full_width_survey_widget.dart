@@ -70,20 +70,19 @@ class _FullWidthSurveyWidgetState extends State<FullWidthSurveyWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                widget.bonusPercentage > 0
-                    ? PromotionView(
-                        accentColor: color,
-                        reward: widget.oldReward,
-                        currencyIcon: widget.image,
-                        bonusPercentage: widget.bonusPercentage,
-                        color: const [Colors.white, Colors.white],
-                      )
-                    : const SizedBox.shrink(),
+                if (widget.bonusPercentage > 0)
+                  PromotionView(
+                    accentColor: color,
+                    reward: widget.oldReward,
+                    currencyIcon: widget.image,
+                    bonusPercentage: widget.bonusPercentage,
+                    color: const [Colors.white, Colors.white],
+                  ),
                 RewardView(
                   size: 16,
                   reward: widget.reward,
                   currencyIcon: widget.image,
-                )
+                ),
               ],
             ),
           ),

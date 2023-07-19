@@ -88,19 +88,18 @@ class _WebViewState extends State<WebWidget> {
                 ),
           body: Stack(fit: StackFit.expand, children: [
             WebViewWidget(controller: controller),
-            !isPageOfferWall
-                ? const SizedBox.shrink()
-                : Align(
-                    alignment: const Alignment(1, -0.99),
-                    child: IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(
-                        Icons.exit_to_app_outlined,
-                        color: isColorBright ? Colors.black : Colors.white,
-                        size: 24.0,
-                      ),
-                    ),
+            if (isPageOfferWall)
+              Align(
+                alignment: const Alignment(1, -0.99),
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Icon(
+                    Icons.exit_to_app_outlined,
+                    color: isColorBright ? Colors.black : Colors.white,
+                    size: 24.0,
                   ),
+                ),
+              ),
           ]),
         ),
       ),

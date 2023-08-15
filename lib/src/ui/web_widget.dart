@@ -1,22 +1,27 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../bitlabs.dart';
 import '../utils/helpers.dart';
 import '../utils/localization.dart';
+import 'styled_text.dart';
 
 /// Launches the Offer Wall in a [WebView].
 class WebWidget extends StatefulWidget {
   final String url;
+  final String uid;
   final List<Color> color;
   final void Function(double) onReward;
 
   const WebWidget(
       {Key? key,
       required this.url,
+      required this.uid,
       required this.color,
       required this.onReward})
       : super(key: key);
@@ -32,6 +37,7 @@ class _WebViewState extends State<WebWidget> {
   late WebViewController controller;
 
   double reward = 0.0;
+  String errorId = '';
   bool isPageOfferWall = false;
 
   @override
@@ -43,6 +49,15 @@ class _WebViewState extends State<WebWidget> {
 
     controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
+          onWebResourceError: (error) {
+            final errorID = '{ uid: ${widget.uid},'
+                ' date: ${DateTime.now().millisecondsSinceEpoch},'
+                ' url: ${error.url} }';
+            log('[BitLabs] WebResourceError ~> $errorID');
+            setState(() {
+              errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
+            });
+          },
           onPageStarted: onPageStarted,
           onNavigationRequest: (request) {
             final url = request.url;
@@ -100,6 +115,18 @@ class _WebViewState extends State<WebWidget> {
                   ),
                 ),
               ),
+            if (errorId.isNotEmpty)
+              Center(
+                child: FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: Row(children: [
+                    QrImageView(data: errorId, size: 70),
+                    Flexible(
+                      child: StyledText(errorId, fontSize: 12),
+                    ),
+                  ]),
+                ),
+              )
           ]),
         ),
       ),

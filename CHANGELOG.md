@@ -1,3 +1,7 @@
+## 2.1.4
+- **Error QR Code**: Show a QR Code when there is an http error in the web widget.
+- **Improvements**
+
 ## 2.1.3
 - **Promotion View**: Show a promotion in the survey widgets to your users when available in you Dashboard.
 - **Bugfix**: Leaderboard not showing when there is user data.

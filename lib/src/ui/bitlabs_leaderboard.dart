@@ -47,7 +47,7 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   }
 
   @override
-  Widget build(BuildContext context) => topUsers == null
+  Widget build(BuildContext context) => topUsers == null || topUsers!.isEmpty
       ? const SizedBox.shrink()
       : SizedBox(
           height: 200,

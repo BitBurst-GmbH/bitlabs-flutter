@@ -53,7 +53,6 @@ class _WebViewState extends State<WebWidget> {
             final errorID = '{ uid: ${widget.uid},'
                 ' date: ${DateTime.now().millisecondsSinceEpoch},'
                 ' url: ${error.url} }';
-            log('[BitLabs] WebResourceError ~> $errorID');
             setState(() {
               errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
             });

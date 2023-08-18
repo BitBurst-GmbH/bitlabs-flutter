@@ -57,19 +57,9 @@ class _WebViewState extends State<WebWidget> {
               errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
             });
           },
-          onPageStarted: onPageStarted,
-          onUrlChange: (urlChange) {
-            final url = urlChange.url ?? '';
-            log('[BitLabs] On URL Change ~> $url');
-
-            if (url.endsWith('/close')) {
-              Navigator.of(context).pop();
-              return;
-            }
-          },
+          onUrlChange: onUrlChanged,
           onNavigationRequest: (request) {
             final url = request.url;
-            log('[BitLabs] Navigation request ~> $url');
 
             if (url.contains('/offers/')) {
               launchUrlString(url, mode: LaunchMode.externalApplication);
@@ -136,10 +126,16 @@ class _WebViewState extends State<WebWidget> {
     super.dispose();
   }
 
-  void onPageStarted(String url) {
+  void onUrlChanged(UrlChange urlChange) {
+    final url = urlChange.url ?? '';
+
+    if (url.endsWith('/close')) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     setState(() {
-      isPageOfferWall = url.startsWith(
-          'web.bitlabs.ai');
+      isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });
 
     if (url.contains('survey-compete') ||

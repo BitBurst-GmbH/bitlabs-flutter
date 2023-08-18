@@ -57,7 +57,7 @@ class _WebViewState extends State<WebWidget> {
               errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
             });
           },
-          onPageStarted: onPageStarted,
+          onUrlChange: onUrlChanged,
           onNavigationRequest: (request) {
             final url = request.url;
 
@@ -102,18 +102,6 @@ class _WebViewState extends State<WebWidget> {
                 ),
           body: Stack(fit: StackFit.expand, children: [
             WebViewWidget(controller: controller),
-            if (isPageOfferWall)
-              Align(
-                alignment: const Alignment(1, -0.99),
-                child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(
-                    Icons.exit_to_app_outlined,
-                    color: isColorBright ? Colors.black : Colors.white,
-                    size: 24.0,
-                  ),
-                ),
-              ),
             if (errorId.isNotEmpty)
               Center(
                 child: FractionallySizedBox(
@@ -138,7 +126,14 @@ class _WebViewState extends State<WebWidget> {
     super.dispose();
   }
 
-  void onPageStarted(String url) {
+  void onUrlChanged(UrlChange urlChange) {
+    final url = urlChange.url ?? '';
+
+    if (url.endsWith('/close')) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     setState(() {
       isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
     });

@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init(appToken, 'USER_ID');
+    BitLabs.instance.init(appToken, 'oblivatevariegata');
 
     BitLabs.instance.setOnReward(
         (reward) => log('[Example] Reward for this session: $reward'));

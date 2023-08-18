@@ -1,3 +1,6 @@
+## 2.1.5
+- **New Exit Button**: Changed the exit button for better UX.
+
 ## 2.1.4
 - **Error QR Code**: Show a QR Code when there is an http error in the web widget.
 - **Improvements**

@@ -134,9 +134,7 @@ class _WebViewState extends State<WebWidget> {
       return;
     }
 
-    setState(() {
-      isPageOfferWall = url.startsWith('https://web.bitlabs.ai');
-    });
+    setState(() => isPageOfferWall = url.startsWith('https://web.bitlabs.ai'));
 
     if (url.contains('survey-compete') ||
         url.contains('survey-screenout') ||

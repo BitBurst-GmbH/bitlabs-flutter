@@ -161,6 +161,7 @@ class _WebViewState extends State<WebWidget> {
   }
 
   void leaveSurvey(String reason) {
+    setState(() => errorId = '');
     controller.loadRequest(Uri.parse(widget.url));
 
     if (clickId == null) return;

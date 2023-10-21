@@ -1,3 +1,6 @@
+## 2.1.6
+- **Bugfix**: Remove Error QR Code when the Webview is reset.
+
 ## 2.1.5
 - **New Exit Button**: Changed the exit button for better UX.
 

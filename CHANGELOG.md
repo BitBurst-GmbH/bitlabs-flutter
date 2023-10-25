@@ -1,3 +1,6 @@
+## 2.1.7
+- **Bugfix**: Ignore irrelevant errors in the Webview.
+
 ## 2.1.6
 - **Bugfix**: Remove Error QR Code when the Webview is reset.
 

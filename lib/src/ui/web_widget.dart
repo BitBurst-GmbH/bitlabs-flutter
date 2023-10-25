@@ -50,9 +50,14 @@ class _WebViewState extends State<WebWidget> {
     controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: (error) {
+            if(error.errorType == WebResourceErrorType.hostLookup) return;
+
             final errorID = '{ uid: ${widget.uid},'
                 ' date: ${DateTime.now().millisecondsSinceEpoch},'
-                ' url: ${error.url} }';
+                ' url: ${error.url}, '
+                ' type: ${error.errorType},'
+                ' description: ${error.description} }';
+
             setState(() {
               errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
             });

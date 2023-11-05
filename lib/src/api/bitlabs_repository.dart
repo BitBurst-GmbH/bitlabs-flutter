@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../models/bitlabs_response.dart';
-import '../models/get_offers_response.dart';
 import '../models/get_surveys_response.dart';
 import '../models/serializable.dart';
 import '../models/survey.dart';
@@ -19,23 +18,6 @@ class BitLabsRepository {
 
   BitLabsRepository(String token, String uid)
       : _bitLabsApi = BitLabsApi(token, uid);
-
-  void getHasOffers(void Function(bool) onResponse) async {
-    final response = await _bitLabsApi.getOffers();
-    final body = BitLabsResponse<GetOffersResponse>.fromJson(
-        jsonDecode(response.body), (data) => GetOffersResponse(data!));
-
-    final error = body.error;
-    if (error != null) {
-      log('[BitLabs] GetOffers ${error.details.http}: '
-          ' ${error.details.msg}');
-      onResponse(false);
-      return;
-    }
-
-    final offers = body.data?.offers;
-    if (offers != null) onResponse(offers.isNotEmpty);
-  }
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {

@@ -1,3 +1,6 @@
+## 2.1.8
+- **Remove Open Offerwall externally.**
+
 ## 2.1.7
 - **Bugfix**: Ignore irrelevant errors in the Webview.
 

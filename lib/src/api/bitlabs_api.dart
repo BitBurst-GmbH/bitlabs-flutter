@@ -17,9 +17,6 @@ class BitLabsApi {
       }),
       headers: _headers);
 
-  Future<Response> getOffers() =>
-      get(url('v2/client/offers'), headers: _headers);
-
   Future<Response> getLeaderboard() =>
       get(url('v1/client/leaderboard'), headers: _headers);
 

@@ -1,7 +1,6 @@
 library bitlabs;
 
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
@@ -9,7 +8,6 @@ import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
@@ -31,7 +29,6 @@ class BitLabs {
   String _uid = '';
   String _adId = '';
   String _token = '';
-  bool _hasOffers = false;
   Map<String, dynamic> _tags = {};
   List<Color> _headerColor = [Colors.blueAccent, Colors.blueAccent];
 
@@ -73,7 +70,6 @@ class BitLabs {
       notifiers.bonusPercentage.value = bonus;
     }, (error) => log(error.toString()));
 
-    _getHasOffers();
     _getAdId();
   }
 
@@ -144,26 +140,15 @@ class BitLabs {
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
         final url = offerWallUrl(_token, _uid, _adId, _tags);
 
-        if (Platform.isIOS && _hasOffers) {
-          launchUrlString(url, mode: LaunchMode.externalApplication);
-          return;
-        }
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) {
-            return WebWidget(
-              url: url,
-              uid: _uid,
-              color: _headerColor,
-              onReward: _onReward,
-            );
-          }),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return WebWidget(
+            url: url,
+            uid: _uid,
+            color: _headerColor,
+            onReward: _onReward,
+          );
+        }));
       });
-
-  void _getHasOffers() =>
-      _bitLabsRepository?.getHasOffers((hasOffers) => _hasOffers = hasOffers);
 
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     try {

@@ -1,3 +1,5 @@
+## 2.1.9
+- **Add os parameter to offerwall.**
 ## 2.1.8
 - **Remove Open Offerwall externally.**
 

@@ -43,6 +43,7 @@ String offerWallUrl(
     'uid': uid,
     'token': token,
     'sdk': 'FLUTTER',
+    'os': Platform.isIOS ? 'ios' : 'android',
   };
   if (adId.isNotEmpty) queries['maid'] = adId;
   return Uri.https('web.bitlabs.ai', '', queries).toString();

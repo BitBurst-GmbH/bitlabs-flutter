@@ -52,8 +52,13 @@ class BitLabs {
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =
-          settings.visual.surveyIconColor.colorsFromCSS();
-      _headerColor = settings.visual.navigationColor.colorsFromCSS();
+          settings.visual.surveyIconColor.colorsFromCSS().isNotEmpty
+              ? settings.visual.surveyIconColor.colorsFromCSS()
+              : [Colors.blueAccent, Colors.blueAccent];
+
+      _headerColor = settings.visual.navigationColor.colorsFromCSS().isNotEmpty
+          ? settings.visual.navigationColor.colorsFromCSS()
+          : [Colors.blueAccent, Colors.blueAccent];
 
       notifiers.currencyIconURL.value = settings.currency.symbol.isImage
           ? settings.currency.symbol.content

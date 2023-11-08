@@ -1,0 +1,201 @@
+import 'package:bitlabs/src/api/bitlabs_api.dart';
+import 'package:bitlabs/src/api/bitlabs_repository.dart';
+import 'package:bitlabs/src/models/get_leaderboard_response.dart';
+import 'package:bitlabs/src/models/survey.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'bitlabs_repository_test.mocks.dart';
+
+@GenerateMocks([BitLabsApi])
+void main() {
+  errorBody() => """
+    {"error": {
+      "details": {
+        "http": "400",
+        "msg": "string"
+      }
+    },
+    "status": "error",
+    "trace_id": "1dc6786b10a62ec6"}
+  """;
+
+  dataBody(String data) => """
+    {"data": $data,
+    "status": "success",
+    "trace_id": "1dc6786b10a62ec6"}
+  """;
+
+  group('getSurveys', () {
+    // test('Failure', () {
+    //   final api = MockBitLabsApi();
+    //   when(api.getSurveys()).thenAnswer((_) async => Response('', 400));
+    //
+    //   final repository = BitLabsRepository(api);
+    //   repository.getSurveys((_) {}, (e) {
+    //     expect(e, isA<Exception>());
+    //   });
+    // });
+
+    test('Success', () {
+      final api = MockBitLabsApi();
+      when(api.getSurveys()).thenAnswer((_) async => Response(dataBody("""
+          {
+          "surveys": [
+            {
+              "id": "string",
+              "type": "survey",
+              "click_url": "string",
+              "cpi": "1.2",
+              "value": "120",
+              "loi": 5.3,
+              "country": "US",
+              "language": "en",
+              "rating": 4,
+              "category": {
+                "name": "Automotive",
+                "icon_name": "string",
+                "icon_url": "string",
+                "name_internal": "automotive"
+              },
+              "tags": [
+                "pii"
+              ]
+            }
+          ]}
+          """), 200));
+
+      final repository = BitLabsRepository(api);
+      repository.getSurveys((surveys) {
+        expect(surveys, isA<List<Survey>>());
+      }, (_) {});
+    });
+
+    test('Error', () {
+      final api = MockBitLabsApi();
+      when(api.getSurveys())
+          .thenAnswer((_) async => Response(errorBody(), 400));
+
+      final repository = BitLabsRepository(api);
+      repository.getSurveys((_) {}, (e) {
+        expect(e, isA<Exception>());
+      });
+    });
+  });
+
+  group('getLeaderboard', () {
+    // test('Failure', () {
+    //   final api = MockBitLabsApi();
+    //   when(api.getSurveys()).thenAnswer((_) async => Response('', 400));
+    //
+    //   final repository = BitLabsRepository(api);
+    //   repository.getSurveys((_) {}, (e) {
+    //     expect(e, isA<Exception>());
+    //   });
+    // });
+
+    test('Success', () {
+      final api = MockBitLabsApi();
+      when(api.getLeaderboard()).thenAnswer((_) async => Response(dataBody("""
+      {
+        "next_reset_at": "2021-09-30T00:00:00Z",
+        "own_user": {
+          "rank": 1,
+          "name": "string",
+          "earnings_raw": 0
+        },
+        "rewards": [
+          {
+            "rank": 1,
+            "reward_raw": 0
+          }
+        ]
+      }
+      """), 200));
+
+      final repository = BitLabsRepository(api);
+      repository.getLeaderboard((leaderboard) {
+        expect(leaderboard, isA<GetLeaderboardResponse>());
+      });
+    });
+
+    test('Error', () {
+      final api = MockBitLabsApi();
+      when(api.getLeaderboard())
+          .thenAnswer((_) async => Response(errorBody(), 400));
+
+      final repository = BitLabsRepository(api);
+      repository.getLeaderboard((_) {});
+    });
+  });
+
+  group('leaveSurvey', () {
+    // test('Failure', () {
+    //   final api = MockBitLabsApi();
+    //   when(api.updateClick('', '')).thenAnswer((_) async => Response('', 400));
+    //
+    //   final repository = BitLabsRepository(api);
+    //   repository.leaveSurvey('', '');
+    // });
+
+    test('Success', () {
+      final api = MockBitLabsApi();
+      when(api.updateClick('', ''))
+          .thenAnswer((_) async => Response(dataBody("{}"), 200));
+
+      final repository = BitLabsRepository(api);
+      repository.leaveSurvey('', '');
+    });
+
+    test('Error', () {
+      final api = MockBitLabsApi();
+      when(api.updateClick('', ''))
+          .thenAnswer((_) async => Response(errorBody(), 400));
+
+      final repository = BitLabsRepository(api);
+      repository.leaveSurvey('', '');
+    });
+  });
+
+  group('getAppSettings', () {
+    // test('Failure', () {
+    //   final api = MockBitLabsApi();
+    //   when(api.getAppSettings()).thenAnswer((_) async => Response('', 400));
+    //
+    //   final repository = BitLabsRepository(api);
+    //   repository.getAppSettings((_) {}, (e) {
+    //     expect(e, isA<Exception>());
+    //   });
+    // });
+
+    test('Success', () {
+      final api = MockBitLabsApi();
+      when(api.getAppSettings()).thenAnswer((_) async => Response(dataBody("""
+      {
+        "visual": {
+          "survey_icon_color": "linear-gradient(90deg, #FF0000 0%, #00FF00 100%)",
+          "navigation_color": "#FF0000"
+        },
+        "currency": {
+          "name": "string",
+          "symbol": "string",
+          "icon_url": "string"
+        },
+      }
+      """), 200));
+    });
+
+    test('Error', () {
+      final api = MockBitLabsApi();
+      when(api.getAppSettings())
+          .thenAnswer((_) async => Response(errorBody(), 400));
+
+      final repository = BitLabsRepository(api);
+      repository.getAppSettings((_) {}, (e) {
+        expect(e, isA<Exception>());
+      });
+    });
+  });
+}

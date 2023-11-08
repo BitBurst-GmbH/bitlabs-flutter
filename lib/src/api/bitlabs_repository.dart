@@ -16,8 +16,7 @@ import 'bitlabs_api.dart';
 class BitLabsRepository {
   final BitLabsApi _bitLabsApi;
 
-  BitLabsRepository(String token, String uid)
-      : _bitLabsApi = BitLabsApi(token, uid);
+  BitLabsRepository(BitLabsApi bitLabsApi) : _bitLabsApi = bitLabsApi;
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {

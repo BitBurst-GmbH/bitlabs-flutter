@@ -9,6 +9,7 @@ import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
+import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
 import 'src/ui/web_widget.dart';
@@ -48,7 +49,7 @@ class BitLabs {
   void init(String token, String uid) {
     _token = token;
     _uid = uid;
-    _bitLabsRepository = BitLabsRepository(token, uid);
+    _bitLabsRepository = BitLabsRepository(BitLabsApi(token, uid));
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =

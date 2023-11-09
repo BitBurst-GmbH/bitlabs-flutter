@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/ui/simple_survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
@@ -38,8 +40,11 @@ class _SurveyWidgetState extends State<SurveyWidget> {
   }
 
   void _updateImageWidget() {
-    BitLabsRepository.getCurrencyIcon(notifiers.currencyIconURL.value,
-        (imageData) => setState(() => image = imageData));
+    BitLabsRepository.getCurrencyIcon(
+      notifiers.currencyIconURL.value,
+      (imageData) => setState(() => image = imageData),
+      (e) => log(e.toString()),
+    );
   }
 
   @override

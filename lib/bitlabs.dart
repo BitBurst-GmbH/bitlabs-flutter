@@ -133,11 +133,16 @@ class BitLabs {
 
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
       _ifInitialised(() {
-        _bitLabsRepository?.getLeaderboard(onResponse);
+        _bitLabsRepository?.getLeaderboard(
+            onResponse, (error) => log(error.toString()));
       });
 
   void leaveSurvey(String clickId, String reason) =>
-      _bitLabsRepository?.leaveSurvey(clickId, reason);
+      _bitLabsRepository?.leaveSurvey(
+          clickId,
+          reason,
+          (response) => log('[BitLabs] LeaveSurvey: $response'),
+          (error) => log(error.toString()));
 
   /// Launches the OfferWall from the [context] you pass.
   ///

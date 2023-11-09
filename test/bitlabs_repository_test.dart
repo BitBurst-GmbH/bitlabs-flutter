@@ -29,15 +29,16 @@ void main() {
   """;
 
   group('getSurveys', () {
-    // test('Failure', () {
-    //   final api = MockBitLabsApi();
-    //   when(api.getSurveys()).thenAnswer((_) async => Response('', 400));
-    //
-    //   final repository = BitLabsRepository(api);
-    //   repository.getSurveys((_) {}, (e) {
-    //     expect(e, isA<Exception>());
-    //   });
-    // });
+    test('Failure', () {
+      final api = MockBitLabsApi();
+      when(api.getSurveys()).thenAnswer((_) async => Response('', 400));
+
+      final repository = BitLabsRepository(api);
+      repository.getSurveys(
+        (_) => fail('Should not be called'),
+        (e) => expect(e, isA<Exception>()),
+      );
+    });
 
     test('Success', () {
       final api = MockBitLabsApi();
@@ -68,9 +69,10 @@ void main() {
           """), 200));
 
       final repository = BitLabsRepository(api);
-      repository.getSurveys((surveys) {
-        expect(surveys, isA<List<Survey>>());
-      }, (_) {});
+      repository.getSurveys(
+        (surveys) => expect(surveys, isA<List<Survey>>()),
+        (_) => fail('Should not be called'),
+      );
     });
 
     test('Error', () {
@@ -79,22 +81,24 @@ void main() {
           .thenAnswer((_) async => Response(errorBody(), 400));
 
       final repository = BitLabsRepository(api);
-      repository.getSurveys((_) {}, (e) {
-        expect(e, isA<Exception>());
-      });
+      repository.getSurveys(
+        (_) => fail('Should not be called'),
+        (e) => expect(e, isA<Exception>()),
+      );
     });
   });
 
   group('getLeaderboard', () {
-    // test('Failure', () {
-    //   final api = MockBitLabsApi();
-    //   when(api.getSurveys()).thenAnswer((_) async => Response('', 400));
-    //
-    //   final repository = BitLabsRepository(api);
-    //   repository.getSurveys((_) {}, (e) {
-    //     expect(e, isA<Exception>());
-    //   });
-    // });
+    test('Failure', () {
+      final api = MockBitLabsApi();
+      when(api.getLeaderboard()).thenAnswer((_) async => Response('', 400));
+
+      final repository = BitLabsRepository(api);
+      repository.getLeaderboard(
+        (_) => fail('Should not be called'),
+        (error) => expect(error, isA<Exception>()),
+      );
+    });
 
     test('Success', () {
       final api = MockBitLabsApi();
@@ -116,9 +120,10 @@ void main() {
       """), 200));
 
       final repository = BitLabsRepository(api);
-      repository.getLeaderboard((leaderboard) {
-        expect(leaderboard, isA<GetLeaderboardResponse>());
-      });
+      repository.getLeaderboard(
+        (leaderboard) => expect(leaderboard, isA<GetLeaderboardResponse>()),
+        (_) => fail('Should not be called'),
+      );
     });
 
     test('Error', () {
@@ -127,18 +132,26 @@ void main() {
           .thenAnswer((_) async => Response(errorBody(), 400));
 
       final repository = BitLabsRepository(api);
-      repository.getLeaderboard((_) {});
+      repository.getLeaderboard(
+        (_) => fail('Should not be called'),
+        (error) => expect(error, isA<Exception>()),
+      );
     });
   });
 
   group('leaveSurvey', () {
-    // test('Failure', () {
-    //   final api = MockBitLabsApi();
-    //   when(api.updateClick('', '')).thenAnswer((_) async => Response('', 400));
-    //
-    //   final repository = BitLabsRepository(api);
-    //   repository.leaveSurvey('', '');
-    // });
+    test('Failure', () {
+      final api = MockBitLabsApi();
+      when(api.updateClick('', '')).thenAnswer((_) async => Response('', 400));
+
+      final repository = BitLabsRepository(api);
+      repository.leaveSurvey(
+        '',
+        '',
+        (_) => fail('Should not be called'),
+        (error) => expect(error, isA<Exception>()),
+      );
+    });
 
     test('Success', () {
       final api = MockBitLabsApi();
@@ -146,7 +159,12 @@ void main() {
           .thenAnswer((_) async => Response(dataBody("{}"), 200));
 
       final repository = BitLabsRepository(api);
-      repository.leaveSurvey('', '');
+      repository.leaveSurvey(
+        '',
+        '',
+        (response) => expect(response, isA<String>()),
+        (_) => fail('Should not be called'),
+      );
     });
 
     test('Error', () {
@@ -155,20 +173,26 @@ void main() {
           .thenAnswer((_) async => Response(errorBody(), 400));
 
       final repository = BitLabsRepository(api);
-      repository.leaveSurvey('', '');
+      repository.leaveSurvey(
+        '',
+        '',
+        (_) => fail('Should not be called'),
+        (error) => expect(error, isA<Exception>()),
+      );
     });
   });
 
   group('getAppSettings', () {
-    // test('Failure', () {
-    //   final api = MockBitLabsApi();
-    //   when(api.getAppSettings()).thenAnswer((_) async => Response('', 400));
-    //
-    //   final repository = BitLabsRepository(api);
-    //   repository.getAppSettings((_) {}, (e) {
-    //     expect(e, isA<Exception>());
-    //   });
-    // });
+    test('Failure', () {
+      final api = MockBitLabsApi();
+      when(api.getAppSettings()).thenAnswer((_) async => Response('', 400));
+
+      final repository = BitLabsRepository(api);
+      repository.getAppSettings(
+        (_) => fail('Should not be called'),
+        (e) => expect(e, isA<Exception>()),
+      );
+    });
 
     test('Success', () {
       final api = MockBitLabsApi();
@@ -193,9 +217,10 @@ void main() {
           .thenAnswer((_) async => Response(errorBody(), 400));
 
       final repository = BitLabsRepository(api);
-      repository.getAppSettings((_) {}, (e) {
-        expect(e, isA<Exception>());
-      });
+      repository.getAppSettings(
+        (_) => fail('Should not be called'),
+        (e) => expect(e, isA<Exception>()),
+      );
     });
   });
 }

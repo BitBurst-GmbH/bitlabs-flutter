@@ -1,5 +1,9 @@
+## 2.1.10
+- **Bugfix**: Fix Closse Offerwall button not showing when going back to Offerwall from Survey.
+
 ## 2.1.9
 - **Add os parameter to offerwall.**
+
 ## 2.1.8
 - **Remove Open Offerwall externally.**
 

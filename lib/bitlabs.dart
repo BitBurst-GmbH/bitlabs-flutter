@@ -149,12 +149,12 @@ class BitLabs {
   /// On iOS, if there are Offers available, the Offerwall will be launched in
   /// the external browser.
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
-        final url = offerWallUrl(_token, _uid, _adId, _tags);
-
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return WebWidget(
-            url: url,
             uid: _uid,
+            adId: _adId,
+            tags: _tags,
+            token: _token,
             color: _headerColor,
             onReward: _onReward,
           );

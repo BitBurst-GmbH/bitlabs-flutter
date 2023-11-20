@@ -13,18 +13,22 @@ import 'styled_text.dart';
 
 /// Launches the Offer Wall in a [WebView].
 class WebWidget extends StatefulWidget {
-  final String url;
   final String uid;
+  final String adId;
+  final String token;
+  final Map<String, dynamic> tags;
   final List<Color> color;
   final void Function(double) onReward;
 
-  const WebWidget(
-      {Key? key,
-      required this.url,
-      required this.uid,
-      required this.color,
-      required this.onReward})
-      : super(key: key);
+  const WebWidget({
+    Key? key,
+    required this.uid,
+    required this.adId,
+    required this.tags,
+    required this.color,
+    required this.token,
+    required this.onReward,
+  }) : super(key: key);
 
   @override
   State<WebWidget> createState() => _WebViewState();
@@ -33,16 +37,20 @@ class WebWidget extends StatefulWidget {
 class _WebViewState extends State<WebWidget> {
   String? clickId;
 
+  late final String url;
   late bool isColorBright;
   late WebViewController controller;
 
   double reward = 0.0;
   String errorId = '';
   bool isPageOfferWall = false;
+  bool areParametersInjected = true;
 
   @override
   void initState() {
     super.initState();
+
+    url = offerWallUrl(widget.token, widget.uid, widget.adId, widget.tags);
 
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
@@ -50,7 +58,7 @@ class _WebViewState extends State<WebWidget> {
     controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: (error) {
-            if(error.errorType == WebResourceErrorType.hostLookup) return;
+            if (error.errorType == WebResourceErrorType.hostLookup) return;
 
             final errorID = '{ uid: ${widget.uid},'
                 ' date: ${DateTime.now().millisecondsSinceEpoch},'
@@ -68,14 +76,14 @@ class _WebViewState extends State<WebWidget> {
 
             if (url.contains('/offers/')) {
               launchUrlString(url, mode: LaunchMode.externalApplication);
-              controller.loadRequest(Uri.parse(widget.url));
+              controller.loadRequest(Uri.parse(url));
               return NavigationDecision.prevent;
             }
 
             return NavigationDecision.navigate;
           }))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(widget.url));
+      ..loadRequest(Uri.parse(url));
   }
 
   @override
@@ -145,10 +153,16 @@ class _WebViewState extends State<WebWidget> {
         url.contains('survey-screenout') ||
         url.contains('start-bonus')) {
       reward += double.parse(Uri.parse(url).queryParameters['val'] ?? '0.0');
+
+      if (!areParametersInjected && !url.contains('sdk=FLUTTER')) {
+        areParametersInjected = true;
+        controller.loadRequest(Uri.parse(this.url));
+      }
     }
 
     if (!isPageOfferWall) {
       clickId = Uri.parse(url).queryParameters['clk'] ?? clickId;
+      areParametersInjected = false;
     }
   }
 
@@ -167,7 +181,7 @@ class _WebViewState extends State<WebWidget> {
 
   void leaveSurvey(String reason) {
     setState(() => errorId = '');
-    controller.loadRequest(Uri.parse(widget.url));
+    controller.loadRequest(Uri.parse(url));
 
     if (clickId == null) return;
 

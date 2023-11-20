@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 extension DoubleExtension on double {
   String rounded() {
-    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    RegExp regex = RegExp(r'([.]*0*)(?!.*\d)');
     String s = toStringAsFixed(3).replaceAll(regex, '');
 
     return s;
@@ -11,16 +11,19 @@ extension DoubleExtension on double {
 
 extension StringExtension on String {
   List<Color> colorsFromCSS() {
-    final colors = RegExp(r'linear-gradient\((\d+)deg,\s*(.+)\)')
-            .firstMatch(this)
-            ?.group(2)
-            ?.replaceAll(RegExp(r'([0-9]+)%'), '')
-            .split(RegExp(r',\s'))
-            .map((e) => e.trim()._colorFromHex())
-            .toList() ??
-        [_colorFromHex(), _colorFromHex()];
+    final colors = RegExp(r'^linear-gradient\((\d+)deg,\s*(.+)\)$')
+        .firstMatch(this)
+        ?.group(2)
+        ?.replaceAll(RegExp(r'([0-9]+)%'), '')
+        .split(RegExp(r',\s'))
+        .map((e) => e.trim()._colorFromHex())
+        .toList();
 
-    return colors.length == 2 ? colors : [Colors.blueAccent, Colors.blueAccent];
+    if (colors != null) return colors;
+
+    final isHex = RegExp(r'^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$').hasMatch(this);
+
+    return isHex ? [_colorFromHex(), _colorFromHex()] : [];
   }
 
   Color _colorFromHex() {

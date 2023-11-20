@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bitlabs/src/models/get_app_settings_response.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
@@ -16,78 +15,97 @@ import 'bitlabs_api.dart';
 class BitLabsRepository {
   final BitLabsApi _bitLabsApi;
 
-  BitLabsRepository(String token, String uid)
-      : _bitLabsApi = BitLabsApi(token, uid);
+  BitLabsRepository(BitLabsApi bitLabsApi) : _bitLabsApi = bitLabsApi;
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {
-    final response = await _bitLabsApi.getSurveys();
-    final body = BitLabsResponse<GetSurveysResponse>.fromJson(
-        jsonDecode(response.body), (data) => GetSurveysResponse(data!));
+    try {
+      final response = await _bitLabsApi.getSurveys();
+      final body = BitLabsResponse<GetSurveysResponse>.fromJson(
+          jsonDecode(response.body), (data) => GetSurveysResponse(data!));
+      final error = body.error;
+      if (error != null) {
+        onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+        return;
+      }
 
-    final error = body.error;
-    if (error != null) {
-      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
-      return;
+      final surveys = body.data?.surveys ?? [];
+      onResponse(surveys);
+    } catch (e) {
+      onFailure(Exception('Error - ${e.toString()}'));
     }
-
-    final surveys = body.data?.surveys ?? [];
-    onResponse(surveys);
   }
 
-  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) async {
-    final response = await _bitLabsApi.getLeaderboard();
-    final body = BitLabsResponse<GetLeaderboardResponse>.fromJson(
-        jsonDecode(response.body), (data) => GetLeaderboardResponse(data!));
+  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse,
+      void Function(Exception) onFailure) async {
+    try {
+      final response = await _bitLabsApi.getLeaderboard();
+      final body = BitLabsResponse<GetLeaderboardResponse>.fromJson(
+          jsonDecode(response.body), (data) => GetLeaderboardResponse(data!));
 
-    final error = body.error;
-    if (error != null) {
-      log('[BitLabs] GetLeaderboard ${error.details.http}:'
-          ' ${error.details.msg}');
-      return;
+      final error = body.error;
+      if (error != null) {
+        onFailure(Exception('[BitLabs] GetLeaderboard ${error.details.http}:'
+            ' ${error.details.msg}'));
+        return;
+      }
+
+      final leaderboard = body.data;
+      if (leaderboard != null) onResponse(leaderboard);
+    } catch (e) {
+      onFailure(Exception('Error - ${e.toString()}'));
     }
-
-    final leaderboard = body.data;
-    if (leaderboard != null) onResponse(leaderboard);
   }
 
-  void leaveSurvey(String clickId, String reason) async {
-    final response = await _bitLabsApi.updateClick(clickId, reason);
-    final body = BitLabsResponse<Serializable>.fromJson(
-        jsonDecode(response.body), (data) => Serializable());
+  void leaveSurvey(
+      String clickId,
+      String reason,
+      void Function(String) onResponse,
+      void Function(Exception) onFailure) async {
+    try {
+      final response = await _bitLabsApi.updateClick(clickId, reason);
+      final body = BitLabsResponse<Serializable>.fromJson(
+          jsonDecode(response.body), (data) => Serializable());
 
-    final error = body.error;
-    if (error != null) {
-      log('[BitLabs] LeaveSurvey ${error.details.http}:'
-          ' ${error.details.msg}');
-      return;
+      final error = body.error;
+      if (error != null) {
+        onFailure(Exception('[BitLabs] LeaveSurvey ${error.details.http}:'
+            ' ${error.details.msg}'));
+        return;
+      }
+
+      onResponse('[BitLabs] LeaveSurvey Successful');
+    } catch (e) {
+      onFailure(Exception('Error - ${e.toString()}'));
     }
-
-    log('[BitLabs] LeaveSurvey Successful');
   }
 
   void getAppSettings(void Function(GetAppSettingsResponse) onResponse,
       void Function(Exception) onFailure) async {
-    final response = await _bitLabsApi.getAppSettings();
-    final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
-        jsonDecode(response.body), (data) => GetAppSettingsResponse(data!));
+    try {
+      final response = await _bitLabsApi.getAppSettings();
+      final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
+          jsonDecode(response.body), (data) => GetAppSettingsResponse(data!));
 
-    final error = body.error;
-    if (error != null) {
-      onFailure(Exception('${error.details.http} - ${error.details.msg}'));
-      return;
+      final error = body.error;
+      if (error != null) {
+        onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+        return;
+      }
+
+      if (body.data != null) onResponse(body.data!);
+    } catch (e) {
+      onFailure(Exception('Error - ${e.toString()}'));
     }
-
-    if (body.data != null) onResponse(body.data!);
   }
 
-  static void getCurrencyIcon(
-      String url, void Function(Widget) onResponse) async {
+  static void getCurrencyIcon(String url, void Function(Widget) onResponse,
+      void Function(Exception) onFailure) async {
     final response = await BitLabsApi.getCurrencyIcon(url);
 
     if (response.reasonPhrase != 'OK') {
-      log('[BitLabs] GetCurrencyIcon ${response.statusCode}:'
-          ' ${response.reasonPhrase}');
+      onFailure(Exception('[BitLabs] GetCurrencyIcon ${response.statusCode}:'
+          ' ${response.reasonPhrase}'));
       return;
     }
 

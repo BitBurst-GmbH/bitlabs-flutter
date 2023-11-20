@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
 import 'package:bitlabs/src/ui/styled_text.dart';
@@ -29,6 +31,7 @@ class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
     BitLabsRepository.getCurrencyIcon(
       notifiers.currencyIconURL.value,
       (imageData) => setState(() => image = imageData),
+      (e) => log(e.toString()),
     );
   }
 

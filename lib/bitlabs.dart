@@ -9,6 +9,7 @@ import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
+import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
 import 'src/ui/web_widget.dart';
@@ -48,12 +49,17 @@ class BitLabs {
   void init(String token, String uid) {
     _token = token;
     _uid = uid;
-    _bitLabsRepository = BitLabsRepository(token, uid);
+    _bitLabsRepository = BitLabsRepository(BitLabsApi(token, uid));
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =
-          settings.visual.surveyIconColor.colorsFromCSS();
-      _headerColor = settings.visual.navigationColor.colorsFromCSS();
+          settings.visual.surveyIconColor.colorsFromCSS().isNotEmpty
+              ? settings.visual.surveyIconColor.colorsFromCSS()
+              : [Colors.blueAccent, Colors.blueAccent];
+
+      _headerColor = settings.visual.navigationColor.colorsFromCSS().isNotEmpty
+          ? settings.visual.navigationColor.colorsFromCSS()
+          : [Colors.blueAccent, Colors.blueAccent];
 
       notifiers.currencyIconURL.value = settings.currency.symbol.isImage
           ? settings.currency.symbol.content
@@ -127,23 +133,28 @@ class BitLabs {
 
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
       _ifInitialised(() {
-        _bitLabsRepository?.getLeaderboard(onResponse);
+        _bitLabsRepository?.getLeaderboard(
+            onResponse, (error) => log(error.toString()));
       });
 
   void leaveSurvey(String clickId, String reason) =>
-      _bitLabsRepository?.leaveSurvey(clickId, reason);
+      _bitLabsRepository?.leaveSurvey(
+          clickId,
+          reason,
+          (response) => log('[BitLabs] LeaveSurvey: $response'),
+          (error) => log(error.toString()));
 
   /// Launches the OfferWall from the [context] you pass.
   ///
   /// On iOS, if there are Offers available, the Offerwall will be launched in
   /// the external browser.
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
-        final url = offerWallUrl(_token, _uid, _adId, _tags);
-
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return WebWidget(
-            url: url,
             uid: _uid,
+            adId: _adId,
+            tags: _tags,
+            token: _token,
             color: _headerColor,
             onReward: _onReward,
           );

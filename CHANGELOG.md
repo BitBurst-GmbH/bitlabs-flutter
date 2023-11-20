@@ -1,3 +1,6 @@
+## 2.1.11
+-- **Important Bug Fixes**
+
 ## 2.1.10
 - **Bugfix**: Fix Closse Offerwall button not showing when going back to Offerwall from Survey.
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -156,7 +157,17 @@ class _WebViewState extends State<WebWidget> {
 
       if (!areParametersInjected && !url.contains('sdk=FLUTTER')) {
         areParametersInjected = true;
-        controller.loadRequest(Uri.parse(this.url));
+        var newUrl =
+            '$url&sdk=FLUTTER&os=${Platform.isIOS ? 'ios' : 'android'}&uid=${widget.uid}&token=${widget.token}';
+        if (widget.adId.isNotEmpty) newUrl += '&maid=${widget.adId}';
+
+        if (widget.tags.isNotEmpty) {
+          widget.tags.forEach((key, value) {
+            newUrl += '&$key=$value';
+          });
+        }
+
+        controller.loadRequest(Uri.parse(newUrl));
       }
     }
 

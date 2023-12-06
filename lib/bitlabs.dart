@@ -12,11 +12,12 @@ import 'package:flutter/material.dart';
 import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/ui/web_widget.dart';
+import 'src/ui/bitlabs-offerwall.dart';
 import 'src/utils/helpers.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 
 export 'src/models/widget_type.dart';
+export 'src/ui/bitlabs-offerwall.dart';
 export 'src/ui/bitlabs_leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 
@@ -150,7 +151,7 @@ class BitLabs {
   /// the external browser.
   void launchOfferWall(BuildContext context) => _ifInitialised(() {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return WebWidget(
+          return BitLabsOfferwall(
             uid: _uid,
             adId: _adId,
             tags: _tags,
@@ -164,9 +165,9 @@ class BitLabs {
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     try {
       _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
-      log("[BitLabs] $_adId");
+      log("[BitLabs] adId: $_adId");
     } on Exception catch (e) {
-      log("[BitLabs] Couldn't get adID: $_adId ~ Reason: $e)");
+      log("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
     }
   }
 

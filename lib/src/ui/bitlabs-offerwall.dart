@@ -13,29 +13,30 @@ import '../utils/localization.dart';
 import 'styled_text.dart';
 
 /// Launches the Offer Wall in a [WebView].
-class WebWidget extends StatefulWidget {
+class BitLabsOfferwall extends StatefulWidget {
   final String uid;
   final String adId;
   final String token;
-  final Map<String, dynamic> tags;
   final List<Color> color;
-  final void Function(double) onReward;
+  final Map<String, dynamic> tags;
+  final void Function(double)? onReward;
 
-  const WebWidget({
+  const BitLabsOfferwall({
     Key? key,
+    this.onReward,
+    this.adId = '',
     required this.uid,
-    required this.adId,
-    required this.tags,
-    required this.color,
     required this.token,
-    required this.onReward,
+    this.tags = const {},
+    this.color = const [Colors.blueAccent, Colors.blueAccent],
   }) : super(key: key);
 
   @override
-  State<WebWidget> createState() => _WebViewState();
+  State<BitLabsOfferwall> createState() => OfferwallState();
 }
 
-class _WebViewState extends State<WebWidget> {
+@visibleForTesting
+class OfferwallState extends State<BitLabsOfferwall> {
   String? clickId;
 
   late final String url;
@@ -136,7 +137,7 @@ class _WebViewState extends State<WebWidget> {
 
   @override
   void dispose() {
-    widget.onReward(reward);
+    widget.onReward?.call(reward);
     super.dispose();
   }
 

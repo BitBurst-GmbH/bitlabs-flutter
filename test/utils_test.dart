@@ -1,6 +1,6 @@
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('rounded', () {
@@ -10,14 +10,14 @@ void main() {
 
       expect(d.rounded(), expected);
     });
-    
+
     test('When less than three decimal points, Expect the same', () {
       const d = 1.12;
       const expected = '1.12';
 
       expect(d.rounded(), expected);
     });
-    
+
     test('When no decimal points, Expect the same', () {
       const double d = 1;
       const expected = '1';
@@ -39,7 +39,7 @@ void main() {
       expect(d.rounded(), expected);
     });
   });
-  
+
   group('colorsFromCSS', () {
     test('When single hex color, Expect two colors', () {
       const s = '#000000';
@@ -47,14 +47,14 @@ void main() {
 
       expect(s.colorsFromCSS(), expected);
     });
-    
+
     test('When linear gradient, Expect two colors', () {
       const s = 'linear-gradient(90deg, #000000 0%, #ffffff 100%)';
       const expected = [Colors.black, Colors.white];
 
       expect(s.colorsFromCSS(), expected);
     });
-    
+
     test('When empty string, Expect empty array', () {
       const s = '';
       const expected = [];

@@ -1,3 +1,6 @@
+## 2.1.12
+-- **Add Tests**
+
 ## 2.1.11
 -- **Important Bug Fixes**
 

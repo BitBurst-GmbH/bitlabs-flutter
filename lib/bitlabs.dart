@@ -12,12 +12,12 @@ import 'package:flutter/material.dart';
 import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/ui/bitlabs-offerwall.dart';
+import 'src/ui/bitlabs_offerwall.dart';
 import 'src/utils/helpers.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 
 export 'src/models/widget_type.dart';
-export 'src/ui/bitlabs-offerwall.dart';
+export 'src/ui/bitlabs_offerwall.dart';
 export 'src/ui/bitlabs_leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 

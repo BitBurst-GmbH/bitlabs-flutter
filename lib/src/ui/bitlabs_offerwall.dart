@@ -17,6 +17,7 @@ class BitLabsOfferwall extends StatefulWidget {
   final String uid;
   final String adId;
   final String token;
+  final bool debugMode;
   final List<Color> color;
   final Map<String, dynamic> tags;
   final void Function(double)? onReward;
@@ -28,6 +29,7 @@ class BitLabsOfferwall extends StatefulWidget {
     required this.uid,
     required this.token,
     this.tags = const {},
+    this.debugMode = false,
     this.color = const [Colors.blueAccent, Colors.blueAccent],
   }) : super(key: key);
 
@@ -60,7 +62,10 @@ class OfferwallState extends State<BitLabsOfferwall> {
     controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: (error) {
-            if (error.errorType == WebResourceErrorType.hostLookup) return;
+            if (!widget.debugMode &&
+                error.errorType != WebResourceErrorType.fileNotFound) {
+              return;
+            }
 
             final errorID = '{ uid: ${widget.uid},'
                 ' date: ${DateTime.now().millisecondsSinceEpoch},'

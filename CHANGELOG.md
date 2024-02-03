@@ -1,3 +1,6 @@
+## 2.1.13
+-- **Bugfix**: QR Code appears unnecessarily. Add a toggle flag to whether to display the QR Code.
+
 ## 2.1.12
 -- **Add Tests**
 

@@ -20,7 +20,7 @@ export 'src/models/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 export 'src/widgets/bitlabs_leaderboard.dart';
 export 'src/widgets/bitlabs_offerwall.dart';
-export 'src/widgets/leaderboard.dart';
+export 'src/widgets/bitlabs_widget.dart';
 
 /// The main class including all the library functions to use in your code.
 ///

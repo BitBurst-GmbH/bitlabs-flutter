@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
-import 'package:bitlabs/src/widgets/simple_survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
+import 'package:bitlabs/src/widgets/simple_survey_widget.dart';
 import 'package:flutter/widgets.dart';
 
 import '../api/bitlabs_repository.dart';
@@ -121,6 +121,8 @@ double _getWidgetWidth(WidgetType type, BuildContext context) {
       return MediaQuery.of(context).size.width * 1.05;
     case WidgetType.compact:
       return MediaQuery.of(context).size.width * .7;
+    default:
+      return MediaQuery.of(context).size.width * .7;
   }
 }
 
@@ -160,6 +162,15 @@ Widget _getWidgetWithType(
         loi: loi,
         color: color,
         image: image,
+        oldReward: oldReward,
+        bonusPercentage: bonusPercentage,
+      );
+    default:
+      return SimpleSurveyWidget(
+        loi: loi,
+        color: color.first,
+        image: image,
+        reward: reward,
         oldReward: oldReward,
         bonusPercentage: bonusPercentage,
       );

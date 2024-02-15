@@ -41,13 +41,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ListView? surveyWidgets;
+  final uid = 'oblivatevariegata';
 
   bool isLeaderboardVisible = false;
 
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init(appToken, 'oblivatevariegata');
+    BitLabs.instance.init(appToken, uid);
 
     BitLabs.instance.setOnReward(
         (reward) => log('[Example] Reward for this session: $reward'));
@@ -57,94 +58,88 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: ColoredBox(
-        color: Colors.redAccent,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            if (isLeaderboardVisible)
-              const ColoredBox(
-                  color: Colors.purpleAccent, child: BitLabsLeaderboard()),
-            ColoredBox(
-              color: Colors.greenAccent,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () =>
-                              setState(() => isLeaderboardVisible = true),
-                          title: 'Show Leaderboard',
-                        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          if (isLeaderboardVisible) BitLabsWidget(token: appToken, uid: uid),
+          ColoredBox(
+            color: Colors.greenAccent,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: () =>
+                            setState(() => isLeaderboardVisible = true),
+                        title: 'Show Leaderboard',
                       ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed:
-                              BitLabs.instance.requestTrackingAuthorization,
-                          title: 'Authorize Tracking(iOS)',
-                        ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed:
+                            BitLabs.instance.requestTrackingAuthorization,
+                        title: 'Authorize Tracking(iOS)',
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: checkForSurveys,
-                          title: 'Check for Surveys',
-                        ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: checkForSurveys,
+                        title: 'Check for Surveys',
                       ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () =>
-                              BitLabs.instance.launchOfferWall(context),
-                          title: 'Open OfferWall',
-                        ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: () =>
+                            BitLabs.instance.launchOfferWall(context),
+                        title: 'Open OfferWall',
                       ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: getSurveys,
-                          title: 'Get Surveys',
-                        ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: CustomButton(
+                        onPressed: getSurveys,
+                        title: 'Get Surveys',
                       ),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: CustomButton(
-                          title: 'Show Survey Widget',
-                        ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: CustomButton(
+                        title: 'Show Survey Widget',
                       ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                ),
+              ],
             ),
-            ColoredBox(
-                color: Colors.cyan,
-                child: SizedBox(
-                    height: 150, child: surveyWidgets ?? const SizedBox())),
-          ],
-        ),
+          ),
+          ColoredBox(
+              color: Colors.cyan,
+              child: SizedBox(
+                  height: 150, child: surveyWidgets ?? const SizedBox())),
+        ],
       ),
     );
   }

@@ -5,21 +5,22 @@ import 'dart:developer';
 import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/widget_type.dart';
-import 'package:bitlabs/src/ui/survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
+import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/ui/bitlabs_offerwall.dart';
 import 'src/utils/helpers.dart';
 import 'src/utils/notifiers.dart' as notifiers;
+import 'src/widgets/bitlabs_offerwall.dart';
 
 export 'src/models/widget_type.dart';
-export 'src/ui/bitlabs_offerwall.dart';
-export 'src/ui/bitlabs_leaderboard.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
+export 'src/widgets/bitlabs_leaderboard.dart';
+export 'src/widgets/bitlabs_offerwall.dart';
+export 'src/widgets/leaderboard.dart';
 
 /// The main class including all the library functions to use in your code.
 ///

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
-import 'package:bitlabs/src/ui/simple_survey_widget.dart';
+import 'package:bitlabs/src/widgets/simple_survey_widget.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/widgets.dart';
 

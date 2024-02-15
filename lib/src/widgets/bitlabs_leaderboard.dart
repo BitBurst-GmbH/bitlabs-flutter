@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
-import 'package:bitlabs/src/ui/styled_text.dart';
+import 'package:bitlabs/src/widgets/styled_text.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';

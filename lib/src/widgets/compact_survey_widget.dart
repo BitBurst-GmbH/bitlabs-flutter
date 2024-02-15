@@ -1,7 +1,7 @@
-import 'package:bitlabs/src/ui/promotion_view.dart';
-import 'package:bitlabs/src/ui/reward_view.dart';
-import 'package:bitlabs/src/ui/star_rating.dart';
-import 'package:bitlabs/src/ui/styled_text.dart';
+import 'package:bitlabs/src/widgets/promotion_view.dart';
+import 'package:bitlabs/src/widgets/reward_view.dart';
+import 'package:bitlabs/src/widgets/star_rating.dart';
+import 'package:bitlabs/src/widgets/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class CompactSurveyWidget extends StatefulWidget {

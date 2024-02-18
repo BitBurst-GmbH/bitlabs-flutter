@@ -63,32 +63,54 @@ class BitLabsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (type == WidgetType.leaderboard) {
+      // GestureDetector not used here because of conflict with WebView scrolling
+      return WebViewWidget(controller: controller);
+    }
+
+    return _SizeableWebView(
+      size: _getSizeByType(type),
+      controller: controller,
+    );
+  }
+
+  _getSizeByType(WidgetType type) {
     switch (type) {
       case WidgetType.simple:
-        return Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox.fromSize(
-            size: const Size(280, 130),
-            child: WebViewWidget(controller: controller),
-          ),
-        );
+        return const Size(295, 135);
       case WidgetType.compact:
-        return Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox.fromSize(
-            size: const Size(250, 72),
-            child: WebViewWidget(controller: controller),
-          ),
-        );
+        return const Size(255, 80);
       case WidgetType.fullWidth:
-        return SizedBox.fromSize(
-          size: const Size(double.infinity, 57),
-          child: WebViewWidget(controller: controller),
-        );
+        return const Size(double.infinity, 57);
       case WidgetType.leaderboard:
-        return WebViewWidget(controller: controller);
+        return const Size(double.infinity, 300);
       default:
-        return const SizedBox.shrink();
+        return const Size(0, 0);
     }
+  }
+}
+
+class _SizeableWebView extends StatelessWidget {
+  final Size size;
+  final WebViewController controller;
+
+  const _SizeableWebView({
+    Key? key,
+    required this.size,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SizedBox.fromSize(
+        size: size,
+        child: GestureDetector(
+          onTapDown: (tap) => BitLabs.instance.launchOfferWall(context),
+          child: WebViewWidget(controller: controller),
+        ),
+      ),
+    );
   }
 }

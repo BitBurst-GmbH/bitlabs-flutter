@@ -17,6 +17,7 @@ class BitLabsLeaderboard extends StatefulWidget {
   State<BitLabsLeaderboard> createState() => _BitLabsLeaderboardState();
 }
 
+@Deprecated('Will be Removed in the next major.')
 class _BitLabsLeaderboardState extends State<BitLabsLeaderboard> {
   User? ownUser;
   List<User>? topUsers;

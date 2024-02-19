@@ -1,11 +1,15 @@
+## 2.2.0
+- **Widget Migration**:Migrate Widgets to new WebView Components for scalability.
+  Deprecated `BitLabsLeaderboard` and `getSurveyWidgets()`. Use ``BitLabsWidget`instead.
+
 ## 2.1.13
--- **Bugfix**: QR Code appears unnecessarily. Add a toggle flag to whether to display the QR Code.
+- **Bugfix**: QR Code appears unnecessarily. Add a toggle flag to whether to display the QR Code.
 
 ## 2.1.12
--- **Add Tests**
+- **Add Tests**
 
 ## 2.1.11
--- **Important Bug Fixes**
+- **Important Bug Fixes**
 
 ## 2.1.10
 - **Bugfix**: Fix Closse Offerwall button not showing when going back to Offerwall from Survey.

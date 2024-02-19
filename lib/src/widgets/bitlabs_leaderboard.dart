@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/api/bitlabs_repository.dart';
-import 'package:bitlabs/src/ui/styled_text.dart';
+import 'package:bitlabs/src/widgets/styled_text.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user.dart';
 import '../utils/notifiers.dart' as notifiers;
 import 'leaderboard_item.dart';
 
+@Deprecated('Use BitLabsWidget with type WidgetType.leaderboard instead.')
 class BitLabsLeaderboard extends StatefulWidget {
   const BitLabsLeaderboard({Key? key}) : super(key: key);
 

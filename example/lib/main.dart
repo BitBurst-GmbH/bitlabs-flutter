@@ -41,11 +41,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ListView? surveyWidgets;
+  final uid = 'oblivatevariegata';
+
+  bool isLeaderboardVisible = false;
+  bool isSurveyWidgetVisible = false;
 
   @override
   void initState() {
     super.initState();
-    BitLabs.instance.init(appToken, 'oblivatevariegata');
+    BitLabs.instance.init(appToken, uid);
 
     BitLabs.instance.setOnReward(
         (reward) => log('[Example] Reward for this session: $reward'));
@@ -55,38 +59,99 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const BitLabsLeaderboard(),
-            SizedBox(
-              width: 250,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const SizedBox(height: 8),
+          Expanded(
+            flex: 5,
+            child: isLeaderboardVisible
+                ? BitLabsWidget(
+                    token: appToken,
+                    uid: uid,
+                    type: WidgetType.leaderboard,
+                  )
+                : const SizedBox.shrink(),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: BitLabs.instance.requestTrackingAuthorization,
-                    child: const Text('Authorize Tracking(iOS)'),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: () =>
+                          setState(() => isLeaderboardVisible = true),
+                      title: 'Show Leaderboard',
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: checkForSurveys,
-                    child: const Text('Check for Surveys'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => BitLabs.instance.launchOfferWall(context),
-                    child: const Text('Open OfferWall'),
-                  ),
-                  ElevatedButton(
-                    onPressed: getSurveys,
-                    child: const Text('Get Surveys'),
-                  ),
+                  const SizedBox(width: 4),
                 ],
               ),
+              Row(
+                children: [
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: BitLabs.instance.requestTrackingAuthorization,
+                      title: 'Authorize Tracking(iOS)',
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: checkForSurveys,
+                      title: 'Check for Surveys',
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                ],
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: () =>
+                          BitLabs.instance.launchOfferWall(context),
+                      title: 'Open OfferWall',
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                ],
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: getSurveys,
+                      title: 'Get Surveys',
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: CustomButton(
+                      onPressed: () =>
+                          setState(() => isSurveyWidgetVisible = true),
+                      title: 'Show Survey Widget',
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                ],
+              ),
+            ],
+          ),
+          if (isSurveyWidgetVisible)
+            BitLabsWidget(
+              token: appToken,
+              uid: uid,
+              type: WidgetType.simple,
             ),
-            SizedBox(height: 150, child: surveyWidgets ?? const SizedBox()),
-          ],
-        ),
+          const Spacer(),
+        ],
       ),
     );
   }
@@ -97,11 +162,20 @@ class _HomePageState extends State<HomePage> {
       (exception) => log('[Example] CheckSurveys $exception'));
 
   void getSurveys() => BitLabs.instance.getSurveys(
-      (surveys) => setState(() {
-            surveyWidgets = ListView(
-                scrollDirection: Axis.horizontal,
-                children: BitLabs.instance
-                    .getSurveyWidgets(surveys, WidgetType.simple));
-          }),
+      (surveys) => surveys.forEach((element) => log(
+          '[Example] Survey: ${element.id} - ${element.value} - ${element.rating}')),
       (exception) => log('[Example] GetSurveys $exception'));
+}
+
+class CustomButton extends StatelessWidget {
+  final String title;
+  final VoidCallback? onPressed;
+
+  const CustomButton({Key? key, required this.title, this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(onPressed: onPressed, child: Text(title));
+  }
 }

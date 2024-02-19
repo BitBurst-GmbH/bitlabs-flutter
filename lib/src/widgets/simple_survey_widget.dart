@@ -1,5 +1,5 @@
-import 'package:bitlabs/src/ui/promotion_view.dart';
-import 'package:bitlabs/src/ui/styled_text.dart';
+import 'package:bitlabs/src/widgets/promotion_view.dart';
+import 'package:bitlabs/src/widgets/styled_text.dart';
 import 'package:flutter/material.dart';
 
 import 'reward_view.dart';

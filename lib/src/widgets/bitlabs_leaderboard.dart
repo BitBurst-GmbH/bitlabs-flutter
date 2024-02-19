@@ -9,6 +9,7 @@ import '../models/user.dart';
 import '../utils/notifiers.dart' as notifiers;
 import 'leaderboard_item.dart';
 
+@Deprecated('Use BitLabsWidget with type WidgetType.leaderboard instead.')
 class BitLabsLeaderboard extends StatefulWidget {
   const BitLabsLeaderboard({Key? key}) : super(key: key);
 

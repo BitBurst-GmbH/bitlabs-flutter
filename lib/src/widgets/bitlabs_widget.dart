@@ -77,13 +77,11 @@ class BitLabsWidget extends StatelessWidget {
   _getSizeByType(WidgetType type) {
     switch (type) {
       case WidgetType.simple:
-        return const Size(295, 135);
+        return const Size(300, 135);
       case WidgetType.compact:
-        return const Size(255, 80);
+        return const Size(260, 80);
       case WidgetType.fullWidth:
         return const Size(double.infinity, 57);
-      case WidgetType.leaderboard:
-        return const Size(double.infinity, 300);
       default:
         return const Size(0, 0);
     }

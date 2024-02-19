@@ -120,6 +120,8 @@ class BitLabs {
               onResponse(surveys.isNotEmpty ? surveys : randomSurveys()),
           onFailure));
 
+  @Deprecated('Use the BitLabsWidget instead,'
+      ' will be removed soon in the next major')
   List<SurveyWidget> getSurveyWidgets(List<Survey> surveys, WidgetType type) {
     return List.generate(surveys.length, (index) {
       final survey = surveys[index];

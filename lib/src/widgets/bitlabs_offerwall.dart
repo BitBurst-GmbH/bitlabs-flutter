@@ -106,7 +106,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
         if (params.acceptTypes.any((type) => type == 'image/*')) {
           final picker = ImagePicker();
-          final photo = await picker.pickImage(source: ImageSource.camera);
+          final photo =
+              await picker.pickImage(source: await chooseImageSource());
 
           if (photo == null) {
             return [];
@@ -232,5 +233,30 @@ class OfferwallState extends State<BitLabsOfferwall> {
     log('[BitLabs] Leaving with reason ~> $reason');
     BitLabs.instance.leaveSurvey(clickId!, reason);
     clickId = null;
+  }
+
+  Future<ImageSource> chooseImageSource() async {
+    final picker = ImagePicker();
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_camera),
+              title: const Text('Camera'),
+              onTap: () => Navigator.of(context).pop(ImageSource.camera),
+            ),
+          ],
+        );
+      },
+    );
+
+    return source ?? ImageSource.gallery;
   }
 }

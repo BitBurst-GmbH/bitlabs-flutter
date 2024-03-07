@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import '../../bitlabs.dart';
 import '../utils/helpers.dart';
@@ -59,7 +61,9 @@ class OfferwallState extends State<BitLabsOfferwall> {
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
 
-    controller = WebViewController()
+    controller = WebViewController(
+      onPermissionRequest: (request) => request.grant(),
+    )
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: (error) {
             if (!widget.debugMode &&
@@ -91,6 +95,29 @@ class OfferwallState extends State<BitLabsOfferwall> {
           }))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(url));
+
+    if (Platform.isAndroid) {
+      // or: if (webViewController.platform is AndroidWebViewController)
+      final myAndroidController =
+          controller.platform as AndroidWebViewController;
+
+      myAndroidController.setOnShowFileSelector((params) async {
+        log('[BitLabs] File selector params: ${params.acceptTypes}');
+
+        if (params.acceptTypes.any((type) => type == 'image/*')) {
+          final picker = ImagePicker();
+          final photo = await picker.pickImage(source: ImageSource.camera);
+
+          if (photo == null) {
+            return [];
+          }
+
+          return [Uri.file(photo.path).toString()];
+        }
+
+        return [];
+      });
+    }
   }
 
   @override

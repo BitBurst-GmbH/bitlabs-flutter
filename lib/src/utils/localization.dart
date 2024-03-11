@@ -52,6 +52,10 @@ class Localization {
 
   String get leaveDescription =>
       _localizedValues[locale.languageCode]!['leave_description']!;
+
+  String get gallery => _localizedValues[locale.languageCode]!['gallery']!;
+
+  String get camera => _localizedValues[locale.languageCode]!['camera']!;
 }
 
 class LocalizationDelegate extends LocalizationsDelegate<Localization> {

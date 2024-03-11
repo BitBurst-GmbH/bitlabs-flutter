@@ -244,12 +244,12 @@ class OfferwallState extends State<BitLabsOfferwall> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              title: Text(Localization.of(context).gallery),
               onTap: () => Navigator.of(context).pop(ImageSource.gallery),
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Camera'),
+              title: Text(Localization.of(context).camera),
               onTap: () => Navigator.of(context).pop(ImageSource.camera),
             ),
           ],

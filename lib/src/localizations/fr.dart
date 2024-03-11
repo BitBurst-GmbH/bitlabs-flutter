@@ -9,4 +9,6 @@ const _fr = {
   "continue_survey": "Continuer l'enquête",
   "leave_title": "Quitter l'enquête",
   "leave_description": "Choisissez une raison pour quitter l'enquête",
+  "gallery": "Galerie",
+  "camera": "Appareil photo",
 };

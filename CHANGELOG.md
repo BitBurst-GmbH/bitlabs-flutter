@@ -1,3 +1,6 @@
+## 2.2.1
+- **Magic Receipts**: Add Magic Receipts to the Offerwall. You can now reward users for scanning receipts. Make sure to enable that in your Dashboard.
+
 ## 2.2.0
 - **Widget Migration**:Migrate Widgets to new WebView Components for scalability.
   Deprecated `BitLabsLeaderboard` and `getSurveyWidgets()`. Use ``BitLabsWidget`instead.

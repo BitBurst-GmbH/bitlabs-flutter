@@ -105,9 +105,11 @@ class OfferwallState extends State<BitLabsOfferwall> {
         log('[BitLabs] File selector params: ${params.acceptTypes}');
 
         if (params.acceptTypes.any((type) => type == 'image/*')) {
+          final imageSource = await chooseImageSource();
+          if (imageSource == null) return [];
+
           final picker = ImagePicker();
-          final photo =
-              await picker.pickImage(source: await chooseImageSource());
+          final photo = await picker.pickImage(source: imageSource);
 
           if (photo == null) {
             return [];
@@ -235,7 +237,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
     clickId = null;
   }
 
-  Future<ImageSource> chooseImageSource() async {
+  Future<ImageSource?> chooseImageSource() async {
     final picker = ImagePicker();
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -257,6 +259,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
       },
     );
 
-    return source ?? ImageSource.gallery;
+    return source;
   }
 }

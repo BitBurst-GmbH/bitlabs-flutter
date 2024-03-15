@@ -10,4 +10,6 @@ const _de = {
   "leave_title": "Umfrage Verlassen",
   "leave_description":
       "Wähle einen Grund warum du die Umfrage verlassen willst",
+  "gallery": "Galerie",
+  "camera": "Kamera",
 };

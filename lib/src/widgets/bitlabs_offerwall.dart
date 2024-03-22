@@ -87,7 +87,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
             if (url.contains('/offers/')) {
               launchUrlString(url, mode: LaunchMode.externalApplication);
-              controller.loadRequest(Uri.parse(url));
               return NavigationDecision.prevent;
             }
 

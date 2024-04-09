@@ -101,23 +101,17 @@ class OfferwallState extends State<BitLabsOfferwall> {
           controller.platform as AndroidWebViewController;
 
       myAndroidController.setOnShowFileSelector((params) async {
-        log('[BitLabs] File selector params: ${params.acceptTypes}');
+        log('[BitLabs] File selector params: ${params..acceptTypes}');
 
-        if (params.acceptTypes.any((type) => type == 'image/*')) {
-          final imageSource = await chooseImageSource();
-          if (imageSource == null) return [];
+        final imageSource = await chooseImageSource();
+        if (imageSource == null) return [];
 
-          final picker = ImagePicker();
-          final photo = await picker.pickImage(source: imageSource);
+        final picker = ImagePicker();
+        final photo = await picker.pickImage(source: imageSource);
 
-          if (photo == null) {
-            return [];
-          }
+        if (photo == null) return [];
 
-          return [Uri.file(photo.path).toString()];
-        }
-
-        return [];
+        return [Uri.file(photo.path).toString()];
       });
     }
   }

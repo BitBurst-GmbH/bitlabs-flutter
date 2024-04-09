@@ -118,13 +118,10 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (!isPageOfferWall) {
-          await showDialog(context: context, builder: showLeaveSurveyDialog);
-        }
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async =>
+          await showDialog(context: context, builder: showLeaveSurveyDialog),
       child: SafeArea(
         child: Scaffold(
           appBar: isPageOfferWall

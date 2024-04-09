@@ -43,20 +43,22 @@ class BitLabsOfferwall extends StatefulWidget {
 class OfferwallState extends State<BitLabsOfferwall> {
   String? clickId;
 
-  late final String url;
   late bool isColorBright;
+  late final String initialUrl;
   late WebViewController controller;
 
   double reward = 0.0;
   String errorId = '';
   bool isPageOfferWall = false;
+  bool isPageAdGateSupport = false;
   bool areParametersInjected = true;
 
   @override
   void initState() {
     super.initState();
 
-    url = offerWallUrl(widget.token, widget.uid, widget.adId, widget.tags);
+    initialUrl =
+        offerWallUrl(widget.token, widget.uid, widget.adId, widget.tags);
 
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
@@ -93,7 +95,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
             return NavigationDecision.navigate;
           }))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(url));
+      ..loadRequest(Uri.parse(initialUrl));
 
     if (Platform.isAndroid) {
       // or: if (webViewController.platform is AndroidWebViewController)
@@ -120,8 +122,16 @@ class OfferwallState extends State<BitLabsOfferwall> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async =>
-          await showDialog(context: context, builder: showLeaveSurveyDialog),
+      onPopInvoked: (didPop) async {
+        if (isPageOfferWall) return;
+
+        if (isPageAdGateSupport) {
+          controller.loadRequest(Uri.parse(initialUrl));
+          return;
+        }
+
+        await showDialog(context: context, builder: showLeaveSurveyDialog);
+      },
       child: SafeArea(
         child: Scaffold(
           appBar: isPageOfferWall
@@ -197,9 +207,13 @@ class OfferwallState extends State<BitLabsOfferwall> {
       }
     }
 
+    isPageAdGateSupport = false;
+
     if (!isPageOfferWall) {
       clickId = Uri.parse(url).queryParameters['clk'] ?? clickId;
       areParametersInjected = false;
+      isPageAdGateSupport =
+          url.startsWith('https://wall.adgaterewards.com/contact/');
     }
   }
 
@@ -218,7 +232,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
   void leaveSurvey(String reason) {
     setState(() => errorId = '');
-    controller.loadRequest(Uri.parse(url));
+    controller.loadRequest(Uri.parse(initialUrl));
 
     if (clickId == null) return;
 

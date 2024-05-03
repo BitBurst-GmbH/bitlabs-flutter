@@ -67,8 +67,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
     )
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: (error) {
-            if (!widget.debugMode &&
-                error.errorType != WebResourceErrorType.fileNotFound) {
+            if (!widget.debugMode) {
               return;
             }
 

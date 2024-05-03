@@ -51,7 +51,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
   String errorId = '';
   bool isPageOfferWall = false;
   bool isPageAdGateSupport = false;
-  bool areParametersInjected = true;
 
   @override
   void initState() {
@@ -68,8 +67,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
     )
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: (error) {
-            if (!widget.debugMode &&
-                error.errorType != WebResourceErrorType.fileNotFound) {
+            if (!widget.debugMode) {
               return;
             }
 
@@ -185,33 +183,9 @@ class OfferwallState extends State<BitLabsOfferwall> {
     }
 
     setState(() => isPageOfferWall = url.startsWith('https://web.bitlabs.ai'));
-
-    if (url.contains('survey-compete') ||
-        url.contains('survey-screenout') ||
-        url.contains('start-bonus')) {
-      reward += double.parse(Uri.parse(url).queryParameters['val'] ?? '0.0');
-
-      if (!areParametersInjected && !url.contains('sdk=FLUTTER')) {
-        areParametersInjected = true;
-        var newUrl =
-            '$url&sdk=FLUTTER&os=${Platform.isIOS ? 'ios' : 'android'}&uid=${widget.uid}&token=${widget.token}';
-        if (widget.adId.isNotEmpty) newUrl += '&maid=${widget.adId}';
-
-        if (widget.tags.isNotEmpty) {
-          widget.tags.forEach((key, value) {
-            newUrl += '&$key=$value';
-          });
-        }
-
-        controller.loadRequest(Uri.parse(newUrl));
-      }
-    }
-
     isPageAdGateSupport = false;
 
     if (!isPageOfferWall) {
-      clickId = Uri.parse(url).queryParameters['clk'] ?? clickId;
-      areParametersInjected = false;
       isPageAdGateSupport =
           url.startsWith('https://wall.adgaterewards.com/contact/');
     }

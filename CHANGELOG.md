@@ -1,3 +1,6 @@
+## 2.2.3
+- **Bugfix**: QR Code appears without errors
+
 ## 2.2.2
 - **Offer Support Page**: Now you can report to use in case there is a problem with an Offer.
   The **Report a Problem** option is now available in the Offer overview page once you start the offer.  

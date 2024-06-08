@@ -93,7 +93,20 @@ class OfferwallState extends State<BitLabsOfferwall> {
             return NavigationDecision.navigate;
           }))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel('FlutterWebView', onMessageReceived: (message) {
+        log('[BitLabs] Message received ~> ${message.message}');
+      })
       ..loadRequest(Uri.parse(initialUrl));
+
+    Future.delayed(const Duration(seconds: 2), () {
+      controller.runJavaScript('''
+        window.addEventListener('message', function(event) {
+          window.FlutterWebView.postMessage(JSON.stringify(event.data));
+        });
+
+        window.postMessage({ target: 'app.visual.dark.background_color', value: '#FF0000' }, '*');
+      ''');
+    });
 
     if (Platform.isAndroid) {
       // or: if (webViewController.platform is AndroidWebViewController)

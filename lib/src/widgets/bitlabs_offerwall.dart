@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:bitlabs/src/utils/HookMessageHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -95,6 +96,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel('FlutterWebView', onMessageReceived: (message) {
         log('[BitLabs] Message received ~> ${message.message}');
+
+        log('[BitLabs] Message parsed ~> ${message.message.toHookMessage()}');
       })
       ..loadRequest(Uri.parse(initialUrl));
 

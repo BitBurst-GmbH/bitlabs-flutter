@@ -218,6 +218,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
   Future<ImageSource?> chooseImageSource() async {
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
+      useSafeArea: true,
       builder: (context) {
         return Wrap(
           children: [

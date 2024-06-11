@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:bitlabs/src/utils/HookMessageHelper.dart';
+import 'package:bitlabs/src/utils/hook_message_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -94,10 +94,18 @@ class OfferwallState extends State<BitLabsOfferwall> {
             return NavigationDecision.navigate;
           }))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel('FlutterWebView', onMessageReceived: (message) {
-        log('[BitLabs] Message received ~> ${message.message}');
+      ..addJavaScriptChannel('FlutterWebView', onMessageReceived: (jsMessage) {
+        log('[BitLabs] Message received ~> ${jsMessage.message}');
 
-        log('[BitLabs] Message parsed ~> ${message.message.toHookMessage()}');
+        final hookMessage = jsMessage.message.toHookMessage();
+
+        switch (hookMessage.name) {
+          case HookName.sdkClose:
+            Navigator.of(context).pop();
+            break;
+          default:
+            break;
+        }
       })
       ..loadRequest(Uri.parse(initialUrl));
 
@@ -192,11 +200,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
-
-    if (url.endsWith('/close')) {
-      Navigator.of(context).pop();
-      return;
-    }
 
     setState(() => isPageOfferWall = url.startsWith('https://web.bitlabs.ai'));
     isPageAdGateSupport = false;

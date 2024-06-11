@@ -2,7 +2,6 @@
 Extension of the String class to convert a json to a HookMessage object
  */
 import 'dart:convert';
-import 'dart:ffi';
 
 extension StringExtension on String {
   HookMessage toHookMessage() {

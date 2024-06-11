@@ -1,3 +1,6 @@
+## 2.2.5
+-**Improvements**
+
 ## 2.2.4
 - **Bugfix**: Fix the issue when Modal Bottom Sheet is clipped or not showing
 

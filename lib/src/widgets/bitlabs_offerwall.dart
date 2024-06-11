@@ -218,21 +218,23 @@ class OfferwallState extends State<BitLabsOfferwall> {
   Future<ImageSource?> chooseImageSource() async {
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
-      useSafeArea: true,
       builder: (context) {
-        return Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(Localization.of(context).gallery),
-              onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_camera),
-              title: Text(Localization.of(context).camera),
-              onTap: () => Navigator.of(context).pop(ImageSource.camera),
-            ),
-          ],
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(Localization.of(context).gallery),
+                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: Text(Localization.of(context).camera),
+                onTap: () => Navigator.of(context).pop(ImageSource.camera),
+              ),
+            ],
+          ),
         );
       },
     );

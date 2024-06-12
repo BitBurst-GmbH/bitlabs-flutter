@@ -16,18 +16,30 @@ Class to represent a HookMessage object
 class HookMessage {
   final String type;
   final HookName name;
-  final List<String> args;
+  final List<dynamic> args;
 
   HookMessage.fromJson(Map<String, dynamic> json)
       : type = json['type'],
         name = _hookNameFromString(json['name']),
-        args = List<String>.from(json['args']);
+        args = json['args'].map((arg) {
+          if (arg['reward'] != null) {
+            return RewardArgument.fromJson(arg);
+          } else {
+            return SurveyStartArgument.fromJson(arg);
+          }
+        }).toList();
 
   Map<String, dynamic> toJson() {
     return {
       'type': type,
       'name': _hookNameToString(name),
-      'args': args,
+      'args': args.map((arg) {
+        if (arg is RewardArgument) {
+          return {'reward': arg.reward};
+        } else {
+          return {'clickId': arg.clickId, 'linkId': arg.linkId};
+        }
+      }).toList(),
     };
   }
 
@@ -81,4 +93,19 @@ enum HookName {
   surveyComplete,
   surveyScreenout,
   surveyStartBonus,
+}
+
+class RewardArgument {
+  final double reward;
+
+  RewardArgument.fromJson(Map<String, dynamic> json) : reward = json['reward'];
+}
+
+class SurveyStartArgument {
+  final String clickId;
+  final String linkId;
+
+  SurveyStartArgument.fromJson(Map<String, dynamic> json)
+      : clickId = json['clickId'],
+        linkId = json['linkId'];
 }

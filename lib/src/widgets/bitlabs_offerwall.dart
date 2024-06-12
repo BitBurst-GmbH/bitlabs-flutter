@@ -100,6 +100,25 @@ class OfferwallState extends State<BitLabsOfferwall> {
         final hookMessage = jsMessage.message.toHookMessage();
 
         switch (hookMessage.name) {
+          case HookName.surveyComplete:
+            final rewardArg = hookMessage.args.first as RewardArgument;
+            reward += rewardArg.reward;
+            log('[BitLabs] Survey completed ~> $reward');
+            break;
+            case HookName.surveyScreenout:
+            final rewardArg = hookMessage.args.first as RewardArgument;
+            reward += rewardArg.reward;
+            log('[BitLabs] Survey screenout ~> $reward');
+            break;
+            case HookName.surveyStartBonus:
+            final rewardArg = hookMessage.args.first as RewardArgument;
+            reward += rewardArg.reward;
+            log('[BitLabs] Survey start bonus ~> $reward');
+            break;
+          case HookName.surveyStart:
+            clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
+            log('[BitLabs] Survey started ~> $clickId');
+            break;
           case HookName.sdkClose:
             Navigator.of(context).pop();
             break;
@@ -109,13 +128,11 @@ class OfferwallState extends State<BitLabsOfferwall> {
       })
       ..loadRequest(Uri.parse(initialUrl));
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       controller.runJavaScript('''
         window.addEventListener('message', function(event) {
           window.FlutterWebView.postMessage(JSON.stringify(event.data));
         });
-
-        window.postMessage({ target: 'app.visual.dark.background_color', value: '#FF0000' }, '*');
       ''');
     });
 

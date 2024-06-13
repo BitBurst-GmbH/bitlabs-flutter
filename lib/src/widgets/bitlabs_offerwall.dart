@@ -83,6 +83,17 @@ class OfferwallState extends State<BitLabsOfferwall> {
             });
           },
           onUrlChange: onUrlChanged,
+          onPageFinished: (url) {
+            controller.runJavaScript('''
+            if(!window.isEventListenerAdded) { // Important to add event listener only once regardless of the number of times the script is injected
+              window.addEventListener('message', function(event) {
+                window.FlutterWebView.postMessage(JSON.stringify(event.data));
+              });
+              
+              window.isEventListenerAdded = true; // Set flag to true to prevent adding the event listener again
+            }
+            ''');
+          },
           onNavigationRequest: (request) {
             final url = request.url;
 
@@ -99,18 +110,20 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
         final hookMessage = jsMessage.message.toHookMessage();
 
+        if (hookMessage == null) return;
+
         switch (hookMessage.name) {
           case HookName.surveyComplete:
             final rewardArg = hookMessage.args.first as RewardArgument;
             reward += rewardArg.reward;
             log('[BitLabs] Survey completed ~> $reward');
             break;
-            case HookName.surveyScreenout:
+          case HookName.surveyScreenout:
             final rewardArg = hookMessage.args.first as RewardArgument;
             reward += rewardArg.reward;
             log('[BitLabs] Survey screenout ~> $reward');
             break;
-            case HookName.surveyStartBonus:
+          case HookName.surveyStartBonus:
             final rewardArg = hookMessage.args.first as RewardArgument;
             reward += rewardArg.reward;
             log('[BitLabs] Survey start bonus ~> $reward');
@@ -122,19 +135,16 @@ class OfferwallState extends State<BitLabsOfferwall> {
           case HookName.sdkClose:
             Navigator.of(context).pop();
             break;
+          case HookName.init:
+            controller.runJavaScript('''
+                window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
+              ''');
+            break;
           default:
             break;
         }
       })
       ..loadRequest(Uri.parse(initialUrl));
-
-    Future.delayed(const Duration(seconds: 1), () {
-      controller.runJavaScript('''
-        window.addEventListener('message', function(event) {
-          window.FlutterWebView.postMessage(JSON.stringify(event.data));
-        });
-      ''');
-    });
 
     if (Platform.isAndroid) {
       // or: if (webViewController.platform is AndroidWebViewController)

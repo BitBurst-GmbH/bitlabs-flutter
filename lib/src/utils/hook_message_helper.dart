@@ -4,7 +4,12 @@ Extension of the String class to convert a json to a HookMessage object
 import 'dart:convert';
 
 extension StringExtension on String {
-  HookMessage toHookMessage() {
+  HookMessage? toHookMessage() {
+    final regex = RegExp(r'^\{"type":"hook","name":".*","args":\[.*\]\}$');
+    if (!regex.hasMatch(this)) {
+      return null;
+    }
+
     final json = jsonDecode(this);
     return HookMessage.fromJson(json);
   }
@@ -24,8 +29,10 @@ class HookMessage {
         args = json['args'].map((arg) {
           if (arg['reward'] != null) {
             return RewardArgument.fromJson(arg);
-          } else {
+          } else if (arg['clickId'] != null) {
             return SurveyStartArgument.fromJson(arg);
+          } else {
+            return arg;
           }
         }).toList();
 
@@ -36,8 +43,10 @@ class HookMessage {
       'args': args.map((arg) {
         if (arg is RewardArgument) {
           return {'reward': arg.reward};
-        } else {
+        } else if (arg is SurveyStartArgument) {
           return {'clickId': arg.clickId, 'linkId': arg.linkId};
+        } else {
+          return arg;
         }
       }).toList(),
     };
@@ -57,6 +66,8 @@ class HookMessage {
         return HookName.surveyScreenout;
       case "offerwall-core:survey.startBonus":
         return HookName.surveyStartBonus;
+      case "offerwall-identity:offerwall-identity:identity.change":
+        return HookName.identityChange;
       default:
         throw ArgumentError('Invalid hook name');
     }
@@ -76,6 +87,8 @@ class HookMessage {
         return "offerwall-core:survey.screenout";
       case HookName.surveyStartBonus:
         return "offerwall-core:survey.startBonus";
+      case HookName.identityChange:
+        return "offerwall-identity:offerwall-identity:identity.change";
     }
   }
 
@@ -90,6 +103,7 @@ enum HookName {
   init,
   sdkClose,
   surveyStart,
+  identityChange,
   surveyComplete,
   surveyScreenout,
   surveyStartBonus,

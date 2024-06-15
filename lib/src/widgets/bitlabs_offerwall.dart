@@ -15,6 +15,17 @@ import '../utils/helpers.dart';
 import '../utils/localization.dart';
 import 'styled_text.dart';
 
+const String BASE_URL = 'https://web.bitlabs.ai';
+const String ADGATE_SUPPORT_URL = 'https://wall.adgaterewards.com/contact/';
+const String POST_MESSAGE_SCRIPT = '''
+  if (!window.isEventListenerAdded) {
+    window.addEventListener('message', function(event) {
+      window.FlutterWebView.postMessage(JSON.stringify(event.data));
+    });
+    window.isEventListenerAdded = true;
+  }
+''';
+
 /// Launches the Offer Wall in a [WebView].
 class BitLabsOfferwall extends StatefulWidget {
   final String uid;
@@ -63,88 +74,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
 
-    controller = WebViewController(
-      onPermissionRequest: (request) => request.grant(),
-    )
-      ..setNavigationDelegate(NavigationDelegate(
-          onWebResourceError: (error) {
-            if (!widget.debugMode) {
-              return;
-            }
 
-            final errorID = '{ uid: ${widget.uid},'
-                ' date: ${DateTime.now().millisecondsSinceEpoch},'
-                ' url: ${error.url}, '
-                ' type: ${error.errorType},'
-                ' description: ${error.description} }';
-
-            setState(() {
-              errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
-            });
-          },
-          onUrlChange: onUrlChanged,
-          onPageFinished: (url) {
-            controller.runJavaScript('''
-            if(!window.isEventListenerAdded) { // Important to add event listener only once regardless of the number of times the script is injected
-              window.addEventListener('message', function(event) {
-                window.FlutterWebView.postMessage(JSON.stringify(event.data));
-              });
-              
-              window.isEventListenerAdded = true; // Set flag to true to prevent adding the event listener again
-            }
-            ''');
-          },
-          onNavigationRequest: (request) {
-            final url = request.url;
-
-            if (url.contains('/offers/')) {
-              launchUrlString(url, mode: LaunchMode.externalApplication);
-              return NavigationDecision.prevent;
-            }
-
-            return NavigationDecision.navigate;
-          }))
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel('FlutterWebView', onMessageReceived: (jsMessage) {
-        log('[BitLabs] Message received ~> ${jsMessage.message}');
-
-        final hookMessage = jsMessage.message.toHookMessage();
-
-        if (hookMessage == null) return;
-
-        switch (hookMessage.name) {
-          case HookName.surveyComplete:
-            final rewardArg = hookMessage.args.first as RewardArgument;
-            reward += rewardArg.reward;
-            log('[BitLabs] Survey completed ~> $reward');
-            break;
-          case HookName.surveyScreenout:
-            final rewardArg = hookMessage.args.first as RewardArgument;
-            reward += rewardArg.reward;
-            log('[BitLabs] Survey screenout ~> $reward');
-            break;
-          case HookName.surveyStartBonus:
-            final rewardArg = hookMessage.args.first as RewardArgument;
-            reward += rewardArg.reward;
-            log('[BitLabs] Survey start bonus ~> $reward');
-            break;
-          case HookName.surveyStart:
-            clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
-            log('[BitLabs] Survey started ~> $clickId');
-            break;
-          case HookName.sdkClose:
-            Navigator.of(context).pop();
-            break;
-          case HookName.init:
-            controller.runJavaScript('''
-                window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
-              ''');
-            break;
-          default:
-            break;
-        }
-      })
-      ..loadRequest(Uri.parse(initialUrl));
+    initializeWebView();
 
     if (Platform.isAndroid) {
       // or: if (webViewController.platform is AndroidWebViewController)
@@ -225,15 +156,88 @@ class OfferwallState extends State<BitLabsOfferwall> {
     super.dispose();
   }
 
+  void initializeWebView() async {
+    controller = WebViewController(
+      onPermissionRequest: (request) => request.grant(),
+    )
+      ..setNavigationDelegate(NavigationDelegate(
+          onWebResourceError: onWebResourceError,
+          onUrlChange: onUrlChanged,
+          onPageFinished: (_) => controller.runJavaScript(POST_MESSAGE_SCRIPT),
+          onNavigationRequest: (request) {
+            final url = request.url;
+
+            if (url.contains('/offers/')) {
+              launchUrlString(url, mode: LaunchMode.externalApplication);
+              return NavigationDecision.prevent;
+            }
+
+            return NavigationDecision.navigate;
+          }))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'FlutterWebView',
+        onMessageReceived: onJavaScriptMessage,
+      );
+
+    await controller.loadRequest(Uri.parse(initialUrl));
+  }
+
+  void onWebResourceError(WebResourceError error) {
+    if (!widget.debugMode) {
+      return;
+    }
+
+    final errorID = '{ uid: ${widget.uid},'
+        ' date: ${DateTime.now().millisecondsSinceEpoch},'
+        ' url: ${error.url}, '
+        ' type: ${error.errorType},'
+        ' description: ${error.description} }';
+
+    setState(() {
+      errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
+    });
+  }
+
+  void onJavaScriptMessage(JavaScriptMessage message) {
+    final hookMessage = message.message.toHookMessage();
+    if (hookMessage == null) return;
+
+    switch (hookMessage.name) {
+      case HookName.surveyComplete:
+      case HookName.surveyScreenout:
+      case HookName.surveyStartBonus:
+        final rewardArg = hookMessage.args.first as RewardArgument;
+        setState(() {
+          reward += rewardArg.reward;
+        });
+        break;
+      case HookName.surveyStart:
+        setState(() {
+          clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
+        });
+        break;
+      case HookName.sdkClose:
+        Navigator.of(context).pop();
+        break;
+      case HookName.init:
+        controller.runJavaScript('''
+        window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
+      ''');
+        break;
+      default:
+        break;
+    }
+  }
+
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
 
-    setState(() => isPageOfferWall = url.startsWith('https://web.bitlabs.ai'));
+    setState(() => isPageOfferWall = url.startsWith(BASE_URL));
     isPageAdGateSupport = false;
 
     if (!isPageOfferWall) {
-      isPageAdGateSupport =
-          url.startsWith('https://wall.adgaterewards.com/contact/');
+      isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
     }
   }
 

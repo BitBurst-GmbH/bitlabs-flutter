@@ -74,23 +74,18 @@ class OfferwallState extends State<BitLabsOfferwall> {
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
 
-
     initializeWebView();
 
     if (Platform.isAndroid) {
-      // or: if (webViewController.platform is AndroidWebViewController)
       final myAndroidController =
           controller.platform as AndroidWebViewController;
 
       myAndroidController.setOnShowFileSelector((params) async {
-        log('[BitLabs] File selector params: ${params..acceptTypes}');
-
         final imageSource = await chooseImageSource();
         if (imageSource == null) return [];
 
         final picker = ImagePicker();
         final photo = await picker.pickImage(source: imageSource);
-
         if (photo == null) return [];
 
         return [Uri.file(photo.path).toString()];
@@ -98,87 +93,26 @@ class OfferwallState extends State<BitLabsOfferwall> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (isPageOfferWall) return;
-
-        if (isPageAdGateSupport) {
-          controller.loadRequest(Uri.parse(initialUrl));
-          return;
-        }
-
-        await showDialog(context: context, builder: showLeaveSurveyDialog);
-      },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: isPageOfferWall
-              ? null
-              : AppBar(
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: widget.color,
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                  ),
-                  iconTheme: IconThemeData(
-                    color: isColorBright ? Colors.black : Colors.white,
-                  ),
-                ),
-          body: Stack(fit: StackFit.expand, children: [
-            WebViewWidget(controller: controller),
-            if (errorId.isNotEmpty)
-              Center(
-                child: FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: Row(children: [
-                    QrImageView(data: errorId, size: 70),
-                    Flexible(
-                      child: StyledText(errorId, fontSize: 12),
-                    ),
-                  ]),
-                ),
-              )
-          ]),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    widget.onReward?.call(reward);
-    super.dispose();
-  }
-
-  void initializeWebView() async {
+  Future<void> initializeWebView() async {
     controller = WebViewController(
       onPermissionRequest: (request) => request.grant(),
     )
       ..setNavigationDelegate(NavigationDelegate(
           onWebResourceError: onWebResourceError,
           onUrlChange: onUrlChanged,
-          onPageFinished: (_) => controller.runJavaScript(POST_MESSAGE_SCRIPT),
+          onPageFinished: (_) async =>
+              await controller.runJavaScript(POST_MESSAGE_SCRIPT),
           onNavigationRequest: (request) {
             final url = request.url;
-
             if (url.contains('/offers/')) {
               launchUrlString(url, mode: LaunchMode.externalApplication);
               return NavigationDecision.prevent;
             }
-
             return NavigationDecision.navigate;
           }))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel(
-        'FlutterWebView',
-        onMessageReceived: onJavaScriptMessage,
-      );
+      ..addJavaScriptChannel('FlutterWebView',
+          onMessageReceived: onJavaScriptMessage);
 
     await controller.loadRequest(Uri.parse(initialUrl));
   }
@@ -233,12 +167,11 @@ class OfferwallState extends State<BitLabsOfferwall> {
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
 
-    setState(() => isPageOfferWall = url.startsWith(BASE_URL));
-    isPageAdGateSupport = false;
-
-    if (!isPageOfferWall) {
-      isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
-    }
+    setState(() {
+      isPageOfferWall = url.startsWith(BASE_URL);
+      isPageAdGateSupport =
+          !isPageOfferWall && url.startsWith(ADGATE_SUPPORT_URL);
+    });
   }
 
   Widget showLeaveSurveyDialog(BuildContext context) {
@@ -287,5 +220,63 @@ class OfferwallState extends State<BitLabsOfferwall> {
     );
 
     return source;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (isPageOfferWall) return;
+
+        if (isPageAdGateSupport) {
+          await controller.loadRequest(Uri.parse(initialUrl));
+          return;
+        }
+
+        await showDialog(context: context, builder: showLeaveSurveyDialog);
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: isPageOfferWall
+              ? null
+              : AppBar(
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: widget.color,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
+                  iconTheme: IconThemeData(
+                    color: isColorBright ? Colors.black : Colors.white,
+                  ),
+                ),
+          body: Stack(fit: StackFit.expand, children: [
+            WebViewWidget(controller: controller),
+            if (errorId.isNotEmpty)
+              Center(
+                child: FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: Row(children: [
+                    QrImageView(data: errorId, size: 70),
+                    Flexible(
+                      child: StyledText(errorId, fontSize: 12),
+                    ),
+                  ]),
+                ),
+              )
+          ]),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    widget.onReward?.call(reward);
+    super.dispose();
   }
 }

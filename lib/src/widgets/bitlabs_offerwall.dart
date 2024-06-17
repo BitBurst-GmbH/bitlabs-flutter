@@ -11,20 +11,10 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import '../../bitlabs.dart';
+import '../utils/constants.dart';
 import '../utils/helpers.dart';
 import '../utils/localization.dart';
 import 'styled_text.dart';
-
-const String BASE_URL = 'https://web.bitlabs.ai';
-const String ADGATE_SUPPORT_URL = 'https://wall.adgaterewards.com/contact/';
-const String POST_MESSAGE_SCRIPT = '''
-  if (!window.isEventListenerAdded) {
-    window.addEventListener('message', function(event) {
-      window.FlutterWebView.postMessage(JSON.stringify(event.data));
-    });
-    window.isEventListenerAdded = true;
-  }
-''';
 
 /// Launches the Offer Wall in a [WebView].
 class BitLabsOfferwall extends StatefulWidget {
@@ -167,11 +157,14 @@ class OfferwallState extends State<BitLabsOfferwall> {
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
 
-    setState(() {
-      isPageOfferWall = url.startsWith(BASE_URL);
-      isPageAdGateSupport =
-          !isPageOfferWall && url.startsWith(ADGATE_SUPPORT_URL);
-    });
+    log('[BitLabs] isPageOfferWall ~> $isPageOfferWall');
+
+    if (mounted) {
+      setState(() {
+        isPageOfferWall = url.startsWith(OFFERWALL_URL);
+        isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
+      });
+    }
   }
 
   Widget showLeaveSurveyDialog(BuildContext context) {

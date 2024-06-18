@@ -1,5 +1,8 @@
+## 2.2.6
+- **Use PostMessage API for communication with the Offerwall** 
+
 ## 2.2.5
--**Improvements**
+- **Improvements**
 
 ## 2.2.4
 - **Bugfix**: Fix the issue when Modal Bottom Sheet is clipped or not showing

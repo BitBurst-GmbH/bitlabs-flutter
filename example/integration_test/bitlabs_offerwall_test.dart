@@ -102,8 +102,7 @@ void main() {
     expect(find.byType(QrImageView), findsOneWidget);
   });
 
-  testWidgets('Given dispose, then invokes onReward callback',
-      (tester) async {
+  testWidgets('Given dispose, then invokes onReward callback', (tester) async {
     double reward = 0.0;
 
     await tester.pumpWidget(
@@ -124,5 +123,27 @@ void main() {
     await tester.pumpWidget(Container());
 
     expect(reward, 30.0);
+  });
+
+  //test the Javascript communication
+  testWidgets('Given survey complete event message, then updates reward',
+      (tester) async {
+    const hookMessage =
+        '{"type":"hook","name":"offerwall-surveys:survey.complete","args":[{"reward": 5.0}]}';
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: validUid, token: token),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    state.onJavaScriptMessage(const JavaScriptMessage(message: hookMessage));
+
+    await tester.pumpAndSettle();
+
+    expect(state.reward, 5.0);
   });
 }

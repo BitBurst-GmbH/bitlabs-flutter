@@ -157,8 +157,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
 
-    log('[BitLabs] isPageOfferWall ~> $isPageOfferWall');
-
     if (mounted) {
       setState(() {
         isPageOfferWall = url.startsWith(OFFERWALL_URL);

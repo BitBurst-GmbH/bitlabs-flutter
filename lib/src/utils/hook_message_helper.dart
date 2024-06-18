@@ -5,7 +5,8 @@ import 'dart:convert';
 
 extension StringExtension on String {
   HookMessage? toHookMessage() {
-    final regex = RegExp(r'^\{"type":"hook","name":".*","args":\[.*\]\}$');
+    final regex = RegExp(
+        r'^\{\s*"type"\s*:\s*"hook"\s*,\s*"name"\s*:\s*".*"\s*,\s*"args"\s*:\s*\[.*\]\s*\}$');
     if (!regex.hasMatch(this)) {
       return null;
     }
@@ -54,19 +55,19 @@ class HookMessage {
 
   static HookName _hookNameFromString(String name) {
     switch (name) {
-      case "offerwall-core:init":
+      case 'offerwall-core:init':
         return HookName.init;
-      case "offerwall-core:sdk.close":
+      case 'offerwall-core:sdk.close':
         return HookName.sdkClose;
-      case "offerwall-core:survey.start":
+      case 'offerwall-surveys:survey.start':
         return HookName.surveyStart;
-      case "offerwall-core:survey.complete":
+      case 'offerwall-surveys:survey.complete':
         return HookName.surveyComplete;
-      case "offerwall-core:survey.screenout":
+      case 'offerwall-surveys:survey.screenout':
         return HookName.surveyScreenout;
-      case "offerwall-core:survey.startBonus":
+      case 'offerwall-surveys:survey.start-bonus':
         return HookName.surveyStartBonus;
-      case "offerwall-identity:offerwall-identity:identity.change":
+      case 'offerwall-identity:offerwall-identity:identity.change':
         return HookName.identityChange;
       default:
         throw ArgumentError('Invalid hook name');
@@ -76,19 +77,19 @@ class HookMessage {
   static String _hookNameToString(HookName name) {
     switch (name) {
       case HookName.init:
-        return "offerwall-core:init";
+        return 'offerwall-core:init';
       case HookName.sdkClose:
-        return "offerwall-core:sdk.close";
+        return 'offerwall-core:sdk.close';
       case HookName.surveyStart:
-        return "offerwall-core:survey.start";
+        return 'offerwall-surveys:survey.start';
       case HookName.surveyComplete:
-        return "offerwall-core:survey.complete";
+        return 'offerwall-surveys:survey.complete';
       case HookName.surveyScreenout:
-        return "offerwall-core:survey.screenout";
+        return 'offerwall-surveys:survey.screenout';
       case HookName.surveyStartBonus:
-        return "offerwall-core:survey.startBonus";
+        return 'offerwall-surveys:survey.start-bonus';
       case HookName.identityChange:
-        return "offerwall-identity:offerwall-identity:identity.change";
+        return 'offerwall-identity:offerwall-identity:identity.change';
     }
   }
 

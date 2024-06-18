@@ -74,7 +74,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         await Future.delayed(const Duration(milliseconds: 40));
         // End onTap Animation
 
-        if (!mounted) return;
+        if (!context.mounted) return;
         BitLabs.instance.launchOfferWall(context);
       },
       child: AnimatedContainer(

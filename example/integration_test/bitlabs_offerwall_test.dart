@@ -1,71 +1,149 @@
-import 'package:bitlabs/bitlabs.dart';
-import 'package:example/secrets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:bitlabs/bitlabs.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:example/secrets.dart'; // Ensure `appToken` is defined in secrets.dart
 
 void main() {
-  group('BitLabs Offerwall', () {
-    testWidgets('Correct UID and Token, Expect Offerwall Stays Open',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(
+  const validUid = 'randomUID';
+  const token = appToken;
+
+  testWidgets('Given valid UID and token, then displays offerwall',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: validUid, token: token),
+      ),
+    );
+
+    expect(find.byType(BitLabsOfferwall), findsOneWidget);
+    expect(find.byType(WebViewWidget), findsOneWidget);
+
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('Given non-offerwall URL, then isPageOfferWall is false',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: validUid, token: token),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    await state.controller.loadRequest(Uri.parse('https://google.com'));
+
+    await tester.pumpAndSettle();
+    expect(state.isPageOfferWall, false);
+
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('Given offer URL, then isPageOfferWall is true', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: validUid, token: token),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    final initialUrl = state.initialUrl;
+    state.controller.loadRequest(Uri.parse(initialUrl));
+
+    await tester.pumpAndSettle();
+
+    expect(state.isPageOfferWall, true);
+  });
+
+  testWidgets(
+      'Given back press in non-offerwall page, then displays leave survey dialog',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: 'testUID', token: 'testToken'),
+      ),
+    );
+
+    // Simulate a back press
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Choose a reason for leaving the survey'), findsOneWidget);
+  });
+
+  testWidgets('Given error in debug mode, then displays QR code',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
         home: BitLabsOfferwall(
-          uid: 'randomUID',
-          token: appToken,
+          uid: 'testUID',
+          token: 'testToken',
+          debugMode: true,
         ),
-      ));
+      ),
+    );
 
-      expect(find.byType(BitLabsOfferwall), findsOneWidget);
-      expect(find.byType(WebViewWidget), findsOneWidget);
-      await tester.pumpAndSettle();
-    });
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    state.onWebResourceError(
+      const WebResourceError(
+        errorCode: 404,
+        description: 'Not Found',
+        errorType: WebResourceErrorType.hostLookup,
+      ),
+    );
 
-    testWidgets('URL not Offerwall, Expect isPageOfferWall false',
-        (tester) async {
-      await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
 
-      await tester.pumpWidget(const MaterialApp(
+    expect(find.byType(QrImageView), findsOneWidget);
+  });
+
+  testWidgets('Given dispose, then invokes onReward callback', (tester) async {
+    double reward = 0.0;
+
+    await tester.pumpWidget(
+      MaterialApp(
         home: BitLabsOfferwall(
-          uid: 'randomUID',
-          token: appToken,
+          uid: 'testUID',
+          token: 'testToken',
+          onReward: (r) => reward = r,
         ),
-      ));
+      ),
+    );
 
-      await tester.pumpAndSettle();
+    // Simulate adding a reward
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    state.reward = 30.0;
 
-      final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    // Dispose the widget to trigger the callback
+    await tester.pumpWidget(Container());
 
-      state.controller.loadRequest(Uri.parse('https://google.com'));
-      await tester.pump();
-      await tester.pumpAndSettle();
+    expect(reward, 30.0);
+  });
 
-      await Future.delayed(const Duration(seconds: 5), () async {
-        expect(state.isPageOfferWall, false);
-      });
+  //test the Javascript communication
+  testWidgets('Given survey complete event message, then updates reward',
+      (tester) async {
+    const hookMessage =
+        '{"type":"hook","name":"offerwall-surveys:survey.complete","args":[{"reward": 5.0}]}';
 
-      await tester.pumpAndSettle();
-    });
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: validUid, token: token),
+      ),
+    );
 
-    testWidgets('URL is Offerwall, Expect isPageOfferWall true',
-        (tester) async {
-      await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
 
-      await tester.pumpWidget(const MaterialApp(
-        home: BitLabsOfferwall(
-          uid: 'randomUID',
-          token: appToken,
-        ),
-      ));
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    state.onJavaScriptMessage(const JavaScriptMessage(message: hookMessage));
 
-      final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    await tester.pumpAndSettle();
 
-      await tester.pump();
-      await tester.pumpAndSettle();
-
-      await Future.delayed(const Duration(seconds: 5), () async {
-        expect(state.isPageOfferWall, true);
-      });
-      await tester.pumpAndSettle();
-    });
+    expect(state.reward, 5.0);
   });
 }

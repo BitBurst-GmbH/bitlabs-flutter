@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:bitlabs/src/utils/hook_message_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import '../../bitlabs.dart';
+import '../utils/constants.dart';
 import '../utils/helpers.dart';
 import '../utils/localization.dart';
 import 'styled_text.dart';
@@ -62,53 +64,18 @@ class OfferwallState extends State<BitLabsOfferwall> {
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
 
-    controller = WebViewController(
-      onPermissionRequest: (request) => request.grant(),
-    )
-      ..setNavigationDelegate(NavigationDelegate(
-          onWebResourceError: (error) {
-            if (!widget.debugMode) {
-              return;
-            }
-
-            final errorID = '{ uid: ${widget.uid},'
-                ' date: ${DateTime.now().millisecondsSinceEpoch},'
-                ' url: ${error.url}, '
-                ' type: ${error.errorType},'
-                ' description: ${error.description} }';
-
-            setState(() {
-              errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
-            });
-          },
-          onUrlChange: onUrlChanged,
-          onNavigationRequest: (request) {
-            final url = request.url;
-
-            if (url.contains('/offers/')) {
-              launchUrlString(url, mode: LaunchMode.externalApplication);
-              return NavigationDecision.prevent;
-            }
-
-            return NavigationDecision.navigate;
-          }))
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(initialUrl));
+    initializeWebView();
 
     if (Platform.isAndroid) {
-      // or: if (webViewController.platform is AndroidWebViewController)
       final myAndroidController =
           controller.platform as AndroidWebViewController;
 
       myAndroidController.setOnShowFileSelector((params) async {
-        log('[BitLabs] File selector params: ${params..acceptTypes}');
-
         final imageSource = await chooseImageSource();
         if (imageSource == null) return [];
 
         final picker = ImagePicker();
         final photo = await picker.pickImage(source: imageSource);
-
         if (photo == null) return [];
 
         return [Uri.file(photo.path).toString()];
@@ -116,78 +83,85 @@ class OfferwallState extends State<BitLabsOfferwall> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (isPageOfferWall) return;
+  Future<void> initializeWebView() async {
+    controller = WebViewController(
+      onPermissionRequest: (request) => request.grant(),
+    )
+      ..setNavigationDelegate(NavigationDelegate(
+          onWebResourceError: onWebResourceError,
+          onUrlChange: onUrlChanged,
+          onPageFinished: (_) async =>
+              await controller.runJavaScript(POST_MESSAGE_SCRIPT),
+          onNavigationRequest: (request) {
+            final url = request.url;
+            if (url.contains('/offers/')) {
+              launchUrlString(url, mode: LaunchMode.externalApplication);
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          }))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel('FlutterWebView',
+          onMessageReceived: onJavaScriptMessage);
 
-        if (isPageAdGateSupport) {
-          controller.loadRequest(Uri.parse(initialUrl));
-          return;
-        }
-
-        await showDialog(context: context, builder: showLeaveSurveyDialog);
-      },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: isPageOfferWall
-              ? null
-              : AppBar(
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: widget.color,
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                  ),
-                  iconTheme: IconThemeData(
-                    color: isColorBright ? Colors.black : Colors.white,
-                  ),
-                ),
-          body: Stack(fit: StackFit.expand, children: [
-            WebViewWidget(controller: controller),
-            if (errorId.isNotEmpty)
-              Center(
-                child: FractionallySizedBox(
-                  widthFactor: 0.8,
-                  child: Row(children: [
-                    QrImageView(data: errorId, size: 70),
-                    Flexible(
-                      child: StyledText(errorId, fontSize: 12),
-                    ),
-                  ]),
-                ),
-              )
-          ]),
-        ),
-      ),
-    );
+    await controller.loadRequest(Uri.parse(initialUrl));
   }
 
-  @override
-  void dispose() {
-    widget.onReward?.call(reward);
-    super.dispose();
+  void onWebResourceError(WebResourceError error) {
+    if (!widget.debugMode) {
+      return;
+    }
+
+    final errorID = '{ uid: ${widget.uid},'
+        ' date: ${DateTime.now().millisecondsSinceEpoch},'
+        ' url: ${error.url}, '
+        ' type: ${error.errorType},'
+        ' description: ${error.description} }';
+
+    setState(() {
+      errorId = 'Error ID:\n${base64Encode(errorID.codeUnits)}';
+    });
+  }
+
+  void onJavaScriptMessage(JavaScriptMessage message) {
+    final hookMessage = message.message.toHookMessage();
+    if (hookMessage == null) return;
+
+    switch (hookMessage.name) {
+      case HookName.surveyComplete:
+      case HookName.surveyScreenout:
+      case HookName.surveyStartBonus:
+        final rewardArg = hookMessage.args.first as RewardArgument;
+        setState(() {
+          reward += rewardArg.reward;
+        });
+        break;
+      case HookName.surveyStart:
+        setState(() {
+          clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
+        });
+        break;
+      case HookName.sdkClose:
+        Navigator.of(context).pop();
+        break;
+      case HookName.init:
+        controller.runJavaScript('''
+        window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
+      ''');
+        break;
+      default:
+        break;
+    }
   }
 
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
 
-    if (url.endsWith('/close')) {
-      Navigator.of(context).pop();
-      return;
-    }
-
-    setState(() => isPageOfferWall = url.startsWith('https://web.bitlabs.ai'));
-    isPageAdGateSupport = false;
-
-    if (!isPageOfferWall) {
-      isPageAdGateSupport =
-          url.startsWith('https://wall.adgaterewards.com/contact/');
+    if (mounted) {
+      setState(() {
+        isPageOfferWall = url.startsWith(OFFERWALL_URL);
+        isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
+      });
     }
   }
 
@@ -240,5 +214,63 @@ class OfferwallState extends State<BitLabsOfferwall> {
     );
 
     return source;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (isPageOfferWall) return;
+
+        if (isPageAdGateSupport) {
+          await controller.loadRequest(Uri.parse(initialUrl));
+          return;
+        }
+
+        await showDialog(context: context, builder: showLeaveSurveyDialog);
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: isPageOfferWall
+              ? null
+              : AppBar(
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: widget.color,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
+                  iconTheme: IconThemeData(
+                    color: isColorBright ? Colors.black : Colors.white,
+                  ),
+                ),
+          body: Stack(fit: StackFit.expand, children: [
+            WebViewWidget(controller: controller),
+            if (errorId.isNotEmpty)
+              Center(
+                child: FractionallySizedBox(
+                  widthFactor: 0.8,
+                  child: Row(children: [
+                    QrImageView(data: errorId, size: 70),
+                    Flexible(
+                      child: StyledText(errorId, fontSize: 12),
+                    ),
+                  ]),
+                ),
+              )
+          ]),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    widget.onReward?.call(reward);
+    super.dispose();
   }
 }

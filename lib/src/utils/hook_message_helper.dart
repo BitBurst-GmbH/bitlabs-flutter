@@ -70,7 +70,7 @@ class HookMessage {
       case 'offerwall-identity:offerwall-identity:identity.change':
         return HookName.identityChange;
       default:
-        throw ArgumentError('Invalid hook name');
+        return HookName.unrecognized;
     }
   }
 
@@ -90,6 +90,8 @@ class HookMessage {
         return 'offerwall-surveys:survey.start-bonus';
       case HookName.identityChange:
         return 'offerwall-identity:offerwall-identity:identity.change';
+      default:
+        return 'unrecognized';
     }
   }
 
@@ -108,6 +110,7 @@ enum HookName {
   surveyComplete,
   surveyScreenout,
   surveyStartBonus,
+  unrecognized,
 }
 
 class RewardArgument {

@@ -23,4 +23,24 @@ class RestrictionReason {
         'reason': reason,
         'unsupported_country': unsupportedCountry
       };
+
+  String prettyPrint() {
+    if (notVerified == true) {
+      return "The publisher account that owns this app has not been verified and therefore cannot receive surveys.";
+    }
+
+    if (usingVpn == true) {
+      return "The user is using a VPN and cannot access surveys.";
+    }
+
+    if (bannedUntil != null) {
+      return "The user is banned until $bannedUntil";
+    }
+
+    if (unsupportedCountry != null) {
+      return "Unsupported Country: $unsupportedCountry";
+    }
+
+    return reason ?? "Unknown Reason";
+  }
 }

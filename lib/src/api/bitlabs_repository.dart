@@ -29,6 +29,12 @@ class BitLabsRepository {
         return;
       }
 
+      final restriction = body.data?.restrictionReason;
+      if (restriction != null) {
+        onFailure(Exception('Restriction ${restriction.prettyPrint()}'));
+        return;
+      }
+
       final surveys = body.data?.surveys ?? [];
       onResponse(surveys);
     } catch (e) {

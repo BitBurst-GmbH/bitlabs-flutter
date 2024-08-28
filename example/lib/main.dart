@@ -162,9 +162,13 @@ class _HomePageState extends State<HomePage> {
       (exception) => log('[Example] CheckSurveys $exception'));
 
   void getSurveys() => BitLabs.instance.getSurveys(
-      (surveys) => surveys.forEach((element) => log(
-          '[Example] Survey: ${element.id} - ${element.value} - ${element.rating}')),
-      (exception) => log('[Example] GetSurveys $exception'));
+        (surveys) {
+          for (final element in surveys) {
+            log('[Example] Survey: ${element.id} - ${element.value} - ${element.rating}');
+          }
+        },
+        (exception) => log('[Example] GetSurveys $exception'),
+      );
 }
 
 class CustomButton extends StatelessWidget {

@@ -1,40 +1,10 @@
 import 'dart:io' show Platform;
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../models/category.dart';
-import '../models/survey.dart';
 import 'localization.dart';
 
 String system = Platform.isAndroid ? 'ANDROID' : 'IOS';
-
-List<Survey> randomSurveys() {
-  final random = Random();
-  var surveys = <Survey>[];
-
-  for (var i = 1; i <= 3; i++) {
-    surveys.add(Survey(
-        id: i.toString(),
-        type: 'survey',
-        clickUrl: '',
-        cpi: '0.5',
-        value: '0.5',
-        loi: random.nextDouble(),
-        country: 'US',
-        language: 'en',
-        rating: random.nextInt(5),
-        category: Category(
-          name: 'General',
-          iconUrl: '',
-          iconName: '',
-          nameInternal: '',
-        ),
-        tags: ['recontact', 'pii']));
-  }
-
-  return surveys;
-}
 
 String offerWallUrl(
     String token, String uid, String adId, Map<String, dynamic> tags) {

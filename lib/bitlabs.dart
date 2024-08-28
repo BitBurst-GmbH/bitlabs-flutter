@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
 import 'src/models/survey.dart';
-import 'src/utils/helpers.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 import 'src/widgets/bitlabs_offerwall.dart';
 
@@ -103,7 +102,9 @@ class BitLabs {
   /// The boolean parameter in [onResponse] is `true` if there are surveys available
   /// and `false` otherwise.
   void checkSurveys(
-          void Function(bool) onResponse, void Function(Exception) onFailure) =>
+    void Function(bool) onResponse,
+    void Function(Exception) onFailure,
+  ) =>
       _ifInitialised(() {
         _bitLabsRepository?.getSurveys(
             (surveys) => onResponse(surveys.isNotEmpty), onFailure);
@@ -113,12 +114,14 @@ class BitLabs {
   ///
   /// The [onResponse] callback executes when a response is received.
   /// Its parameter is the list of surveys.
-  void getSurveys(void Function(List<Survey>) onResponse,
-          void Function(Exception) onFailure) =>
-      _ifInitialised(() => _bitLabsRepository?.getSurveys(
-          (surveys) =>
-              onResponse(surveys.isNotEmpty ? surveys : randomSurveys()),
-          onFailure));
+  void getSurveys(
+    void Function(List<Survey>) onResponse,
+    void Function(Exception) onFailure,
+  ) =>
+      _ifInitialised(
+        () => _bitLabsRepository?.getSurveys(
+            (surveys) => onResponse(surveys), onFailure),
+      );
 
   @Deprecated('Use the BitLabsWidget instead,'
       ' will be removed soon in the next major')

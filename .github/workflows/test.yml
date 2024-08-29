@@ -24,6 +24,11 @@ jobs:
         with:
           model: 'iPhone 15 Pro'
 
+      - name: Create secrets.dart
+        run: |
+          cat <<EOF > example/lib/secrets.dart
+          const appToken = '${{ secrets.APP_TOKEN }}';
+
       - name: Run Integration tests
         run: |
           cd example/

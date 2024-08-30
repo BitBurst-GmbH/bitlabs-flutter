@@ -1,3 +1,7 @@
+## 2.2.7
+
+- **Expose Restriction Reason as an Exception for getSurveys()**
+
 ## 2.2.6
 - **Use PostMessage API for communication with the Offerwall** 
 

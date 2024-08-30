@@ -1,24 +1,28 @@
 name: Publish to pub.dev
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_run:
+    workflows: [ "Tests" ]
+    types: [ completed ]
+    branches: [ master ]
 
 jobs:
   publish:
-    permissions:
-      id-token: write
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dart-lang/setup-dart@v1
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          environment: pub.dev
+          flutter-version: '3.19.0'
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
 
       - name: Publish package
-        run: dart pub publish --force
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          credentialJson: ${{ secrets.CREDENTIALS }}
+          flutter: true

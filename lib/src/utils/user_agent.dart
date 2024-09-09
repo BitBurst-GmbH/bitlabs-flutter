@@ -24,7 +24,7 @@ Future<String> getUserAgent() async {
     info = 'iOS $version; $name; ${getDeviceType()}';
   }
 
-  return 'BitLabs/1.0.0 ($info)';
+  return 'BitLabs ($info)';
 }
 
 String getDeviceType() {

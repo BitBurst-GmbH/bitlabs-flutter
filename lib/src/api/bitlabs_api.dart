@@ -3,12 +3,18 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../utils/helpers.dart';
+import '../utils/user_agent.dart';
 
 class BitLabsApi {
   final Map<String, String> _headers;
 
   BitLabsApi(String token, String uid)
-      : _headers = {'X-Api-Token': token, 'X-User-Id': uid};
+      : _headers = {
+          'X-Api-Token': token,
+          'X-User-Id': uid,
+        } {
+    getUserAgent().then((value) => _headers['User-Agent'] = value);
+  }
 
   Future<Response> getSurveys() => get(
       url('v2/client/surveys', {

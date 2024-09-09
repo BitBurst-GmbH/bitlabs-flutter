@@ -22,8 +22,6 @@ class BitLabsRepository {
     try {
       final response = await _bitLabsApi.getSurveys();
 
-      print(response.request?.headers);
-
       final body = BitLabsResponse<GetSurveysResponse>.fromJson(
           jsonDecode(response.body), (data) => GetSurveysResponse(data!));
       final error = body.error;

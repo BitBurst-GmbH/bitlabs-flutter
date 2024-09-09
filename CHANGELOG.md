@@ -1,5 +1,7 @@
-## 2.2.7
+## 2.2.8
+- **Add User-Agent to the requests**
 
+## 2.2.7
 - **Expose Restriction Reason as an Exception for getSurveys()**
 
 ## 2.2.6

@@ -19,7 +19,6 @@ Future<String> getUserAgent() async {
     final iosInfo = await deviceInfo.iosInfo;
     final version = iosInfo.systemVersion;
     final name = iosInfo.name;
-    final model = iosInfo.model;
 
     info = 'iOS $version; $name; ${getDeviceType()}';
   }

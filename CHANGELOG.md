@@ -1,3 +1,6 @@
+## 2.2.9
+- **Bugfix:** HookMessage parse error
+
 ## 2.2.8
 - **Add User-Agent to the requests**
 

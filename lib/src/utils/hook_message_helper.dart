@@ -116,7 +116,8 @@ enum HookName {
 class RewardArgument {
   final double reward;
 
-  RewardArgument.fromJson(Map<String, dynamic> json) : reward = json['reward'];
+  RewardArgument.fromJson(Map<String, dynamic> json)
+      : reward = (json['reward'] as num).toDouble();
 }
 
 class SurveyStartArgument {

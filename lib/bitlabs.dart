@@ -3,11 +3,13 @@ library bitlabs;
 import 'dart:developer';
 
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/secrets.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
@@ -48,6 +50,8 @@ class BitLabs {
   /// - The [token] is found in your [BitLabs Dashboard](https://dashboard.bitlabs.ai/).
   /// - The [uid] should belong to the current user so that you to keep track of which user got what.
   void init(String token, String uid) {
+    initSentry();
+
     _token = token;
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(BitLabsApi(token, uid));
@@ -78,6 +82,14 @@ class BitLabs {
     }, (error) => log(error.toString()));
 
     _getAdId();
+  }
+
+  void initSentry() async {
+    await SentryFlutter.init((options) {
+      options.dsn = sentryDSN;
+      options.tracesSampleRate = 1.0;
+      options.profilesSampleRate = 1.0;
+    });
   }
 
   /// **FOR IOS ONLY.** Prompts the user to give Authorization for Tracking.

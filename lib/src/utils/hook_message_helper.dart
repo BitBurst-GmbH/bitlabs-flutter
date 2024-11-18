@@ -32,6 +32,8 @@ class HookMessage {
             return RewardArgument.fromJson(arg);
           } else if (arg['clickId'] != null) {
             return SurveyStartArgument.fromJson(arg);
+          } else if (arg['offer'] != null) {
+            return OfferStartArgument.fromJson(arg);
           } else {
             return arg;
           }
@@ -61,6 +63,8 @@ class HookMessage {
         return HookName.sdkClose;
       case 'offerwall-surveys:survey.start':
         return HookName.surveyStart;
+      case 'offerwall-offers:offer.start':
+        return HookName.offerStart;
       case 'offerwall-surveys:survey.complete':
         return HookName.surveyComplete;
       case 'offerwall-surveys:survey.screenout':
@@ -82,6 +86,8 @@ class HookMessage {
         return 'offerwall-core:sdk.close';
       case HookName.surveyStart:
         return 'offerwall-surveys:survey.start';
+      case HookName.offerStart:
+        return 'offerwall-offers:offer.start';
       case HookName.surveyComplete:
         return 'offerwall-surveys:survey.complete';
       case HookName.surveyScreenout:
@@ -105,12 +111,13 @@ Enum to represent the different hook names with their respective string values
 enum HookName {
   init,
   sdkClose,
+  offerStart,
   surveyStart,
+  unrecognized,
   identityChange,
   surveyComplete,
   surveyScreenout,
   surveyStartBonus,
-  unrecognized,
 }
 
 class RewardArgument {
@@ -126,5 +133,17 @@ class SurveyStartArgument {
 
   SurveyStartArgument.fromJson(Map<String, dynamic> json)
       : clickId = json['clickId'],
-        linkId = json['linkId'];
+        linkId = json['link'];
+}
+
+class OfferStartArgument {
+  final Offer offer;
+
+  OfferStartArgument.fromJson(Map<String, dynamic> json) : offer = Offer.fromJson(json['offer']);
+}
+
+class Offer {
+  final String clickUrl;
+
+  Offer.fromJson(Map<String, dynamic> json) : clickUrl = json['clickUrl'];
 }

@@ -34,6 +34,8 @@ class HookMessage {
             return SurveyStartArgument.fromJson(arg);
           } else if (arg['offer'] != null) {
             return OfferStartArgument.fromJson(arg);
+          } else if (arg['link'] != null) {
+            return OfferContinueArgument.fromJson(arg);
           } else {
             return arg;
           }
@@ -61,10 +63,12 @@ class HookMessage {
         return HookName.init;
       case 'offerwall-core:sdk.close':
         return HookName.sdkClose;
-      case 'offerwall-surveys:survey.start':
-        return HookName.surveyStart;
       case 'offerwall-offers:offer.start':
         return HookName.offerStart;
+      case 'offerwall-surveys:survey.start':
+        return HookName.surveyStart;
+      case 'offerwall-offers:offer.continue':
+        return HookName.offerContinue;
       case 'offerwall-surveys:survey.complete':
         return HookName.surveyComplete;
       case 'offerwall-surveys:survey.screenout':
@@ -84,10 +88,12 @@ class HookMessage {
         return 'offerwall-core:init';
       case HookName.sdkClose:
         return 'offerwall-core:sdk.close';
-      case HookName.surveyStart:
-        return 'offerwall-surveys:survey.start';
       case HookName.offerStart:
         return 'offerwall-offers:offer.start';
+      case HookName.surveyStart:
+        return 'offerwall-surveys:survey.start';
+      case HookName.offerContinue:
+        return 'offerwall-offers:offer.continue';
       case HookName.surveyComplete:
         return 'offerwall-surveys:survey.complete';
       case HookName.surveyScreenout:
@@ -114,6 +120,7 @@ enum HookName {
   offerStart,
   surveyStart,
   unrecognized,
+  offerContinue,
   identityChange,
   surveyComplete,
   surveyScreenout,
@@ -139,11 +146,19 @@ class SurveyStartArgument {
 class OfferStartArgument {
   final Offer offer;
 
-  OfferStartArgument.fromJson(Map<String, dynamic> json) : offer = Offer.fromJson(json['offer']);
+  OfferStartArgument.fromJson(Map<String, dynamic> json)
+      : offer = Offer.fromJson(json['offer']);
 }
 
 class Offer {
   final String clickUrl;
 
   Offer.fromJson(Map<String, dynamic> json) : clickUrl = json['clickUrl'];
+}
+
+class OfferContinueArgument {
+  final String link;
+
+  OfferContinueArgument.fromJson(Map<String, dynamic> json)
+      : link = json['link'];
 }

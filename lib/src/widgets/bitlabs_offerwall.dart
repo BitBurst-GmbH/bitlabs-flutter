@@ -147,7 +147,13 @@ class OfferwallState extends State<BitLabsOfferwall> {
         break;
       case HookName.offerStart:
         shouldStopNavigation = true;
-        final url = (hookMessage.args.first as OfferStartArgument).offer.clickUrl;
+        final url =
+            (hookMessage.args.first as OfferStartArgument).offer.clickUrl;
+        launchUrlString(url, mode: LaunchMode.externalApplication);
+        break;
+      case HookName.offerContinue:
+        shouldStopNavigation = true;
+        final url = (hookMessage.args.first as OfferContinueArgument).link;
         launchUrlString(url, mode: LaunchMode.externalApplication);
         break;
       case HookName.sdkClose:

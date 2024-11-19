@@ -53,6 +53,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
   String errorId = '';
   bool isPageOfferWall = false;
   bool isPageAdGateSupport = false;
+  bool shouldStopNavigation = false;
 
   @override
   void initState() {
@@ -88,21 +89,24 @@ class OfferwallState extends State<BitLabsOfferwall> {
       onPermissionRequest: (request) => request.grant(),
     )
       ..setNavigationDelegate(NavigationDelegate(
-          onWebResourceError: onWebResourceError,
-          onUrlChange: onUrlChanged,
-          onPageFinished: (_) async =>
-              await controller.runJavaScript(POST_MESSAGE_SCRIPT),
-          onNavigationRequest: (request) {
-            final url = request.url;
-            if (url.contains('/offers/')) {
-              launchUrlString(url, mode: LaunchMode.externalApplication);
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          }))
+        onWebResourceError: onWebResourceError,
+        onUrlChange: onUrlChanged,
+        onPageFinished: (_) async =>
+            await controller.runJavaScript(POST_MESSAGE_SCRIPT),
+        onNavigationRequest: (request) {
+          if (shouldStopNavigation) {
+            shouldStopNavigation = false;
+            return NavigationDecision.prevent;
+          }
+
+          return NavigationDecision.navigate;
+        },
+      ))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel('FlutterWebView',
-          onMessageReceived: onJavaScriptMessage);
+      ..addJavaScriptChannel(
+        'FlutterWebView',
+        onMessageReceived: onJavaScriptMessage,
+      );
 
     await controller.loadRequest(Uri.parse(initialUrl));
   }
@@ -140,6 +144,17 @@ class OfferwallState extends State<BitLabsOfferwall> {
         setState(() {
           clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
         });
+        break;
+      case HookName.offerStart:
+        shouldStopNavigation = true;
+        final url =
+            (hookMessage.args.first as OfferStartArgument).offer.clickUrl;
+        launchUrlString(url, mode: LaunchMode.externalApplication);
+        break;
+      case HookName.offerContinue:
+        shouldStopNavigation = true;
+        final url = (hookMessage.args.first as OfferContinueArgument).link;
+        launchUrlString(url, mode: LaunchMode.externalApplication);
         break;
       case HookName.sdkClose:
         Navigator.of(context).pop();

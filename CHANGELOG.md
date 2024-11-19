@@ -1,3 +1,6 @@
+## 2.2.10
+- **Bugfix:** Continue Playing button opens the game as a survey instead of opening the play store/app store.
+
 ## 2.2.9
 - **Bugfix:** HookMessage parse error
 

@@ -87,8 +87,6 @@ class BitLabs {
   void initSentry() async {
     await SentryFlutter.init((options) {
       options.dsn = sentryDSN;
-      options.tracesSampleRate = 1.0;
-      options.profilesSampleRate = 1.0;
     });
   }
 

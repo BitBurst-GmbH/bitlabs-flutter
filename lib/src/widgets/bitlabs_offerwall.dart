@@ -53,7 +53,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
   String errorId = '';
   bool isPageOfferWall = false;
   bool isPageAdGateSupport = false;
-  bool shouldStopNavigation = false;
 
   @override
   void initState() {
@@ -93,14 +92,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
         onUrlChange: onUrlChanged,
         onPageFinished: (_) async =>
             await controller.runJavaScript(POST_MESSAGE_SCRIPT),
-        onNavigationRequest: (request) {
-          if (shouldStopNavigation) {
-            shouldStopNavigation = false;
-            return NavigationDecision.prevent;
-          }
-
-          return NavigationDecision.navigate;
-        },
       ))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
@@ -146,13 +137,11 @@ class OfferwallState extends State<BitLabsOfferwall> {
         });
         break;
       case HookName.offerStart:
-        shouldStopNavigation = true;
         final url =
             (hookMessage.args.first as OfferStartArgument).offer.clickUrl;
         launchUrlString(url, mode: LaunchMode.externalApplication);
         break;
       case HookName.offerContinue:
-        shouldStopNavigation = true;
         final url = (hookMessage.args.first as OfferContinueArgument).link;
         launchUrlString(url, mode: LaunchMode.externalApplication);
         break;
@@ -162,6 +151,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
       case HookName.init:
         controller.runJavaScript('''
         window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
+        window.parent.postMessage({ target: 'app.behaviour.offer_opening_target', value: 'OPENING_TARGET_NONE' }, '*');
       ''');
         break;
       default:
@@ -175,7 +165,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
     if (mounted) {
       setState(() {
         isPageOfferWall = url.startsWith(OFFERWALL_URL);
-        isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
+        isPageAdGateSupport = url.startsWith(adGateSupportUrlRegex);
       });
     }
   }

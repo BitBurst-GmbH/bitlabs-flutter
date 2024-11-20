@@ -20,38 +20,49 @@ extension StringExtension on String {
 Class to represent a HookMessage object
  */
 class HookMessage {
-  final String type;
-  final HookName name;
-  final List<dynamic> args;
+  late final String type;
+  late final HookName name;
+  late final List<dynamic> args;
 
-  HookMessage.fromJson(Map<String, dynamic> json)
-      : type = json['type'],
-        name = _hookNameFromString(json['name']),
-        args = json['args'].map((arg) {
-          if (arg['reward'] != null) {
-            return RewardArgument.fromJson(arg);
-          } else if (arg['clickId'] != null) {
-            return SurveyStartArgument.fromJson(arg);
-          } else if (arg['offer'] != null) {
-            return OfferStartArgument.fromJson(arg);
-          } else if (arg['link'] != null) {
-            return OfferContinueArgument.fromJson(arg);
-          } else {
-            return arg;
-          }
-        }).toList();
+  HookMessage.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    name = _hookNameFromString(json['name']);
+    args = json['args'].map((arg) {
+      switch (name) {
+        case HookName.offerStart:
+          return OfferStartArgument.fromJson(arg);
+        case HookName.surveyStart:
+          return SurveyStartArgument.fromJson(arg);
+        case HookName.surveyComplete:
+        case HookName.surveyScreenout:
+        case HookName.surveyStartBonus:
+          return RewardArgument.fromJson(arg);
+        case HookName.offerContinue:
+          return OfferContinueArgument.fromJson(arg);
+        default:
+          return arg;
+      }
+    }).toList();
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'type': type,
       'name': _hookNameToString(name),
       'args': args.map((arg) {
-        if (arg is RewardArgument) {
-          return {'reward': arg.reward};
-        } else if (arg is SurveyStartArgument) {
-          return {'clickId': arg.clickId, 'linkId': arg.linkId};
-        } else {
-          return arg;
+        switch (name) {
+          case HookName.offerStart:
+            return {'offer-clickUrl': arg.offer.clickUrl};
+          case HookName.surveyStart:
+            return {'clickId': arg.clickId, 'link': arg.link};
+          case HookName.surveyComplete:
+          case HookName.surveyScreenout:
+          case HookName.surveyStartBonus:
+            return {'reward': arg.reward};
+          case HookName.offerContinue:
+            return {'link': arg.link};
+          default:
+            return arg;
         }
       }).toList(),
     };
@@ -136,11 +147,11 @@ class RewardArgument {
 
 class SurveyStartArgument {
   final String clickId;
-  final String linkId;
+  final String link;
 
   SurveyStartArgument.fromJson(Map<String, dynamic> json)
       : clickId = json['clickId'],
-        linkId = json['link'];
+        link = json['link'];
 }
 
 class OfferStartArgument {

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 import 'localization.dart';
 
-String system = Platform.isAndroid ? 'ANDROID' : 'IOS';
+final system = Platform.isAndroid ? 'ANDROID' : 'IOS';
+
+final adGateSupportUrlRegex = RegExp(r'https://wall\.adgaterewards\.com/(.*/)*contact/');
 
 String offerWallUrl(
     String token, String uid, String adId, Map<String, dynamic> tags) {

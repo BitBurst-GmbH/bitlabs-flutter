@@ -165,7 +165,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
     if (mounted) {
       setState(() {
         isPageOfferWall = url.startsWith(OFFERWALL_URL);
-        isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
+        isPageAdGateSupport = url.startsWith(adGateSupportUrlRegex);
       });
     }
   }

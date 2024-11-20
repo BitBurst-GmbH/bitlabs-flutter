@@ -3,8 +3,6 @@
 const BASE_URL = 'web.bitlabs.ai';
 const OFFERWALL_URL = 'https://$BASE_URL/';
 
-const ADGATE_SUPPORT_URL = 'https://wall.adgaterewards.com/contact/';
-
 const POST_MESSAGE_SCRIPT = '''
   if (!window.isEventListenerAdded) {
     window.addEventListener('message', function(event) {

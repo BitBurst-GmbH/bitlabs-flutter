@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
-const OFFERWALL_URL = 'https://web.bitlabs.ai';
+const BASE_URL = 'web.bitlabs.ai';
+const OFFERWALL_URL = 'https://$BASE_URL/';
 
 const ADGATE_SUPPORT_URL = 'https://wall.adgaterewards.com/contact/';
 

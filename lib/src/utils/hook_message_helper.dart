@@ -49,7 +49,11 @@ class HookMessage {
         if (arg is RewardArgument) {
           return {'reward': arg.reward};
         } else if (arg is SurveyStartArgument) {
-          return {'clickId': arg.clickId, 'linkId': arg.linkId};
+          return {'clickId': arg.clickId, 'link': arg.link};
+        } else if (arg is OfferStartArgument) {
+          return {'offer-clickUrl': arg.offer.clickUrl};
+        } else if (arg is OfferContinueArgument) {
+          return {'link': arg.link};
         } else {
           return arg;
         }
@@ -136,11 +140,11 @@ class RewardArgument {
 
 class SurveyStartArgument {
   final String clickId;
-  final String linkId;
+  final String link;
 
   SurveyStartArgument.fromJson(Map<String, dynamic> json)
       : clickId = json['clickId'],
-        linkId = json['link'];
+        link = json['link'];
 }
 
 class OfferStartArgument {

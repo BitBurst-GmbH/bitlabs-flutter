@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:bitlabs/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'localization.dart';
@@ -16,7 +17,7 @@ String offerWallUrl(
     'os': Platform.isIOS ? 'ios' : 'android',
   };
   if (adId.isNotEmpty) queries['maid'] = adId;
-  return Uri.https('web.bitlabs.ai', '', queries).toString();
+  return Uri.https(BASE_URL, '', queries).toString();
 }
 
 Uri url(String path, [Map? queries]) => Uri.https(

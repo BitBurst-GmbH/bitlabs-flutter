@@ -3,6 +3,8 @@ Extension of the String class to convert a json to a HookMessage object
  */
 import 'dart:convert';
 
+import 'package:bitlabs/src/utils/sentry_hub.dart';
+
 extension StringExtension on String {
   HookMessage? toHookMessage() {
     final regex = RegExp(
@@ -11,8 +13,13 @@ extension StringExtension on String {
       return null;
     }
 
-    final json = jsonDecode(this);
-    return HookMessage.fromJson(json);
+    try {
+      final json = jsonDecode(this);
+      return HookMessage.fromJson(json);
+    } catch (e) {
+      SentryHub().captureException(e);
+      return null;
+    }
   }
 }
 

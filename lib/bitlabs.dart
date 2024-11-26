@@ -1,15 +1,13 @@
 library bitlabs;
 
-import 'dart:developer';
 
 import 'package:advertising_id/advertising_id.dart';
-import 'package:bitlabs/secrets.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
+import 'package:bitlabs/src/utils/helpers.dart';
 import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'src/api/bitlabs_api.dart';
 import 'src/api/bitlabs_repository.dart';
@@ -50,8 +48,6 @@ class BitLabs {
   /// - The [token] is found in your [BitLabs Dashboard](https://dashboard.bitlabs.ai/).
   /// - The [uid] should belong to the current user so that you to keep track of which user got what.
   void init(String token, String uid) {
-    initSentry();
-
     _token = token;
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(BitLabsApi(token, uid));
@@ -79,15 +75,9 @@ class BitLabs {
       }
 
       notifiers.bonusPercentage.value = bonus;
-    }, (error) => log(error.toString()));
+    }, (error) => dPrint(error.toString()));
 
     _getAdId();
-  }
-
-  void initSentry() async {
-    await SentryFlutter.init((options) {
-      options.dsn = sentryDSN;
-    });
   }
 
   /// **FOR IOS ONLY.** Prompts the user to give Authorization for Tracking.
@@ -151,15 +141,15 @@ class BitLabs {
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
       _ifInitialised(() {
         _bitLabsRepository?.getLeaderboard(
-            onResponse, (error) => log(error.toString()));
+            onResponse, (error) => dPrint(error.toString()));
       });
 
   void leaveSurvey(String clickId, String reason) =>
       _bitLabsRepository?.leaveSurvey(
           clickId,
           reason,
-          (response) => log('[BitLabs] LeaveSurvey: $response'),
-          (error) => log(error.toString()));
+          (response) => dPrint('[BitLabs] LeaveSurvey: $response'),
+          (error) => dPrint(error.toString()));
 
   /// Launches the OfferWall from the [context] you pass.
   ///
@@ -181,9 +171,9 @@ class BitLabs {
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     try {
       _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
-      log("[BitLabs] adId: $_adId");
+      dPrint("[BitLabs] adId: $_adId");
     } on Exception catch (e) {
-      log("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
+      dPrint("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
     }
   }
 
@@ -191,7 +181,7 @@ class BitLabs {
   /// thus [bitLabsRepo] is initialised and executes the [block] accordingly.
   void _ifInitialised(Function block) {
     if (_bitLabsRepository == null) {
-      log('[BitLabs] Trying to use BitLabs without initialising it!'
+      dPrint('[BitLabs] Trying to use BitLabs without initialising it!'
           'You should initialise BitLabs first! Call BitLabs::init()');
       return;
     }

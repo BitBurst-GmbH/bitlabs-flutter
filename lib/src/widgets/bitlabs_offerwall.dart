@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:bitlabs/src/utils/hook_message_helper.dart';
@@ -184,7 +183,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
     if (clickId == null) return;
 
-    log('[BitLabs] Leaving with reason ~> $reason');
+    dPrint('[BitLabs] Leaving with reason ~> $reason');
     BitLabs.instance.leaveSurvey(clickId!, reason);
     clickId = null;
   }

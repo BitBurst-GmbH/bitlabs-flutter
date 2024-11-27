@@ -18,6 +18,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Create lib secrets.dart
+        run: |
+          cat <<EOF > lib/secrets.dart
+          const sentryDSN = '${{ secrets.SENTRY_DSN }}';
+
       - name: Publish package
         uses: k-paxian/dart-package-publisher@master
         with:

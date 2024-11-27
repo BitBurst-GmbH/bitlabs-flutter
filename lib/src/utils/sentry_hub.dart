@@ -4,7 +4,6 @@ import 'package:bitlabs/secrets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class SentryHub {
-  static final isEnvTesting = Platform.environment.containsKey('FLUTTER_TEST');
   static final Hub? _hub = Platform.environment.containsKey('FLUTTER_TEST')
       ? null
       : Hub(SentryOptions(dsn: sentryDSN));

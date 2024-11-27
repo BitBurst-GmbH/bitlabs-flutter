@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
+import 'package:bitlabs/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'localization.dart';
@@ -9,7 +10,9 @@ void dPrint(Object object) {
   if (kDebugMode) print(object);
 }
 
-String system = Platform.isAndroid ? 'ANDROID' : 'IOS';
+final system = Platform.isAndroid ? 'ANDROID' : 'IOS';
+
+final adGateSupportUrlRegex = RegExp(r'https://wall\.adgaterewards\.com/(.*/)*contact/');
 
 String offerWallUrl(
     String token, String uid, String adId, Map<String, dynamic> tags) {
@@ -21,7 +24,7 @@ String offerWallUrl(
     'os': Platform.isIOS ? 'ios' : 'android',
   };
   if (adId.isNotEmpty) queries['maid'] = adId;
-  return Uri.https('web.bitlabs.ai', '', queries).toString();
+  return Uri.https(BASE_URL, '', queries).toString();
 }
 
 Uri url(String path, [Map? queries]) => Uri.https(

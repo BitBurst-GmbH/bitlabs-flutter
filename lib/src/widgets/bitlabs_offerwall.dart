@@ -87,21 +87,16 @@ class OfferwallState extends State<BitLabsOfferwall> {
       onPermissionRequest: (request) => request.grant(),
     )
       ..setNavigationDelegate(NavigationDelegate(
-          onWebResourceError: onWebResourceError,
-          onUrlChange: onUrlChanged,
-          onPageFinished: (_) async =>
-              await controller.runJavaScript(POST_MESSAGE_SCRIPT),
-          onNavigationRequest: (request) {
-            final url = request.url;
-            if (url.contains('/offers/')) {
-              launchUrlString(url, mode: LaunchMode.externalApplication);
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          }))
+        onWebResourceError: onWebResourceError,
+        onUrlChange: onUrlChanged,
+        onPageFinished: (_) async =>
+            await controller.runJavaScript(POST_MESSAGE_SCRIPT),
+      ))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel('FlutterWebView',
-          onMessageReceived: onJavaScriptMessage);
+      ..addJavaScriptChannel(
+        'FlutterWebView',
+        onMessageReceived: onJavaScriptMessage,
+      );
 
     await controller.loadRequest(Uri.parse(initialUrl));
   }
@@ -140,12 +135,22 @@ class OfferwallState extends State<BitLabsOfferwall> {
           clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
         });
         break;
+      case HookName.offerStart:
+        final url =
+            (hookMessage.args.first as OfferStartArgument).offer.clickUrl;
+        launchUrlString(url, mode: LaunchMode.externalApplication);
+        break;
+      case HookName.offerContinue:
+        final url = (hookMessage.args.first as OfferContinueArgument).link;
+        launchUrlString(url, mode: LaunchMode.externalApplication);
+        break;
       case HookName.sdkClose:
         Navigator.of(context).pop();
         break;
       case HookName.init:
         controller.runJavaScript('''
         window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
+        window.parent.postMessage({ target: 'app.behaviour.offer_opening_target', value: 'OPENING_TARGET_NONE' }, '*');
       ''');
         break;
       default:
@@ -159,7 +164,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
     if (mounted) {
       setState(() {
         isPageOfferWall = url.startsWith(OFFERWALL_URL);
-        isPageAdGateSupport = url.startsWith(ADGATE_SUPPORT_URL);
+        isPageAdGateSupport = url.startsWith(adGateSupportUrlRegex);
       });
     }
   }

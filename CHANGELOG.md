@@ -1,3 +1,10 @@
+## 2.2.11
+- **Bugfix:** Offer/Game opens both internally and externally.
+- **Bugfix:** Offer Support Page related bugs.
+
+## 2.2.10
+- **Bugfix:** Continue Playing button opens the game as a survey instead of opening the play store/app store.
+
 ## 2.2.9
 - **Bugfix:** HookMessage parse error
 

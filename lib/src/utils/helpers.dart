@@ -1,9 +1,14 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart';
 import 'package:bitlabs/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'localization.dart';
+
+void dPrint(Object object) {
+  if (kDebugMode) print(object);
+}
 
 final system = Platform.isAndroid ? 'ANDROID' : 'IOS';
 

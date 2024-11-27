@@ -16,6 +16,11 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Create empty lib secrets.dart
+        run: |
+          cat <<EOF > lib/secrets.dart
+          const sentryDSN = '';
+
       - name: Run tests
         run: flutter test
 
@@ -24,7 +29,7 @@ jobs:
         with:
           model: 'iPhone 15 Pro'
 
-      - name: Create secrets.dart
+      - name: Create example secrets.dart
         run: |
           cat <<EOF > example/lib/secrets.dart
           const appToken = '${{ secrets.APP_TOKEN }}';

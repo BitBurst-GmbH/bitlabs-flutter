@@ -17,7 +17,7 @@ extension StringExtension on String {
       final json = jsonDecode(this);
       return HookMessage.fromJson(json);
     } catch (e) {
-      SentryHub().captureException(e);
+      SentryHub.captureException(e);
       return null;
     }
   }

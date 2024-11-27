@@ -1,11 +1,11 @@
 library bitlabs;
 
-
 import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/widget_type.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:bitlabs/src/utils/helpers.dart';
+import 'package:bitlabs/src/utils/sentry_hub.dart';
 import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +50,7 @@ class BitLabs {
   void init(String token, String uid) {
     _token = token;
     _uid = uid;
+    SentryHub.init(token, uid);
     _bitLabsRepository = BitLabsRepository(BitLabsApi(token, uid));
 
     _bitLabsRepository?.getAppSettings((settings) {
@@ -173,6 +174,7 @@ class BitLabs {
       _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
       dPrint("[BitLabs] adId: $_adId");
     } on Exception catch (e) {
+      SentryHub.captureException(e);
       dPrint("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
     }
   }

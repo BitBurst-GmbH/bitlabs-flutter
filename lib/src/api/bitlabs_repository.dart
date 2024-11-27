@@ -41,7 +41,7 @@ class BitLabsRepository {
       onResponse(surveys);
     } catch (e) {
       onFailure(Exception('Error - ${e.toString()}'));
-      SentryHub().captureException(e);
+      SentryHub.captureException(e);
     }
   }
 
@@ -63,7 +63,7 @@ class BitLabsRepository {
       if (leaderboard != null) onResponse(leaderboard);
     } catch (e) {
       onFailure(Exception('Error - ${e.toString()}'));
-      SentryHub().captureException(e);
+      SentryHub.captureException(e);
     }
   }
 
@@ -87,7 +87,7 @@ class BitLabsRepository {
       onResponse('[BitLabs] LeaveSurvey Successful');
     } catch (e) {
       onFailure(Exception('Error - ${e.toString()}'));
-      SentryHub().captureException(e);
+      SentryHub.captureException(e);
     }
   }
 
@@ -107,7 +107,7 @@ class BitLabsRepository {
       if (body.data != null) onResponse(body.data!);
     } catch (e) {
       onFailure(Exception('Error - ${e.toString()}'));
-      SentryHub().captureException(e);
+      SentryHub.captureException(e);
     }
   }
 

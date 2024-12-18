@@ -1,3 +1,9 @@
+# 2.2.13
+- Remove crash reporting due to compilation issues
+
+# 2.2.12
+- Add crash reporting for better debugging
+
 ## 2.2.11
 - **Bugfix:** Offer/Game opens both internally and externally.
 - **Bugfix:** Offer Support Page related bugs.

@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:bitlabs/src/models/serializable.dart';
-
 import 'reward.dart';
+import 'serializable.dart';
 import 'user.dart';
 
 class GetLeaderboardResponse extends Serializable {

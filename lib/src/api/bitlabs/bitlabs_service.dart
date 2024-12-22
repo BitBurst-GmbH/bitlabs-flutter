@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../utils/helpers.dart';
-import '../utils/user_agent.dart';
+import '../../utils/helpers.dart';
+import '../../utils/user_agent.dart';
 
-class BitLabsApi {
+class BitLabsService {
   final Map<String, String> _headers;
 
-  BitLabsApi(String token, String uid)
+  BitLabsService(String token, String uid)
       : _headers = {
           'X-Api-Token': token,
           'X-User-Id': uid,

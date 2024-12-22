@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-import 'package:bitlabs/src/models/get_app_settings_response.dart';
-import 'package:bitlabs/src/models/get_leaderboard_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../models/bitlabs_response.dart';
-import '../models/get_surveys_response.dart';
-import '../models/serializable.dart';
-import '../models/survey.dart';
-import 'bitlabs_api.dart';
+import '../../models/bitlabs/bitlabs_response.dart';
+import '../../models/bitlabs/get_app_settings_response.dart';
+import '../../models/bitlabs/get_leaderboard_response.dart';
+import '../../models/bitlabs/get_surveys_response.dart';
+import '../../models/bitlabs/serializable.dart';
+import '../../models/bitlabs/survey.dart';
+import 'bitlabs_service.dart';
 
 /// The point of communication between the data and [BitLabs].
 class BitLabsRepository {
-  final BitLabsApi _bitLabsApi;
+  final BitLabsService _bitLabsApi;
 
-  BitLabsRepository(BitLabsApi bitLabsApi) : _bitLabsApi = bitLabsApi;
+  BitLabsRepository(BitLabsService bitLabsApi) : _bitLabsApi = bitLabsApi;
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {
@@ -108,7 +108,7 @@ class BitLabsRepository {
 
   static void getCurrencyIcon(String url, void Function(Widget) onResponse,
       void Function(Exception) onFailure) async {
-    final response = await BitLabsApi.getCurrencyIcon(url);
+    final response = await BitLabsService.getCurrencyIcon(url);
 
     if (response.reasonPhrase != 'OK') {
       onFailure(Exception('[BitLabs] GetCurrencyIcon ${response.statusCode}:'

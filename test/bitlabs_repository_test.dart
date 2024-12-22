@@ -1,7 +1,7 @@
-import 'package:bitlabs/src/api/bitlabs_api.dart';
-import 'package:bitlabs/src/api/bitlabs_repository.dart';
-import 'package:bitlabs/src/models/get_leaderboard_response.dart';
-import 'package:bitlabs/src/models/survey.dart';
+import 'package:bitlabs/src/api/bitlabs/bitlabs_service.dart';
+import 'package:bitlabs/src/api/bitlabs/bitlabs_repository.dart';
+import 'package:bitlabs/src/models/bitlabs/get_leaderboard_response.dart';
+import 'package:bitlabs/src/models/bitlabs/survey.dart';
 import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 import 'bitlabs_repository_test.mocks.dart';
 
-@GenerateMocks([BitLabsApi])
+@GenerateMocks([BitLabsService])
 void main() {
   errorBody() => """
     {"error": {

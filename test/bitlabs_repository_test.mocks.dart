@@ -5,7 +5,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
 
-import 'package:bitlabs/src/api/bitlabs_api.dart' as _i3;
+import 'package:bitlabs/src/api/bitlabs/bitlabs_service.dart' as _i3;
 import 'package:http/http.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -33,7 +33,7 @@ class _FakeResponse_0 extends _i1.SmartFake implements _i2.Response {
 /// A class which mocks [BitLabsApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockBitLabsApi extends _i1.Mock implements _i3.BitLabsApi {
+class MockBitLabsApi extends _i1.Mock implements _i3.BitLabsService {
   MockBitLabsApi() {
     _i1.throwOnMissingStub(this);
   }

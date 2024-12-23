@@ -3,6 +3,7 @@ library bitlabs;
 import 'dart:developer';
 
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,10 @@ class BitLabs {
     _token = token;
     _uid = uid;
     _bitLabsRepository = BitLabsRepository(BitLabsService(token, uid));
+
+    SentryManager().init(token, uid);
+
+    SentryManager().sendEnvelope(Exception('BitLabs initialised'));
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =

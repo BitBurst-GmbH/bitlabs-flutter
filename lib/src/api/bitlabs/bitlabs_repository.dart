@@ -13,14 +13,14 @@ import 'bitlabs_service.dart';
 
 /// The point of communication between the data and [BitLabs].
 class BitLabsRepository {
-  final BitLabsService _bitLabsApi;
+  final BitLabsService _bitLabsService;
 
-  BitLabsRepository(BitLabsService bitLabsApi) : _bitLabsApi = bitLabsApi;
+  BitLabsRepository(BitLabsService bitLabsApi) : _bitLabsService = bitLabsApi;
 
   void getSurveys(void Function(List<Survey>) onResponse,
       void Function(Exception) onFailure) async {
     try {
-      final response = await _bitLabsApi.getSurveys();
+      final response = await _bitLabsService.getSurveys();
 
       final body = BitLabsResponse<GetSurveysResponse>.fromJson(
           jsonDecode(response.body), (data) => GetSurveysResponse(data!));
@@ -46,7 +46,7 @@ class BitLabsRepository {
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse,
       void Function(Exception) onFailure) async {
     try {
-      final response = await _bitLabsApi.getLeaderboard();
+      final response = await _bitLabsService.getLeaderboard();
       final body = BitLabsResponse<GetLeaderboardResponse>.fromJson(
           jsonDecode(response.body), (data) => GetLeaderboardResponse(data!));
 
@@ -70,7 +70,7 @@ class BitLabsRepository {
       void Function(String) onResponse,
       void Function(Exception) onFailure) async {
     try {
-      final response = await _bitLabsApi.updateClick(clickId, reason);
+      final response = await _bitLabsService.updateClick(clickId, reason);
       final body = BitLabsResponse<Serializable>.fromJson(
           jsonDecode(response.body), (data) => Serializable());
 
@@ -90,7 +90,7 @@ class BitLabsRepository {
   void getAppSettings(void Function(GetAppSettingsResponse) onResponse,
       void Function(Exception) onFailure) async {
     try {
-      final response = await _bitLabsApi.getAppSettings();
+      final response = await _bitLabsService.getAppSettings();
       final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
           jsonDecode(response.body), (data) => GetAppSettingsResponse(data!));
 

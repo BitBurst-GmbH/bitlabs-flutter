@@ -6,7 +6,7 @@ import '../../api/sentry/sentry_repository.dart';
 class SentryManager {
   static final SentryManager _instance = SentryManager._internal();
 
-  final SentryDsn _dsn;
+  final SentryDsn dsn;
   late final String projectId;
 
   late final String _host;
@@ -18,14 +18,14 @@ class SentryManager {
   factory SentryManager() => _instance;
 
   SentryManager._internal()
-      : _dsn = SentryDsn(
+      : dsn = SentryDsn(
           dsn:
               'https://6c204d9e07470b969bfb7de16fbd64f6@o494432.ingest.us.sentry.io/4508302031781888',
         ) {
-    _host = _dsn.host;
-    _protocol = _dsn.protocol;
-    _publicKey = _dsn.publicKey;
-    projectId = _dsn.projectId;
+    _host = dsn.host;
+    _protocol = dsn.protocol;
+    _publicKey = dsn.publicKey;
+    projectId = dsn.projectId;
   }
 
   void init(String token, String uid) {
@@ -38,7 +38,10 @@ class SentryManager {
     _sentryRepository = SentryRepository(SentryService(token, uid), token, uid);
   }
 
-  void sendEnvelope(Exception? exception) {
-    _sentryRepository?.sendEnvelope(exception);
+  void sendEnvelope(Exception exception, StackTrace stackTrace) {
+    _sentryRepository?.sendEnvelope(exception, stackTrace);
   }
+
+  Uri get sentryUri =>
+      Uri.parse('$_protocol://$_host/api/$projectId/envelope/');
 }

@@ -5,14 +5,14 @@ class SentryException {
   final String type;
   final String value;
   final String? module;
-  final SentryStackTrace? stackTrace;
+  final SentryStackTrace? stacktrace;
   final SentryExceptionMechanism? mechanism;
 
   SentryException({
     required this.type,
     required this.value,
     this.module,
-    this.stackTrace,
+    this.stacktrace,
     this.mechanism,
   });
 
@@ -26,8 +26,8 @@ class SentryException {
       json['module'] = module!;
     }
 
-    if (stackTrace != null) {
-      json['stack_trace'] = stackTrace!.toJson().toString();
+    if (stacktrace != null) {
+      json['stack_trace'] = stacktrace!.toJson().toString();
     }
 
     if (mechanism != null) {

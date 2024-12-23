@@ -1,9 +1,8 @@
+import 'dart:convert';
+
 import 'sentry_envelope_headers.dart';
 
-abstract class SentryEnvelopeItem
-{
-}
-
+abstract class SentryEnvelopeItem {}
 
 class SentryEnvelope {
   final SentryEnvelopeHeaders headers;
@@ -11,9 +10,12 @@ class SentryEnvelope {
 
   SentryEnvelope({required this.headers, required this.items});
 
-  String toEnvelopeNotation() {
-    final header = headers.toJson();
-    final item = items.join();
+  @override
+  String toString() {
+    final header = jsonEncode(headers.toJson());
+    final item = items.join('\n');
     return '$header\n$item';
   }
+
+  List<int> toEnvelopeNotation() => utf8.encode(toString());
 }

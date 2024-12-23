@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'sentry_envelope.dart';
 import 'sentry_event.dart';
 
@@ -8,12 +10,12 @@ class SentryEventItem implements SentryEnvelopeItem {
 
   @override
   String toString() {
-    final eventJson = event.toJson();
-    final itemHeadersJson = {
+    final eventJson = jsonEncode(event.toJson());
+    final itemHeadersJson = jsonEncode({
       'type': 'event',
-      'length': eventJson.length.toString()
-    };
+      'length': eventJson.length,
+    });
 
-    return '${itemHeadersJson.toString()}\n${eventJson.toString()}';
+    return '$itemHeadersJson\n$eventJson';
   }
 }

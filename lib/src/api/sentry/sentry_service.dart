@@ -1,3 +1,5 @@
+import 'package:bitlabs/src/models/sentry/sentry_envelope.dart';
+import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
 import 'package:http/http.dart';
 
 class SentryService {
@@ -9,14 +11,8 @@ class SentryService {
           'X-User-Id': uid,
         };
 
-  Future<Response> sendEnvelope(String projectId, String envelope) => post(
-      sentryUrl('api/$projectId/envelope/'),
+  Future<Response> sendEnvelope(SentryEnvelope envelope) => post(
+      SentryManager().sentryUri,
       headers: {..._headers, 'Content-Type': 'application/x-sentry-envelope'},
-      body: envelope);
-
-  Uri sentryUrl(String path) => Uri(
-        scheme: 'https',
-        host: 'sentry.io',
-        path: path,
-      );
+      body: envelope.toEnvelopeNotation());
 }

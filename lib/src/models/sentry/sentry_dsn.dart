@@ -17,4 +17,7 @@ class SentryDsn {
     host = match.group(3)!;
     projectId = match.group(4)!;
   }
+
+  @override
+  String toString() => dsn;
 }

@@ -5,11 +5,7 @@ import 'package:http/http.dart';
 class SentryService {
   final Map<String, String> _headers;
 
-  SentryService(String token, String uid)
-      : _headers = {
-          'X-Api-Token': token,
-          'X-User-Id': uid,
-        };
+  SentryService(Map<String, String> headers) : _headers = headers;
 
   Future<Response> sendEnvelope(SentryEnvelope envelope) => post(
       SentryManager().sentryUri,

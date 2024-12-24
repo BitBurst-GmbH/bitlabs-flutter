@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class SentryExceptionMechanism {
   final String type;
   final bool handled;
@@ -13,18 +11,18 @@ class SentryExceptionMechanism {
     this.meta,
   });
 
-  Map<String, String> toJson() {
-    final json = <String, String>{
+  Map<String, dynamic> toJson() {
+    final json = <String, dynamic>{
       'type': type,
-      'handled': handled.toString(),
+      'handled': handled,
     };
 
     if (data != null) {
-      json['data'] = data.toString();
+      json['data'] = data;
     }
 
     if (meta != null) {
-      json['meta'] = meta.toString();
+      json['meta'] = meta;
     }
 
     return json;

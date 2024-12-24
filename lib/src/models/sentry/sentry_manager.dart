@@ -35,7 +35,7 @@ class SentryManager {
       'User-Agent': 'bitlabs-sdk/0.1.0',
     };
 
-    _sentryRepository = SentryRepository(SentryService(token, uid), token, uid);
+    _sentryRepository = SentryRepository(SentryService(headers), token, uid);
   }
 
   void sendEnvelope(Exception exception, StackTrace stackTrace) {

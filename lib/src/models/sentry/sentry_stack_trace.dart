@@ -8,7 +8,7 @@ class SentryStackTrace {
   });
 
   Map<String, dynamic> toJson() {
-    final json = <String, dynamic>{
+    final json = {
       'frames': frames.map((frame) => frame.toJson()).toList(),
     };
 

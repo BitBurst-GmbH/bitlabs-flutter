@@ -40,15 +40,15 @@ class SentryEvent {
     this.exception,
   });
 
-  Map<String, String> toJson() {
-    final json = <String, String>{
+  Map<String, dynamic> toJson() {
+    final json = <String, dynamic>{
       'event_id': eventId,
       'timestamp': timestamp,
       'platform': platform,
     };
 
     if (logentry != null) {
-      json['logentry'] = logentry!.toJson().toString();
+      json['logentry'] = logentry!.toJson();
     }
 
     if (level != null) {
@@ -72,32 +72,32 @@ class SentryEvent {
     }
 
     if (modules != null) {
-      json['modules'] = modules!.toString();
+      json['modules'] = modules!;
     }
 
     if (extra != null) {
-      json['extra'] = extra!.toString();
+      json['extra'] = extra!;
     }
 
     if (tags != null) {
-      json['tags'] = tags!.toString();
+      json['tags'] = tags!;
     }
 
     if (fingerprint != null) {
-      json['fingerprint'] = fingerprint!.toString();
+      json['fingerprint'] = fingerprint!;
     }
 
     if (user != null) {
-      json['user'] = user!.toJson().toString();
+      json['user'] = user!.toJson();
     }
 
     if (sdk != null) {
-      json['sdk'] = sdk!.toJson().toString();
+      json['sdk'] = sdk!.toJson();
     }
 
     if (exception != null) {
       json['exception'] =
-          exception!.map((exception) => exception.toJson()).toList().toString();
+          exception!.map((exception) => exception.toJson()).toList();
     }
 
     return json;

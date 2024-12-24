@@ -1,15 +1,14 @@
 import 'dart:developer';
 
-import 'package:bitlabs/bitlabs.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
-import 'package:bitlabs/src/widgets/simple_survey_widget.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../bitlabs.dart';
 import '../api/bitlabs/bitlabs_repository.dart';
-import '../models/bitlabs/widget_type.dart';
 import '../utils/notifiers.dart' as notifiers;
 import 'compact_survey_widget.dart';
 import 'full_width_survey_widget.dart';
+import 'simple_survey_widget.dart';
 
 class SurveyWidget extends StatefulWidget {
   final String loi;

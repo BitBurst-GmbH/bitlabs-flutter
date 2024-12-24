@@ -55,12 +55,6 @@ class BitLabs {
 
     SentryManager().init(token, uid);
 
-    try {
-      throw Exception('BitLabs initialised');
-    } on Exception catch (e, stacktrace) {
-      SentryManager().sendEnvelope(e, stacktrace);
-    }
-
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =
           settings.visual.surveyIconColor.colorsFromCSS().isNotEmpty

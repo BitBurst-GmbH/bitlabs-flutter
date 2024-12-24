@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
+import 'package:bitlabs/src/models/sentry/send_envelope_response.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../models/sentry/sentry_envelope.dart';
 import '../../models/sentry/sentry_envelope_headers.dart';
@@ -23,23 +25,31 @@ class SentryRepository {
 
   SentryRepository(this._sentryService, this.token, this.uid);
 
-  void sendEnvelope(Exception e, StackTrace stacktrace) async {
-    final envelope = createEnvelope(e, stacktrace);
+  void sendEnvelope(Object errorOrException, StackTrace stacktrace) async {
+    final envelope = createEnvelope(errorOrException, stacktrace);
+    try {
+      final response = await _sentryService.sendEnvelope(envelope);
 
-    final response = await _sentryService.sendEnvelope(envelope);
+      if (response.statusCode != 200) {
+        debugPrint('Error sending envelope: ${response.body}');
+        return;
+      }
 
-    debugPrint('Sending event: ${response.body}');
-
-    debugPrint(envelope.toString());
+      final body = SendEnvelopeResponse(jsonDecode(response.body));
+      debugPrint('Envelope(#${body.id}) sent to Sentry');
+    } catch (e) {
+      debugPrint('Error sending envelope: $e');
+    }
   }
 
-  SentryEnvelope createEnvelope(Exception e, StackTrace stacktrace) {
+  SentryEnvelope createEnvelope(
+      Object errorOrException, StackTrace stacktrace) {
     final eventId = _generateEventId().replaceAll('-', '');
     final now = DateTime.now().toUtc().toIso8601String();
 
     final exception = SentryException(
-      type: e.runtimeType.toString(),
-      value: e.toString(),
+      type: errorOrException.runtimeType.toString(),
+      value: errorOrException.toString(),
       stacktrace: SentryStackTrace(
         frames: stacktrace.toString().split('\n').map((line) {
           return SentryStackFrame(
@@ -56,7 +66,7 @@ class SentryRepository {
     final event = SentryEvent(
       eventId: eventId,
       timestamp: now,
-      logentry: SentryMessage(formatted: e.toString()),
+      logentry: SentryMessage(formatted: errorOrException.toString()),
       user: SentryUser(id: uid),
       sdk: SentrySDK(version: '0.1.0'),
       exception: [exception],

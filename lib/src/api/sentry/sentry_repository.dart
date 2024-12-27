@@ -25,8 +25,12 @@ class SentryRepository {
 
   SentryRepository(this._sentryService, this.token, this.uid);
 
-  void sendEnvelope(Object errorOrException, StackTrace stacktrace) async {
-    final envelope = createEnvelope(errorOrException, stacktrace);
+  void sendEnvelope(
+    Object errorOrException,
+    StackTrace stacktrace,
+    bool isHandled,
+  ) async {
+    final envelope = createEnvelope(errorOrException, stacktrace, isHandled);
     try {
       final response = await _sentryService.sendEnvelope(envelope);
 
@@ -43,7 +47,10 @@ class SentryRepository {
   }
 
   SentryEnvelope createEnvelope(
-      Object errorOrException, StackTrace stacktrace) {
+    Object errorOrException,
+    StackTrace stacktrace,
+    bool isHandled,
+  ) {
     final eventId = _generateEventId().replaceAll('-', '');
     final now = DateTime.now().toUtc().toIso8601String();
 
@@ -60,7 +67,7 @@ class SentryRepository {
           );
         }).toList(),
       ),
-      mechanism: SentryExceptionMechanism(handled: true),
+      mechanism: SentryExceptionMechanism(handled: isHandled),
     );
 
     final event = SentryEvent(

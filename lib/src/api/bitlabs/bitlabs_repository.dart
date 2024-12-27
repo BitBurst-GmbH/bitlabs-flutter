@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -26,20 +27,27 @@ class BitLabsRepository {
           jsonDecode(response.body), (data) => GetSurveysResponse(data!));
       final error = body.error;
       if (error != null) {
-        onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+        final exception =
+            Exception('${error.details.http} - ${error.details.msg}');
+        SentryManager().captureEvent(exception, StackTrace.current);
+        onFailure(exception);
         return;
       }
 
       final restriction = body.data?.restrictionReason;
       if (restriction != null) {
-        onFailure(Exception('Restriction ${restriction.prettyPrint()}'));
+        final exception = Exception('Restriction ${restriction.prettyPrint()}');
+        SentryManager().captureEvent(exception, StackTrace.current);
+        onFailure(exception);
         return;
       }
 
       final surveys = body.data?.surveys ?? [];
       onResponse(surveys);
-    } catch (e) {
-      onFailure(Exception('Error - ${e.toString()}'));
+    } catch (e, stackTrace) {
+      final exception = Exception('Error - ${e.toString()}');
+      SentryManager().captureEvent(exception, stackTrace);
+      onFailure(exception);
     }
   }
 
@@ -52,15 +60,19 @@ class BitLabsRepository {
 
       final error = body.error;
       if (error != null) {
-        onFailure(Exception('[BitLabs] GetLeaderboard ${error.details.http}:'
-            ' ${error.details.msg}'));
+        final exception = Exception(
+            '[BitLabs] GetLeaderboard ${error.details.http}: ${error.details.msg}');
+        SentryManager().captureEvent(exception, StackTrace.current);
+        onFailure(exception);
         return;
       }
 
       final leaderboard = body.data;
       if (leaderboard != null) onResponse(leaderboard);
-    } catch (e) {
-      onFailure(Exception('Error - ${e.toString()}'));
+    } catch (e, stackTrace) {
+      final exception = Exception('Error - ${e.toString()}');
+      SentryManager().captureEvent(exception, stackTrace);
+      onFailure(exception);
     }
   }
 
@@ -76,14 +88,18 @@ class BitLabsRepository {
 
       final error = body.error;
       if (error != null) {
-        onFailure(Exception('[BitLabs] LeaveSurvey ${error.details.http}:'
-            ' ${error.details.msg}'));
+        final exception = Exception(
+            '[BitLabs] LeaveSurvey ${error.details.http}:${error.details.msg}');
+        SentryManager().captureEvent(exception, StackTrace.current);
+        onFailure(exception);
         return;
       }
 
       onResponse('[BitLabs] LeaveSurvey Successful');
-    } catch (e) {
-      onFailure(Exception('Error - ${e.toString()}'));
+    } catch (e, stackTrace) {
+      final exception = Exception('Error - ${e.toString()}');
+      SentryManager().captureEvent(exception, stackTrace);
+      onFailure(exception);
     }
   }
 
@@ -96,13 +112,18 @@ class BitLabsRepository {
 
       final error = body.error;
       if (error != null) {
-        onFailure(Exception('${error.details.http} - ${error.details.msg}'));
+        final exception = Exception(
+            '[BitLabs] GetAppSettings ${error.details.http}:${error.details.msg}');
+        SentryManager().captureEvent(exception, StackTrace.current);
+        onFailure(exception);
         return;
       }
 
       if (body.data != null) onResponse(body.data!);
-    } catch (e) {
-      onFailure(Exception('Error - ${e.toString()}'));
+    } catch (e, stackTrace) {
+      final exception = Exception('Error - ${e.toString()}');
+      SentryManager().captureEvent(exception, stackTrace);
+      onFailure(exception);
     }
   }
 
@@ -111,8 +132,11 @@ class BitLabsRepository {
     final response = await BitLabsService.getCurrencyIcon(url);
 
     if (response.reasonPhrase != 'OK') {
-      onFailure(Exception('[BitLabs] GetCurrencyIcon ${response.statusCode}:'
-          ' ${response.reasonPhrase}'));
+      final exception =
+          Exception('[BitLabs] GetCurrencyIcon ${response.statusCode}:'
+              ' ${response.reasonPhrase}');
+      SentryManager().captureEvent(exception, StackTrace.current);
+      onFailure(exception);
       return;
     }
 

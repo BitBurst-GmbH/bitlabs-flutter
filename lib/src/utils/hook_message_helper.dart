@@ -3,16 +3,23 @@ Extension of the String class to convert a json to a HookMessage object
  */
 import 'dart:convert';
 
+import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
+
 extension StringExtension on String {
   HookMessage? toHookMessage() {
-    final regex = RegExp(
-        r'^\{\s*"type"\s*:\s*"hook"\s*,\s*"name"\s*:\s*".*"\s*,\s*"args"\s*:\s*\[.*\]\s*\}$');
-    if (!regex.hasMatch(this)) {
+    try {
+      final regex = RegExp(
+          r'^\{\s*"type"\s*:\s*"hook"\s*,\s*"name"\s*:\s*".*"\s*,\s*"args"\s*:\s*\[.*\]\s*\}$');
+      if (!regex.hasMatch(this)) {
+        return null;
+      }
+
+      final json = jsonDecode(this);
+      return HookMessage.fromJson(json);
+    } catch (e, stackTrace) {
+      SentryManager().captureEvent(e, stackTrace);
       return null;
     }
-
-    final json = jsonDecode(this);
-    return HookMessage.fromJson(json);
   }
 }
 

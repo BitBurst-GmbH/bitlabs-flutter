@@ -1,6 +1,7 @@
 library bitlabs;
 
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
@@ -54,6 +55,13 @@ class BitLabs {
     _bitLabsRepository = BitLabsRepository(BitLabsService(token, uid));
 
     SentryManager().init(token, uid);
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      if (stack.toString().contains('package:bitlabs')) {
+        SentryManager().captureEvent(error, stack, isHandled: false);
+      }
+      return false;
+    };
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =
@@ -175,7 +183,8 @@ class BitLabs {
     try {
       _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
       log("[BitLabs] adId: $_adId");
-    } on Exception catch (e) {
+    } on Exception catch (e, stacktrace) {
+      SentryManager().captureEvent(e, stacktrace);
       log("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
     }
   }

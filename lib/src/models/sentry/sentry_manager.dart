@@ -38,8 +38,12 @@ class SentryManager {
     _sentryRepository = SentryRepository(SentryService(headers), token, uid);
   }
 
-  void captureEvent(Object errorOrException, StackTrace stackTrace) {
-    _sentryRepository?.sendEnvelope(errorOrException, stackTrace);
+  void captureEvent(
+    Object errorOrException,
+    StackTrace stackTrace, {
+    bool isHandled = true,
+  }) {
+    _sentryRepository?.sendEnvelope(errorOrException, stackTrace, isHandled);
   }
 
   Uri get sentryUri =>

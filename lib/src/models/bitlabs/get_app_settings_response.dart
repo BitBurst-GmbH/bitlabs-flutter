@@ -1,5 +1,5 @@
-import 'promotion.dart';
 import 'currency.dart';
+import 'promotion.dart';
 import 'serializable.dart';
 import 'visual.dart';
 

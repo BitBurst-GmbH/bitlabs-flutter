@@ -1,21 +1,23 @@
 library bitlabs;
 
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:advertising_id/advertising_id.dart';
-import 'package:bitlabs/src/models/get_leaderboard_response.dart';
-import 'package:bitlabs/src/models/widget_type.dart';
+import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'src/api/bitlabs_api.dart';
-import 'src/api/bitlabs_repository.dart';
-import 'src/models/survey.dart';
+import 'src/api/bitlabs/bitlabs_service.dart';
+import 'src/api/bitlabs/bitlabs_repository.dart';
+import 'src/models/bitlabs/get_leaderboard_response.dart';
+import 'src/models/bitlabs/survey.dart';
+import 'src/models/bitlabs/widget_type.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 import 'src/widgets/bitlabs_offerwall.dart';
 
-export 'src/models/widget_type.dart';
+export 'src/models/bitlabs/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 export 'src/widgets/bitlabs_leaderboard.dart';
 export 'src/widgets/bitlabs_offerwall.dart';
@@ -50,7 +52,16 @@ class BitLabs {
   void init(String token, String uid) {
     _token = token;
     _uid = uid;
-    _bitLabsRepository = BitLabsRepository(BitLabsApi(token, uid));
+    _bitLabsRepository = BitLabsRepository(BitLabsService(token, uid));
+
+    SentryManager().init(token, uid);
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      if (stack.toString().contains('package:bitlabs')) {
+        SentryManager().captureEvent(error, stack, isHandled: false);
+      }
+      return false;
+    };
 
     _bitLabsRepository?.getAppSettings((settings) {
       notifiers.widgetColor.value =
@@ -172,7 +183,8 @@ class BitLabs {
     try {
       _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
       log("[BitLabs] adId: $_adId");
-    } on Exception catch (e) {
+    } on Exception catch (e, stacktrace) {
+      SentryManager().captureEvent(e, stacktrace);
       log("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
     }
   }

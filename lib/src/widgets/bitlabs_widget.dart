@@ -1,6 +1,7 @@
-import 'package:bitlabs/bitlabs.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../bitlabs.dart';
 
 class BitLabsWidget extends StatelessWidget {
   final String html;

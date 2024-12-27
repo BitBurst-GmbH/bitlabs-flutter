@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bitlabs/src/models/category.dart';
+import 'category.dart';
 
 /// Represents the survey the user can take.
 class Survey {

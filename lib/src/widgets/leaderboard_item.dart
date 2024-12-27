@@ -2,7 +2,7 @@ import 'package:bitlabs/src/widgets/reward_view.dart';
 import 'package:bitlabs/src/widgets/styled_text.dart';
 import 'package:flutter/material.dart';
 
-import '../models/user.dart';
+import '../models/bitlabs/user.dart';
 
 class LeaderboardItem extends StatelessWidget {
   final User user;

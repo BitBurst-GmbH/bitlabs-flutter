@@ -1,4 +1,4 @@
-import 'package:bitlabs/src/models/serializable.dart';
+import 'serializable.dart';
 
 class Reward extends Serializable {
   final int rank;

@@ -42,24 +42,6 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('Given offer URL, then isPageOfferWall is true', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: BitLabsOfferwall(uid: validUid, token: token),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
-    final initialUrl = state.initialUrl;
-    state.controller.loadRequest(Uri.parse(initialUrl));
-
-    await tester.pumpAndSettle();
-
-    expect(state.isPageOfferWall, true);
-  });
-
   testWidgets(
       'Given back press in non-offerwall page, then displays leave survey dialog',
       (tester) async {

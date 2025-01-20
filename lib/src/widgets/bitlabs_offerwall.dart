@@ -226,14 +226,24 @@ class OfferwallState extends State<BitLabsOfferwall> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
-        if (isPageOfferWall) return;
+        if (didPop) return;
 
-        if (isPageAdGateSupport) {
-          await controller.loadRequest(Uri.parse(initialUrl));
+        if (!isPageOfferWall) {
+          if (isPageAdGateSupport) {
+            await controller.loadRequest(Uri.parse(initialUrl));
+            return;
+          }
+
+          await showDialog(context: context, builder: showLeaveSurveyDialog);
           return;
         }
 
-        await showDialog(context: context, builder: showLeaveSurveyDialog);
+        if (await controller.canGoBack()) {
+          await controller.goBack();
+          return;
+        }
+
+        Navigator.of(context).pop();
       },
       child: SafeArea(
         child: Scaffold(

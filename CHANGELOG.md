@@ -1,4 +1,9 @@
-## 2.2.14-beta.1
+## 2.2.15
+
+- Add native back functionality to the Offerwall. Now you can go back to the previous page in the
+  Offerwall using the back button on the device.
+
+## 2.2.14
 
 - Add crash reporting for better debugging: we had a compilation issue with this feature, so we had
   to remove it in the previous version. We have fixed the issue and added it back in this version.

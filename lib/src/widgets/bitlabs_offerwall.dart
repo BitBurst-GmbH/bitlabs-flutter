@@ -46,7 +46,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
   String? clickId;
 
   late bool isColorBright;
-  late final String initialUrl;
   late WebViewController controller;
 
   double reward = 0.0;
@@ -57,9 +56,6 @@ class OfferwallState extends State<BitLabsOfferwall> {
   @override
   void initState() {
     super.initState();
-
-    initialUrl =
-        offerWallUrl(widget.token, widget.uid, widget.adId, widget.tags);
 
     isColorBright = widget.color.first.computeLuminance() > 0.729 ||
         widget.color.last.computeLuminance() > 0.729;
@@ -99,7 +95,10 @@ class OfferwallState extends State<BitLabsOfferwall> {
         onMessageReceived: onJavaScriptMessage,
       );
 
-    await controller.loadRequest(Uri.parse(initialUrl));
+    final url =
+        offerWallUrl(widget.token, widget.uid, widget.adId, widget.tags);
+
+    await controller.loadRequest(Uri.parse(url));
   }
 
   void onWebResourceError(WebResourceError error) {
@@ -170,6 +169,11 @@ class OfferwallState extends State<BitLabsOfferwall> {
     }
   }
 
+  Future<void> goBackToInitialPage() {
+    return controller
+        .runJavaScript('window.history.go(-(window.history.length - 1));');
+  }
+
   Widget showLeaveSurveyDialog(BuildContext context) {
     return SimpleDialog(
       title: Text(Localization.of(context).leaveDescription),
@@ -185,7 +189,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
   void leaveSurvey(String reason) {
     setState(() => errorId = '');
-    controller.loadRequest(Uri.parse(initialUrl));
+    goBackToInitialPage();
 
     if (clickId == null) return;
 
@@ -226,14 +230,26 @@ class OfferwallState extends State<BitLabsOfferwall> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
-        if (isPageOfferWall) return;
+        if (didPop) return;
 
-        if (isPageAdGateSupport) {
-          await controller.loadRequest(Uri.parse(initialUrl));
+        if (!isPageOfferWall) {
+          if (isPageAdGateSupport) {
+            await goBackToInitialPage();
+            return;
+          }
+
+          if (!context.mounted) return;
+          await showDialog(context: context, builder: showLeaveSurveyDialog);
           return;
         }
 
-        await showDialog(context: context, builder: showLeaveSurveyDialog);
+        if (await controller.canGoBack()) {
+          await controller.goBack();
+          return;
+        }
+
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
       },
       child: SafeArea(
         child: Scaffold(

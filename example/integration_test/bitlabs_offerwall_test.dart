@@ -23,33 +23,17 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('Given non-offerwall URL, then isPageOfferWall is false',
-      (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: BitLabsOfferwall(uid: validUid, token: token),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
-    await state.controller.loadRequest(Uri.parse('https://google.com'));
-
-    await tester.pumpAndSettle();
-    expect(state.isPageOfferWall, false);
-
-    await tester.pumpAndSettle();
-  });
-
   testWidgets(
-      'Given back press in non-offerwall page, then displays leave survey dialog',
+      'Given back press when shouldShowAppBar true, then displays leave survey dialog',
       (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: BitLabsOfferwall(uid: 'testUID', token: 'testToken'),
       ),
     );
+
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    state.shouldShowAppBar = true;
 
     // Simulate a back press
     await tester.binding.handlePopRoute();
@@ -108,6 +92,27 @@ void main() {
   });
 
   //test the Javascript communication
+  testWidgets('Given survey start event message, then shouldShowAppBar is true',
+          (tester) async {
+        const hookMessage =
+            '{"type":"hook","name":"offerwall-surveys:survey.start","args":[{"clickId": "1234", "link": "arbitrary_link"}]}';
+
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: BitLabsOfferwall(uid: validUid, token: token),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+        state.onJavaScriptMessage(const JavaScriptMessage(message: hookMessage));
+
+        await tester.pumpAndSettle();
+
+        expect(state.shouldShowAppBar, true);
+      });
+
   testWidgets('Given survey complete event message, then updates reward',
       (tester) async {
     const hookMessage =

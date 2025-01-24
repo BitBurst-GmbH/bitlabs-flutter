@@ -50,7 +50,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
 
   double reward = 0.0;
   String errorId = '';
-  bool isPageOfferWall = false;
+  bool shouldShowAppBar = false;
   bool isPageAdGateSupport = false;
 
   @override
@@ -126,18 +126,18 @@ class OfferwallState extends State<BitLabsOfferwall> {
       case HookName.surveyScreenout:
       case HookName.surveyStartBonus:
         final rewardArg = hookMessage.args.first as RewardArgument;
-        setState(() {
-          reward += rewardArg.reward;
-        });
+        setState(() => reward += rewardArg.reward);
         break;
       case HookName.surveyStart:
+        final surveyStartArg = hookMessage.args.first as SurveyStartArgument;
         setState(() {
-          clickId = (hookMessage.args.first as SurveyStartArgument).clickId;
+          clickId = surveyStartArg.clickId;
+          shouldShowAppBar = true;
         });
         break;
       case HookName.offerStart:
-        final url =
-            (hookMessage.args.first as OfferStartArgument).offer.clickUrl;
+        final offerStartArg = hookMessage.args.first as OfferStartArgument;
+        final url = offerStartArg.offer.clickUrl;
         launchUrlString(url, mode: LaunchMode.externalApplication);
         break;
       case HookName.offerContinue:
@@ -148,6 +148,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
         Navigator.of(context).pop();
         break;
       case HookName.init:
+        setState(() => shouldShowAppBar = false);
         controller.runJavaScript('''
         window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
         window.parent.postMessage({ target: 'app.behaviour.offer_opening_target', value: 'OPENING_TARGET_NONE' }, '*');
@@ -161,10 +162,12 @@ class OfferwallState extends State<BitLabsOfferwall> {
   void onUrlChanged(UrlChange urlChange) {
     final url = urlChange.url ?? '';
 
-    if (mounted) {
+    if (!mounted) return;
+
+    if (url.startsWith(adGateSupportUrlRegex)) {
       setState(() {
-        isPageOfferWall = url.startsWith(OFFERWALL_URL);
-        isPageAdGateSupport = url.startsWith(adGateSupportUrlRegex);
+        isPageAdGateSupport = true;
+        shouldShowAppBar = true;
       });
     }
   }
@@ -232,9 +235,10 @@ class OfferwallState extends State<BitLabsOfferwall> {
       onPopInvoked: (didPop) async {
         if (didPop) return;
 
-        if (!isPageOfferWall) {
+        if (shouldShowAppBar) {
           if (isPageAdGateSupport) {
             await goBackToInitialPage();
+            setState(() => isPageAdGateSupport = false);
             return;
           }
 
@@ -253,9 +257,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: isPageOfferWall
-              ? null
-              : AppBar(
+          appBar: shouldShowAppBar
+              ? AppBar(
                   flexibleSpace: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -268,7 +271,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
                   iconTheme: IconThemeData(
                     color: isColorBright ? Colors.black : Colors.white,
                   ),
-                ),
+                )
+              : null,
           body: Stack(fit: StackFit.expand, children: [
             WebViewWidget(controller: controller),
             if (errorId.isNotEmpty)

@@ -1,3 +1,7 @@
+## 2.2.16
+
+- Improve Survey and app bar opening mechanism 
+
 ## 2.2.15
 
 - Add native back functionality to the Offerwall. Now you can go back to the previous page in the

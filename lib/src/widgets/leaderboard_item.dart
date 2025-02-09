@@ -11,12 +11,12 @@ class LeaderboardItem extends StatelessWidget {
   final Widget? image;
 
   const LeaderboardItem({
-    Key? key,
+    super.key,
     required this.user,
     required this.ownUser,
     required this.color,
     required this.image,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +57,7 @@ class Trophy extends StatelessWidget {
   final int rank;
   final Color color;
 
-  const Trophy({Key? key, required this.rank, required this.color})
-      : super(key: key);
+  const Trophy({super.key, required this.rank, required this.color});
 
   @override
   Widget build(BuildContext context) =>

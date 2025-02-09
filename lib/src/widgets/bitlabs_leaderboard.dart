@@ -11,7 +11,7 @@ import 'leaderboard_item.dart';
 
 @Deprecated('Use BitLabsWidget with type WidgetType.leaderboard instead.')
 class BitLabsLeaderboard extends StatefulWidget {
-  const BitLabsLeaderboard({Key? key}) : super(key: key);
+  const BitLabsLeaderboard({super.key});
 
   @override
   State<BitLabsLeaderboard> createState() => _BitLabsLeaderboardState();

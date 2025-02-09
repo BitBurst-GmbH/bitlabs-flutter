@@ -8,8 +8,7 @@ class StyledText extends StatelessWidget {
   final TextDecoration? decoration;
 
   const StyledText(this.text,
-      {Key? key, this.color, this.fontSize, this.fontWeight, this.decoration})
-      : super(key: key);
+      {super.key, this.color, this.fontSize, this.fontWeight, this.decoration});
 
   @override
   Widget build(BuildContext context) {

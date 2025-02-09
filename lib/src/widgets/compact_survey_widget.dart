@@ -14,7 +14,7 @@ class CompactSurveyWidget extends StatefulWidget {
   final int bonusPercentage;
 
   const CompactSurveyWidget({
-    Key? key,
+    super.key,
     this.image,
     required this.loi,
     required this.color,
@@ -22,7 +22,7 @@ class CompactSurveyWidget extends StatefulWidget {
     required this.reward,
     required this.oldReward,
     required this.bonusPercentage,
-  }) : super(key: key);
+  });
 
   @override
   State<CompactSurveyWidget> createState() => _CompactSurveyWidgetState();

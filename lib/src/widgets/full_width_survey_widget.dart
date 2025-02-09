@@ -14,7 +14,7 @@ class FullWidthSurveyWidget extends StatefulWidget {
   final int bonusPercentage;
 
   const FullWidthSurveyWidget({
-    Key? key,
+    super.key,
     this.image,
     required this.loi,
     required this.color,
@@ -22,7 +22,7 @@ class FullWidthSurveyWidget extends StatefulWidget {
     required this.reward,
     required this.oldReward,
     required this.bonusPercentage,
-  }) : super(key: key);
+  });
 
   @override
   State<FullWidthSurveyWidget> createState() => _FullWidthSurveyWidgetState();

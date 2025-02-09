@@ -11,13 +11,13 @@ class PromotionView extends StatelessWidget {
   final Widget? currencyIcon;
 
   const PromotionView({
-    Key? key,
+    super.key,
     this.currencyIcon,
     required this.color,
     required this.reward,
     required this.accentColor,
     required this.bonusPercentage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

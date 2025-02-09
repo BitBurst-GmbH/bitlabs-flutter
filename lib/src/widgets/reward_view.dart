@@ -11,14 +11,14 @@ class RewardView extends StatelessWidget {
   final TextDecoration? decoration;
 
   const RewardView({
-    Key? key,
+    super.key,
     this.fontSize,
     this.decoration,
     this.currencyIcon,
     required this.size,
     required this.reward,
     this.color = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

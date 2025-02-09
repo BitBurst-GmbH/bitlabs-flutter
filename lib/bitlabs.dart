@@ -1,4 +1,4 @@
-library bitlabs;
+library;
 
 import 'dart:developer';
 import 'dart:ui';

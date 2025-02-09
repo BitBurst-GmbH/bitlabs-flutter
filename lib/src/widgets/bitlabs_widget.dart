@@ -9,7 +9,7 @@ class BitLabsWidget extends StatelessWidget {
   late final WebViewController controller;
 
   BitLabsWidget(
-      {Key? key,
+      {super.key,
       required String token,
       required String uid,
       this.type = WidgetType.simple})
@@ -54,8 +54,7 @@ class BitLabsWidget extends StatelessWidget {
         </script>
       </body>
     </html>
-  ''',
-        super(key: key) {
+  ''' {
     controller = WebViewController()
       ..setBackgroundColor(Colors.transparent)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -94,10 +93,9 @@ class _SizeableWebView extends StatelessWidget {
   final WebViewController controller;
 
   const _SizeableWebView({
-    Key? key,
     required this.size,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

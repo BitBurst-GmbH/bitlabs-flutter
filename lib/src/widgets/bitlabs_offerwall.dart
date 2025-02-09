@@ -27,7 +27,7 @@ class BitLabsOfferwall extends StatefulWidget {
   final void Function(double)? onReward;
 
   const BitLabsOfferwall({
-    Key? key,
+    super.key,
     this.onReward,
     this.adId = '',
     required this.uid,
@@ -35,7 +35,7 @@ class BitLabsOfferwall extends StatefulWidget {
     this.tags = const {},
     this.debugMode = false,
     this.color = const [Colors.blueAccent, Colors.blueAccent],
-  }) : super(key: key);
+  });
 
   @override
   State<BitLabsOfferwall> createState() => OfferwallState();
@@ -232,7 +232,7 @@ class OfferwallState extends State<BitLabsOfferwall> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, _) async {
         if (didPop) return;
 
         if (shouldShowAppBar) {

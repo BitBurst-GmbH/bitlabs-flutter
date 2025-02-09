@@ -18,13 +18,12 @@ class SurveyWidget extends StatefulWidget {
   final List<Color> color;
 
   const SurveyWidget(
-      {Key? key,
+      {super.key,
       required this.reward,
       required this.loi,
       required this.color,
       required this.rating,
-      required this.type})
-      : super(key: key);
+      required this.type});
 
   @override
   State<SurveyWidget> createState() => _SurveyWidgetState();
@@ -82,7 +81,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         duration: const Duration(milliseconds: 50),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: widget.color.map((c) => c.withOpacity(opacity)).toList(),
+            colors: widget.color.map((c) => c.withValues(alpha: opacity)).toList(),
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           ),

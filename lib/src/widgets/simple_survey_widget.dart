@@ -13,14 +13,14 @@ class SimpleSurveyWidget extends StatefulWidget {
   final int bonusPercentage;
 
   const SimpleSurveyWidget({
-    Key? key,
+    super.key,
     this.image,
     required this.loi,
     required this.color,
     required this.reward,
     required this.oldReward,
     required this.bonusPercentage,
-  }) : super(key: key);
+  });
 
   @override
   State<SimpleSurveyWidget> createState() => _SimpleSurveyWidgetState();

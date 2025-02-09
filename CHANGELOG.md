@@ -1,3 +1,8 @@
+## 3.0.0-beta.1
+
+- Bump dependencies versions to latest
+- Bump minimum Flutter/Dart version to 3.24.0/3.5.0
+
 ## 2.2.16
 
 - Improve Survey and app bar opening mechanism 

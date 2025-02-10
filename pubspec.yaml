@@ -1,6 +1,6 @@
 name: bitlabs
 description: BitLabs offers the opportunity to monetize your app with rewarded surveys easily.
-version: 3.0.0-beta.1
+version: 3.0.0-beta.2
 repository: https://github.com/BitBurst-GmbH/bitlabs-flutter
 
 environment:

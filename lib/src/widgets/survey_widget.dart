@@ -81,7 +81,8 @@ class _SurveyWidgetState extends State<SurveyWidget> {
         duration: const Duration(milliseconds: 50),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: widget.color.map((c) => c.withValues(alpha: opacity)).toList(),
+            colors:
+                widget.color.map((c) => c.withValues(alpha: opacity)).toList(),
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           ),

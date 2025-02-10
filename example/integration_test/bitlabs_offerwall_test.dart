@@ -93,25 +93,25 @@ void main() {
 
   //test the Javascript communication
   testWidgets('Given survey start event message, then shouldShowAppBar is true',
-          (tester) async {
-        const hookMessage =
-            '{"type":"hook","name":"offerwall-surveys:survey.start","args":[{"clickId": "1234", "link": "arbitrary_link"}]}';
+      (tester) async {
+    const hookMessage =
+        '{"type":"hook","name":"offerwall-surveys:survey.start","args":[{"clickId": "1234", "link": "arbitrary_link"}]}';
 
-        await tester.pumpWidget(
-          const MaterialApp(
-            home: BitLabsOfferwall(uid: validUid, token: token),
-          ),
-        );
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BitLabsOfferwall(uid: validUid, token: token),
+      ),
+    );
 
-        await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
 
-        final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
-        state.onJavaScriptMessage(const JavaScriptMessage(message: hookMessage));
+    final state = tester.state<OfferwallState>(find.byType(BitLabsOfferwall));
+    state.onJavaScriptMessage(const JavaScriptMessage(message: hookMessage));
 
-        await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
 
-        expect(state.shouldShowAppBar, true);
-      });
+    expect(state.shouldShowAppBar, true);
+  });
 
   testWidgets('Given survey complete event message, then updates reward',
       (tester) async {

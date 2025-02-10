@@ -1,8 +1,4 @@
-## 3.0.0-beta.2
-
-- Format code
-
-## 3.0.0-beta.1
+## 3.0.0
 
 - Bump dependencies versions to latest
 - Bump minimum Flutter/Dart version to 3.24.0/3.5.0

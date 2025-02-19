@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bitlabs/src/utils/hook_message_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -130,10 +131,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
         break;
       case HookName.surveyStart:
         final surveyStartArg = hookMessage.args.first as SurveyStartArgument;
-        setState(() {
-          clickId = surveyStartArg.clickId;
-          shouldShowAppBar = true;
-        });
+        setState(() => clickId = surveyStartArg.clickId);
+        toggleUIChange(true);
         break;
       case HookName.offerStart:
         final offerStartArg = hookMessage.args.first as OfferStartArgument;
@@ -148,7 +147,8 @@ class OfferwallState extends State<BitLabsOfferwall> {
         Navigator.of(context).pop();
         break;
       case HookName.init:
-        setState(() => shouldShowAppBar = false);
+        toggleUIChange(false);
+        if(!mounted) break;
         controller.runJavaScript('''
         window.parent.postMessage({ target: 'app.behaviour.close_button_visible', value: true }, '*');
         window.parent.postMessage({ target: 'app.behaviour.offer_opening_target', value: 'OPENING_TARGET_NONE' }, '*');
@@ -157,6 +157,17 @@ class OfferwallState extends State<BitLabsOfferwall> {
       default:
         break;
     }
+  }
+
+  void toggleUIChange(bool isPageSurvey) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      if (isPageSurvey) DeviceOrientation.landscapeRight,
+      if (isPageSurvey) DeviceOrientation.landscapeLeft,
+    ]);
+
+    if (!mounted) return;
+    setState(() => shouldShowAppBar = isPageSurvey);
   }
 
   void onUrlChanged(UrlChange urlChange) {

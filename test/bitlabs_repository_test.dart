@@ -30,7 +30,7 @@ void main() {
 
   group('getSurveys', () {
     test('Failure', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.getSurveys()).thenAnswer((_) async => Response('', 400));
 
       final repository = BitLabsRepository(api);
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('Success', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.getSurveys()).thenAnswer((_) async => Response(dataBody("""
           {
           "surveys": [
@@ -76,7 +76,7 @@ void main() {
     });
 
     test('Error', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.getSurveys())
           .thenAnswer((_) async => Response(errorBody(), 400));
 
@@ -90,7 +90,7 @@ void main() {
 
   group('getLeaderboard', () {
     test('Failure', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.getLeaderboard()).thenAnswer((_) async => Response('', 400));
 
       final repository = BitLabsRepository(api);
@@ -101,7 +101,7 @@ void main() {
     });
 
     test('Success', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.getLeaderboard()).thenAnswer((_) async => Response(dataBody("""
       {
         "next_reset_at": "2021-09-30T00:00:00Z",
@@ -127,7 +127,7 @@ void main() {
     });
 
     test('Error', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.getLeaderboard())
           .thenAnswer((_) async => Response(errorBody(), 400));
 
@@ -141,7 +141,7 @@ void main() {
 
   group('leaveSurvey', () {
     test('Failure', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.updateClick('', '')).thenAnswer((_) async => Response('', 400));
 
       final repository = BitLabsRepository(api);
@@ -154,7 +154,7 @@ void main() {
     });
 
     test('Success', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.updateClick('', ''))
           .thenAnswer((_) async => Response(dataBody("{}"), 200));
 
@@ -168,7 +168,7 @@ void main() {
     });
 
     test('Error', () {
-      final api = MockBitLabsApi();
+      final api = MockBitLabsService();
       when(api.updateClick('', ''))
           .thenAnswer((_) async => Response(errorBody(), 400));
 
@@ -184,8 +184,8 @@ void main() {
 
   group('getAppSettings', () {
     test('Failure', () {
-      final api = MockBitLabsApi();
-      when(api.getAppSettings()).thenAnswer((_) async => Response('', 400));
+      final api = MockBitLabsService();
+      when(api.getAppSettings("")).thenAnswer((_) async => Response('', 400));
 
       final repository = BitLabsRepository(api);
       repository.getAppSettings(
@@ -196,8 +196,8 @@ void main() {
     });
 
     test('Success', () {
-      final api = MockBitLabsApi();
-      when(api.getAppSettings()).thenAnswer((_) async => Response(dataBody("""
+      final api = MockBitLabsService();
+      when(api.getAppSettings("")).thenAnswer((_) async => Response(dataBody("""
       {
         "visual": {
           "survey_icon_color": "linear-gradient(90deg, #FF0000 0%, #00FF00 100%)",
@@ -213,8 +213,8 @@ void main() {
     });
 
     test('Error', () {
-      final api = MockBitLabsApi();
-      when(api.getAppSettings())
+      final api = MockBitLabsService();
+      when(api.getAppSettings(""))
           .thenAnswer((_) async => Response(errorBody(), 400));
 
       final repository = BitLabsRepository(api);

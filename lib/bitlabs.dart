@@ -17,6 +17,8 @@ import 'src/models/bitlabs/widget_type.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 import 'src/widgets/bitlabs_offerwall.dart';
 
+export 'src/models/bitlabs/survey.dart';
+export 'src/models/bitlabs/category.dart';
 export 'src/models/bitlabs/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
 export 'src/widgets/bitlabs_leaderboard.dart';

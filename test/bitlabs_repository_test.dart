@@ -189,6 +189,7 @@ void main() {
 
       final repository = BitLabsRepository(api);
       repository.getAppSettings(
+        "",
         (_) => fail('Should not be called'),
         (e) => expect(e, isA<Exception>()),
       );
@@ -218,6 +219,7 @@ void main() {
 
       final repository = BitLabsRepository(api);
       repository.getAppSettings(
+        "",
         (_) => fail('Should not be called'),
         (e) => expect(e, isA<Exception>()),
       );

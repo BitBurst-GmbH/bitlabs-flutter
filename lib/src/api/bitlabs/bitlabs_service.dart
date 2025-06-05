@@ -37,8 +37,7 @@ class BitLabsService {
         }));
   }
 
-  Future<Response> getAppSettings() =>
-      get(url('v1/client/settings/v2'), headers: _headers);
+  Future<Response> getAppSettings(String url) => get(Uri.parse(url));
 
   static Future<Response> getCurrencyIcon(String url) => get(Uri.parse(url));
 }

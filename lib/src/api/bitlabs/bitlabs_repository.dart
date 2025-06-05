@@ -103,23 +103,17 @@ class BitLabsRepository {
     }
   }
 
-  void getAppSettings(void Function(GetAppSettingsResponse) onResponse,
+  void getAppSettings(
+      String token,
+      void Function(GetAppSettingsResponse) onResponse,
       void Function(Exception) onFailure) async {
     try {
-      final response = await _bitLabsService.getAppSettings();
-      final body = BitLabsResponse<GetAppSettingsResponse>.fromJson(
-          jsonDecode(response.body), (data) => GetAppSettingsResponse(data!));
+      final response = await _bitLabsService.getAppSettings(
+        'https://dashboard.bitlabs.ai/api/public/v1/apps/$token',
+      );
+      final body = GetAppSettingsResponse(jsonDecode(response.body));
 
-      final error = body.error;
-      if (error != null) {
-        final exception = Exception(
-            '[BitLabs] GetAppSettings ${error.details.http}:${error.details.msg}');
-        SentryManager().captureEvent(exception, StackTrace.current);
-        onFailure(exception);
-        return;
-      }
-
-      if (body.data != null) onResponse(body.data!);
+      onResponse(body);
     } catch (e, stackTrace) {
       final exception = Exception('Error - ${e.toString()}');
       SentryManager().captureEvent(exception, stackTrace);

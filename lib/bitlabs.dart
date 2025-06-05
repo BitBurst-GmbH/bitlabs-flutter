@@ -65,29 +65,40 @@ class BitLabs {
       return false;
     };
 
-    _bitLabsRepository?.getAppSettings((settings) {
-      notifiers.widgetColor.value =
-          settings.visual.surveyIconColor.colorsFromCSS().isNotEmpty
-              ? settings.visual.surveyIconColor.colorsFromCSS()
-              : [Colors.blueAccent, Colors.blueAccent];
+    _bitLabsRepository?.getAppSettings(_token, (settings) {
+      final config = settings.configuration;
+      final theme = 'light'; // TODO: Implement dark mode
 
-      _headerColor = settings.visual.navigationColor.colorsFromCSS().isNotEmpty
-          ? settings.visual.navigationColor.colorsFromCSS()
+      final surveyIconColor = config
+              .firstWhere((c) =>
+                  c.internalIdentifier == 'app.visual.$theme.survey_icon_color')
+              .value ??
+          '';
+      notifiers.widgetColor.value = surveyIconColor.colorsFromCSS().isNotEmpty
+          ? surveyIconColor.colorsFromCSS()
           : [Colors.blueAccent, Colors.blueAccent];
 
-      notifiers.currencyIconURL.value = settings.currency.symbol.isImage
-          ? settings.currency.symbol.content
-          : '';
+      final navigationColor = config
+              .firstWhere((c) =>
+                  c.internalIdentifier == 'app.visual.$theme.navigation_color')
+              .value ??
+          '';
+      _headerColor = navigationColor.colorsFromCSS().isNotEmpty
+          ? navigationColor.colorsFromCSS()
+          : [Colors.blueAccent, Colors.blueAccent];
 
-      var bonus = settings.currency.bonusPercentage / 100;
+      final isImage = config
+              .firstWhere((c) =>
+                  c.internalIdentifier == 'general.currency.symbol.is_image')
+              .value ==
+          "1";
+      final content = config
+              .firstWhere((c) =>
+                  c.internalIdentifier == 'general.currency.symbol.content')
+              .value ??
+          '';
 
-      final promotion = settings.promotion;
-      if (promotion != null) {
-        bonus += promotion.bonusPercentage / 100 +
-            (bonus * promotion.bonusPercentage) / 100;
-      }
-
-      notifiers.bonusPercentage.value = bonus;
+      notifiers.currencyIconURL.value = isImage ? content : '';
     }, (error) => log(error.toString()));
 
     _getAdId();

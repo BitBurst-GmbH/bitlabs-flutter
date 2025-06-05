@@ -41,7 +41,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ListView? surveyWidgets;
-  List<Survey> surveysList = [];
   final uid = 'oblivatevariegata';
 
   bool isLeaderboardVisible = false;

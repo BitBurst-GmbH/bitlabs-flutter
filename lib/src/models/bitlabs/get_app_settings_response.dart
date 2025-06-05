@@ -1,22 +1,17 @@
-import 'currency.dart';
-import 'promotion.dart';
+import 'configuration.dart';
 import 'serializable.dart';
-import 'visual.dart';
 
 class GetAppSettingsResponse extends Serializable {
-  final Visual visual;
-  final Currency currency;
-  final Promotion? promotion;
+  final List<Configuration> configuration;
 
   GetAppSettingsResponse(Map<String, dynamic> json)
-      : visual = Visual(json['visual']),
-        currency = Currency(json['currency']),
-        promotion =
-            json['promotion'] != null ? Promotion(json['promotion']) : null;
+      : configuration = (json['configuration'] as List)
+            .map((e) => Configuration(e as Map<String, dynamic>))
+            .toList();
 
-  Map<String, dynamic> toJson() => {
-        'visual': visual,
-        'currency': currency,
-        'promotion': promotion,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'configuration': configuration.map((e) => e.toJson()).toList(),
+    };
+  }
 }

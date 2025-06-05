@@ -27,10 +27,13 @@ class BitLabsWidget extends StatelessWidget {
             margin: 0%;
           }
         </style>
-        <script src="https://sdk.bitlabs.ai/bitlabs-sdk-v0.0.2.js"></script>
+        <script
+          type="module"
+          src="https://sdk.bitlabs.ai/bitlabs-sdk-v1.0.0.js"
+        ></script>
         <link
           rel="stylesheet"
-          href="https://sdk.bitlabs.ai/bitlabs-sdk-v0.0.2.css"
+          href="https://sdk.bitlabs.ai/bitlabs-sdk-v1.0.0.css"
         />
         <title>Leaderboard</title>
       </head>

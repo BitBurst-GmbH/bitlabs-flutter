@@ -1,3 +1,8 @@
+## 3.0.1
+
+- Expose Survey and Category models
+- Internal Improvements
+
 ## 3.0.0
 
 - Bump dependencies versions to latest

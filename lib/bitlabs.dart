@@ -6,14 +6,12 @@ import 'dart:ui';
 import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
 import 'package:bitlabs/src/utils/extensions.dart';
-import 'package:bitlabs/src/widgets/survey_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'src/api/bitlabs/bitlabs_service.dart';
 import 'src/api/bitlabs/bitlabs_repository.dart';
 import 'src/models/bitlabs/get_leaderboard_response.dart';
 import 'src/models/bitlabs/survey.dart';
-import 'src/models/bitlabs/widget_type.dart';
 import 'src/utils/notifiers.dart' as notifiers;
 import 'src/widgets/bitlabs_offerwall.dart';
 
@@ -21,7 +19,6 @@ export 'src/models/bitlabs/survey.dart';
 export 'src/models/bitlabs/category.dart';
 export 'src/models/bitlabs/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
-export 'src/widgets/bitlabs_leaderboard.dart';
 export 'src/widgets/bitlabs_offerwall.dart';
 export 'src/widgets/bitlabs_widget.dart';
 
@@ -86,19 +83,6 @@ class BitLabs {
       _headerColor = navigationColor.colorsFromCSS().isNotEmpty
           ? navigationColor.colorsFromCSS()
           : [Colors.blueAccent, Colors.blueAccent];
-
-      final isImage = config
-              .firstWhere((c) =>
-                  c.internalIdentifier == 'general.currency.symbol.is_image')
-              .value ==
-          "1";
-      final content = config
-              .firstWhere((c) =>
-                  c.internalIdentifier == 'general.currency.symbol.content')
-              .value ??
-          '';
-
-      notifiers.currencyIconURL.value = isImage ? content : '';
     }, (error) => log(error.toString()));
 
     _getAdId();
@@ -146,21 +130,6 @@ class BitLabs {
         () => _bitLabsRepository?.getSurveys(
             (surveys) => onResponse(surveys), onFailure),
       );
-
-  @Deprecated('Use the BitLabsWidget instead,'
-      ' will be removed soon in the next major')
-  List<SurveyWidget> getSurveyWidgets(List<Survey> surveys, WidgetType type) {
-    return List.generate(surveys.length, (index) {
-      final survey = surveys[index];
-      return SurveyWidget(
-        type: type,
-        reward: survey.value,
-        rating: survey.rating,
-        color: notifiers.widgetColor.value,
-        loi: '${survey.loi.round()} minutes',
-      );
-    });
-  }
 
   void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
       _ifInitialised(() {

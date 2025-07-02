@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'bitlabs.dart';
 import 'bitlabs_method_channel.dart';
 
 abstract class BitlabsPlatform extends PlatformInterface {
@@ -23,7 +24,21 @@ abstract class BitlabsPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  Future<void> init(String token, String uid);
+
+  void setOnRewardCallback(Function(double reward) onReward);
+
+  Future<void> setTags(Map<String, dynamic> tags);
+
+  Future<void> launchOfferWall();
+
+  Future<void> getSurveys(
+      void Function(List<Survey>) onResponse,
+      void Function(Exception) onFailure,
+      );
+
+  Future<void> checkSurveys(
+      void Function(bool) onResponse,
+      void Function(Exception) onFailure,
+      );
 }

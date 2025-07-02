@@ -4,16 +4,14 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:advertising_id/advertising_id.dart';
+import 'package:bitlabs/bitlabs_platform_interface.dart';
 import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
-import 'package:bitlabs/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'src/api/bitlabs/bitlabs_service.dart';
 import 'src/api/bitlabs/bitlabs_repository.dart';
 import 'src/models/bitlabs/get_leaderboard_response.dart';
 import 'src/models/bitlabs/survey.dart';
-import 'src/utils/notifiers.dart' as notifiers;
-import 'src/widgets/bitlabs_offerwall.dart';
 
 export 'src/models/bitlabs/survey.dart';
 export 'src/models/bitlabs/category.dart';
@@ -29,15 +27,10 @@ export 'src/widgets/bitlabs_widget.dart';
 class BitLabs {
   static final BitLabs instance = BitLabs._();
 
-  String _uid = '';
   String _adId = '';
-  String _token = '';
   Map<String, dynamic> _tags = {};
-  List<Color> _headerColor = [Colors.blueAccent, Colors.blueAccent];
 
   BitLabsRepository? _bitLabsRepository;
-
-  void Function(double) _onReward = (double payout) {};
 
   BitLabs._();
 
@@ -49,8 +42,8 @@ class BitLabs {
   /// - The [token] is found in your [BitLabs Dashboard](https://dashboard.bitlabs.ai/).
   /// - The [uid] should belong to the current user so that you to keep track of which user got what.
   void init(String token, String uid) {
-    _token = token;
-    _uid = uid;
+    BitlabsPlatform.instance.init(token, uid);
+
     _bitLabsRepository = BitLabsRepository(BitLabsService(token, uid));
 
     SentryManager().init(token, uid);
@@ -61,29 +54,6 @@ class BitLabs {
       }
       return false;
     };
-
-    _bitLabsRepository?.getAppSettings(_token, (settings) {
-      final config = settings.configuration;
-      final theme = 'light'; // TODO: Implement dark mode
-
-      final surveyIconColor = config
-              .firstWhere((c) =>
-                  c.internalIdentifier == 'app.visual.$theme.survey_icon_color')
-              .value ??
-          '';
-      notifiers.widgetColor.value = surveyIconColor.colorsFromCSS().isNotEmpty
-          ? surveyIconColor.colorsFromCSS()
-          : [Colors.blueAccent, Colors.blueAccent];
-
-      final navigationColor = config
-              .firstWhere((c) =>
-                  c.internalIdentifier == 'app.visual.$theme.navigation_color')
-              .value ??
-          '';
-      _headerColor = navigationColor.colorsFromCSS().isNotEmpty
-          ? navigationColor.colorsFromCSS()
-          : [Colors.blueAccent, Colors.blueAccent];
-    }, (error) => log(error.toString()));
 
     _getAdId();
   }
@@ -103,7 +73,9 @@ class BitLabs {
   Future<void> addTag(String key, var value) async => _tags[key] = value;
 
   /// Registers a reward callback to be invoked when the OfferWall is exited by the user.
-  void setOnReward(void Function(double) onReward) => _onReward = onReward;
+  void setOnReward(void Function(double) onReward) {
+    BitlabsPlatform.instance.setOnRewardCallback(onReward);
+  }
 
   /// Determines whether the user has surveys available.
   ///
@@ -148,18 +120,9 @@ class BitLabs {
   ///
   /// On iOS, if there are Offers available, the Offerwall will be launched in
   /// the external browser.
-  void launchOfferWall(BuildContext context) => _ifInitialised(() {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return BitLabsOfferwall(
-            uid: _uid,
-            adId: _adId,
-            tags: _tags,
-            token: _token,
-            color: _headerColor,
-            onReward: _onReward,
-          );
-        }));
-      });
+  void launchOfferWall(BuildContext context) {
+    BitlabsPlatform.instance.launchOfferWall();
+  }
 
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     try {

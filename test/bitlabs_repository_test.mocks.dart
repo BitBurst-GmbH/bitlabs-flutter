@@ -47,16 +47,6 @@ class MockBitLabsService extends _i1.Mock implements _i3.BitLabsService {
           as _i4.Future<_i2.Response>);
 
   @override
-  _i4.Future<_i2.Response> getLeaderboard() =>
-      (super.noSuchMethod(
-            Invocation.method(#getLeaderboard, []),
-            returnValue: _i4.Future<_i2.Response>.value(
-              _FakeResponse_0(this, Invocation.method(#getLeaderboard, [])),
-            ),
-          )
-          as _i4.Future<_i2.Response>);
-
-  @override
   _i4.Future<_i2.Response> updateClick(String? clickId, String? reason) =>
       (super.noSuchMethod(
             Invocation.method(#updateClick, [clickId, reason]),

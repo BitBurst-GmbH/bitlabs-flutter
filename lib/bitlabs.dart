@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 
 import 'src/api/bitlabs/bitlabs_service.dart';
 import 'src/api/bitlabs/bitlabs_repository.dart';
-import 'src/models/bitlabs/get_leaderboard_response.dart';
 import 'src/models/bitlabs/survey.dart';
 
 export 'src/models/bitlabs/survey.dart';
@@ -105,12 +104,6 @@ class BitLabs {
         () => _bitLabsRepository?.getSurveys(
             (surveys) => onResponse(surveys), onFailure),
       );
-
-  void getLeaderboard(void Function(GetLeaderboardResponse) onResponse) =>
-      _ifInitialised(() {
-        _bitLabsRepository?.getLeaderboard(
-            onResponse, (error) => log(error.toString()));
-      });
 
   void leaveSurvey(String clickId, String reason) =>
       _bitLabsRepository?.leaveSurvey(

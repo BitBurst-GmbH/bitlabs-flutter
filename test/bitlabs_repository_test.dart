@@ -1,6 +1,5 @@
 import 'package:bitlabs/src/api/bitlabs/bitlabs_service.dart';
 import 'package:bitlabs/src/api/bitlabs/bitlabs_repository.dart';
-import 'package:bitlabs/src/models/bitlabs/get_leaderboard_response.dart';
 import 'package:bitlabs/src/models/bitlabs/survey.dart';
 import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
@@ -84,57 +83,6 @@ void main() {
       repository.getSurveys(
         (_) => fail('Should not be called'),
         (e) => expect(e, isA<Exception>()),
-      );
-    });
-  });
-
-  group('getLeaderboard', () {
-    test('Failure', () {
-      final api = MockBitLabsService();
-      when(api.getLeaderboard()).thenAnswer((_) async => Response('', 400));
-
-      final repository = BitLabsRepository(api);
-      repository.getLeaderboard(
-        (_) => fail('Should not be called'),
-        (error) => expect(error, isA<Exception>()),
-      );
-    });
-
-    test('Success', () {
-      final api = MockBitLabsService();
-      when(api.getLeaderboard()).thenAnswer((_) async => Response(dataBody("""
-      {
-        "next_reset_at": "2021-09-30T00:00:00Z",
-        "own_user": {
-          "rank": 1,
-          "name": "string",
-          "earnings_raw": 0
-        },
-        "rewards": [
-          {
-            "rank": 1,
-            "reward_raw": 0
-          }
-        ]
-      }
-      """), 200));
-
-      final repository = BitLabsRepository(api);
-      repository.getLeaderboard(
-        (leaderboard) => expect(leaderboard, isA<GetLeaderboardResponse>()),
-        (_) => fail('Should not be called'),
-      );
-    });
-
-    test('Error', () {
-      final api = MockBitLabsService();
-      when(api.getLeaderboard())
-          .thenAnswer((_) async => Response(errorBody(), 400));
-
-      final repository = BitLabsRepository(api);
-      repository.getLeaderboard(
-        (_) => fail('Should not be called'),
-        (error) => expect(error, isA<Exception>()),
       );
     });
   });

@@ -23,9 +23,6 @@ class BitLabsService {
       }),
       headers: _headers);
 
-  Future<Response> getLeaderboard() =>
-      get(url('v1/client/leaderboard'), headers: _headers);
-
   Future<Response> updateClick(
     String clickId,
     String reason,
@@ -38,6 +35,4 @@ class BitLabsService {
   }
 
   Future<Response> getAppSettings(String url) => get(Uri.parse(url));
-
-  static Future<Response> getCurrencyIcon(String url) => get(Uri.parse(url));
 }

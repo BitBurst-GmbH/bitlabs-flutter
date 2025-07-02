@@ -54,6 +54,9 @@ class _HomePageState extends State<HomePage> {
     BitLabs.instance.setOnReward(
       (reward) => log('[Example] Reward for this session: $reward'),
     );
+
+   BitLabs.instance.setTags({'display_mode': 'magic_receipts'});
+   BitLabs.instance.addTag('theme', 'dark');
   }
 
   @override

@@ -28,7 +28,6 @@ class BitLabs {
   static final BitLabs instance = BitLabs._();
 
   String _adId = '';
-  Map<String, dynamic> _tags = {};
 
   BitLabsRepository? _bitLabsRepository;
 
@@ -67,10 +66,14 @@ class BitLabs {
   }
 
   /// These will be added as query parameters to the OfferWall Link.
-  void setTags(Map<String, dynamic> tags) => _tags = tags;
+  void setTags(Map<String, dynamic> tags) {
+    BitlabsPlatform.instance.setTags(tags);
+  }
 
   /// Adds a new ([key],[value]) pair to [tags]
-  Future<void> addTag(String key, var value) async => _tags[key] = value;
+  Future<void> addTag(String key, var value) async {
+    BitlabsPlatform.instance.addTag(key, value.toString());
+  }
 
   /// Registers a reward callback to be invoked when the OfferWall is exited by the user.
   void setOnReward(void Function(double) onReward) {

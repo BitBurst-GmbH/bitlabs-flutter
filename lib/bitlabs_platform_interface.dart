@@ -4,7 +4,6 @@ import 'bitlabs.dart';
 import 'bitlabs_method_channel.dart';
 
 abstract class BitlabsPlatform extends PlatformInterface {
-  /// Constructs a BitlabsPlatform.
   BitlabsPlatform() : super(token: _token);
 
   static final Object _token = Object();
@@ -29,6 +28,8 @@ abstract class BitlabsPlatform extends PlatformInterface {
   void setOnRewardCallback(Function(double reward) onReward);
 
   Future<void> setTags(Map<String, dynamic> tags);
+
+  Future<void> addTag(String key, String value);
 
   Future<void> launchOfferWall();
 

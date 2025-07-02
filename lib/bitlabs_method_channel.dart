@@ -38,6 +38,11 @@ class MethodChannelBitlabs extends BitlabsPlatform {
   }
 
   @override
+  Future<void> addTag(String key, String value) async {
+    await methodChannel.invokeMethod('addTag', {'key': key, 'value': value});
+  }
+
+  @override
   Future<void> setTags(Map<String, dynamic> tags) async {
     await methodChannel.invokeMethod('setTags', {'tags': tags});
   }

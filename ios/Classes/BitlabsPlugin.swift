@@ -16,6 +16,7 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "init": initImpl(call, result)
+        case "addTag": addTagImpl(call, result)
         case "setTags": setTagsImpl(call, result)
         case "launchOfferWall": launchOfferWallImpl(result)
         case "getSurveys": getSurveysImpl(result)
@@ -48,6 +49,19 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
         // Ensure the BitLabs offer wall launch method is correctly used
         BitLabs.shared.launchOfferWall(parent: topViewController)
         result("Offer wall launched")
+    }
+    
+    private func addTagImpl(_ call: FlutterMethodCall, _ result:FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any],
+              let key = arguments["key"] as? String,
+              let value = arguments["value"] as? String
+        else {
+            result(FlutterError(code: "Error", message: "Invalid arguments", details: nil))
+            return
+        }
+        
+        BitLabs.shared.addTag(key: key, value: value)
+        
     }
     
     private func setTagsImpl(_ call: FlutterMethodCall, _ result: FlutterResult) {

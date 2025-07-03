@@ -33,4 +33,7 @@ flutter:
     platforms:
       ios:
         pluginClass: BitlabsPlugin
+      android:
+        pluginClass: BitlabsPlugin
+        package: ai.bitlabs.bitlabs
 

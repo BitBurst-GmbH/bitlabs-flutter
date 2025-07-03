@@ -1,31 +1,16 @@
 PODS:
-  - advertising_id (0.0.1):
-    - Flutter
   - bitlabs (0.0.1):
     - BLCustom
     - Flutter
   - BLCustom (4.0.1)
-  - device_info_plus (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
-  - image_picker_ios (0.0.1):
-    - Flutter
-  - integration_test (0.0.1):
-    - Flutter
-  - url_launcher_ios (0.0.1):
-    - Flutter
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
 
 DEPENDENCIES:
-  - advertising_id (from `.symlinks/plugins/advertising_id/ios`)
   - bitlabs (from `.symlinks/plugins/bitlabs/ios`)
-  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
-  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-  - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
@@ -33,32 +18,17 @@ SPEC REPOS:
     - BLCustom
 
 EXTERNAL SOURCES:
-  advertising_id:
-    :path: ".symlinks/plugins/advertising_id/ios"
   bitlabs:
     :path: ".symlinks/plugins/bitlabs/ios"
-  device_info_plus:
-    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
-  image_picker_ios:
-    :path: ".symlinks/plugins/image_picker_ios/ios"
-  integration_test:
-    :path: ".symlinks/plugins/integration_test/ios"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  advertising_id: d5de9e659986092d7ca50977dc50f4f4fcd4c30a
   bitlabs: 95304f69e93a8598796376a731e92f0070ceff0c
   BLCustom: b5d80343e57b7d67597769017aee3b9efa846ead
-  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
-  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011

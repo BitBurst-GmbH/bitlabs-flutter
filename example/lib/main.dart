@@ -51,8 +51,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     BitLabs.instance.init(appToken, uid);
 
-    BitLabs.instance.addTag('theme', 'dark');
-
     BitLabs.instance.setOnReward(
       (reward) => log('[Example] Reward for this session: $reward'),
     );

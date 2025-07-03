@@ -2,6 +2,7 @@ package ai.bitlabs.bitlabs
 
 import android.app.Activity
 import ai.bitlabs.sdk.BitLabs
+import android.util.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -40,6 +41,7 @@ class BitlabsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     val token = call.argument<String>("token") ?: ""
     val uid = call.argument<String>("uid") ?: ""
     BitLabs.init(it, token, uid)
+    BitLabs.API.init(token, uid)
     result.success("BitLabs initialised")
   } ?: result.error("Error", "Activity is null", null)
 
@@ -58,15 +60,15 @@ class BitlabsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     result.success("Offerwall launched")
   } ?: result.error("Error", "Activity is null", null)
 
-  private fun getSurveysImpl(result: Result) = BitLabs.getSurveys(
+  private fun getSurveysImpl(result: Result) = BitLabs.API.getSurveys(
     { surveys ->
-//      val surveysMap = surveys.map { survey -> survey.toMap() }
-//      result.success(surveysMap)
+      val surveysMap = surveys.map { survey -> survey.toMap() }
+      result.success(surveysMap)
     },
     { exception -> result.error("Error", exception.message, null) }
   )
 
-  private fun checkSurveysImpl(result: Result) = BitLabs.checkSurveys(
+  private fun checkSurveysImpl(result: Result) = BitLabs.API.checkSurveys(
     { surveysExist -> result.success(surveysExist) },
     { exception -> result.error("Error", exception.message, null) }
   )

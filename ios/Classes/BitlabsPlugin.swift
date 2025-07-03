@@ -86,7 +86,6 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
                 if let data = try? JSONEncoder().encode(surveys),
                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
                 {
-                    // TODO: LOOK INTO Encoding Strategy
                     result(json)
                 }
                 

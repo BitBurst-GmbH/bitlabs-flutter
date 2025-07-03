@@ -64,12 +64,10 @@ class BitLabs {
     _getAdId(true);
   }
 
-  /// These will be added as query parameters to the OfferWall Link.
   void setTags(Map<String, dynamic> tags) {
     BitlabsPlatform.instance.setTags(tags);
   }
 
-  /// Adds a new ([key],[value]) pair to [tags]
   Future<void> addTag(String key, var value) async {
     BitlabsPlatform.instance.addTag(key, value.toString());
   }
@@ -86,11 +84,9 @@ class BitLabs {
   void checkSurveys(
     void Function(bool) onResponse,
     void Function(Exception) onFailure,
-  ) =>
-      _ifInitialised(() {
-        _bitLabsRepository?.getSurveys(
-            (surveys) => onResponse(surveys.isNotEmpty), onFailure);
-      });
+  ) {
+    BitlabsPlatform.instance.checkSurveys(onResponse, onFailure);
+  }
 
   /// Fetches a list of surveys the user can open.
   ///
@@ -99,11 +95,9 @@ class BitLabs {
   void getSurveys(
     void Function(List<Survey>) onResponse,
     void Function(Exception) onFailure,
-  ) =>
-      _ifInitialised(
-        () => _bitLabsRepository?.getSurveys(
-            (surveys) => onResponse(surveys), onFailure),
-      );
+  ) {
+    BitlabsPlatform.instance.getSurveys(onResponse, onFailure);
+  }
 
   void leaveSurvey(String clickId, String reason) =>
       _bitLabsRepository?.leaveSurvey(
@@ -128,16 +122,5 @@ class BitLabs {
       SentryManager().captureEvent(e, stacktrace);
       log("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
     }
-  }
-
-  /// Checks whether [token] and [uid] have been set and aren't blank/empty and
-  /// thus [bitLabsRepo] is initialised and executes the [block] accordingly.
-  void _ifInitialised(Function block) {
-    if (_bitLabsRepository == null) {
-      log('[BitLabs] Trying to use BitLabs without initialising it!'
-          'You should initialise BitLabs first! Call BitLabs::init()');
-      return;
-    }
-    block();
   }
 }

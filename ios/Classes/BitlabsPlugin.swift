@@ -61,7 +61,6 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
         }
         
         BitLabs.shared.addTag(key: key, value: value)
-        
     }
     
     private func setTagsImpl(_ call: FlutterMethodCall, _ result: FlutterResult) {
@@ -86,6 +85,7 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
                 if let data = try? JSONEncoder().encode(surveys),
                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
                 {
+                    // TODO: LOOK INTO Encoding Strategy
                     result(json)
                 }
                 

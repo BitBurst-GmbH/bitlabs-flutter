@@ -34,12 +34,12 @@ abstract class BitlabsPlatform extends PlatformInterface {
   Future<void> launchOfferWall();
 
   Future<void> getSurveys(
-      void Function(List<Survey>) onResponse,
-      void Function(Exception) onFailure,
-      );
+    void Function(List<Survey>) onResponse,
+    void Function(Exception) onFailure,
+  );
 
   Future<void> checkSurveys(
-      void Function(bool) onResponse,
-      void Function(Exception) onFailure,
-      );
+    void Function(bool) onResponse,
+    void Function(Exception) onFailure,
+  );
 }

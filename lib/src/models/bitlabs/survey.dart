@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../utils/extensions.dart';
+
 import 'category.dart';
 
 /// Represents the survey the user can take.
@@ -50,18 +52,18 @@ class Survey {
       required this.category,
       required this.tags});
 
-  Survey.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        type = json['type'],
-        clickUrl = json['click_url'],
-        cpi = json['cpi'],
-        value = json['value'],
-        loi = (json['loi'] as num).toDouble(),
-        country = json['country'],
-        language = json['language'],
-        rating = json['rating'],
-        category = Category.fromJson(json['category']),
-        tags = List<String>.from(json['tags']);
+  Survey.fromJson(Map json)
+      : id = json.getValue('id'),
+        type = json.getValue('type'),
+        clickUrl = json.getValue('clickUrl'),
+        cpi = json.getValue('cpi'),
+        value = json.getValue('value'),
+        loi = json.getValue<num>('loi').toDouble(),
+        country = json.getValue('country'),
+        language = json.getValue('language'),
+        rating = json.getValue('rating'),
+        category = Category.fromJson(json.getValue('category')),
+        tags = List<String>.from(json.getValue('tags'));
 
   Map<String, dynamic> toJson() => {
         'id': id,

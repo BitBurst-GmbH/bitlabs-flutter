@@ -1,22 +1,19 @@
 library;
 
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:advertising_id/advertising_id.dart';
 import 'package:bitlabs/bitlabs_platform_interface.dart';
 import 'package:bitlabs/src/models/sentry/sentry_manager.dart';
 import 'package:flutter/material.dart';
 
-import 'src/api/bitlabs/bitlabs_service.dart';
-import 'src/api/bitlabs/bitlabs_repository.dart';
 import 'src/models/bitlabs/survey.dart';
 
 export 'src/models/bitlabs/survey.dart';
 export 'src/models/bitlabs/category.dart';
 export 'src/models/bitlabs/widget_type.dart';
 export 'src/utils/localization.dart' show LocalizationDelegate;
-export 'src/widgets/bitlabs_offerwall.dart';
+
+// export 'src/widgets/bitlabs_offerwall.dart';
 export 'src/widgets/bitlabs_widget.dart';
 
 /// The main class including all the library functions to use in your code.
@@ -25,10 +22,6 @@ export 'src/widgets/bitlabs_widget.dart';
 /// main process(app lifecycle).
 class BitLabs {
   static final BitLabs instance = BitLabs._();
-
-  String _adId = '';
-
-  BitLabsRepository? _bitLabsRepository;
 
   BitLabs._();
 
@@ -41,8 +34,6 @@ class BitLabs {
   /// - The [uid] should belong to the current user so that you to keep track of which user got what.
   void init(String token, String uid) {
     BitlabsPlatform.instance.init(token, uid);
-
-    _bitLabsRepository = BitLabsRepository(BitLabsService(token, uid));
 
     SentryManager().init(token, uid);
 
@@ -99,13 +90,6 @@ class BitLabs {
     BitlabsPlatform.instance.getSurveys(onResponse, onFailure);
   }
 
-  void leaveSurvey(String clickId, String reason) =>
-      _bitLabsRepository?.leaveSurvey(
-          clickId,
-          reason,
-          (response) => log('[BitLabs] LeaveSurvey: $response'),
-          (error) => log(error.toString()));
-
   /// Launches the OfferWall from the [context] you pass.
   ///
   /// On iOS, if there are Offers available, the Offerwall will be launched in
@@ -115,12 +99,7 @@ class BitLabs {
   }
 
   void _getAdId([bool requestTrackingAuthorization = false]) async {
-    try {
-      _adId = await AdvertisingId.id(requestTrackingAuthorization) ?? '';
-      log("[BitLabs] adId: $_adId");
-    } on Exception catch (e, stacktrace) {
-      SentryManager().captureEvent(e, stacktrace);
-      log("[BitLabs] Couldn't get adId: $_adId ~ Reason: $e)");
-    }
+    if (!requestTrackingAuthorization) return;
+    BitlabsPlatform.instance.requestTrackingAuthorization();
   }
 }

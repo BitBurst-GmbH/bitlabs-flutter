@@ -86,4 +86,9 @@ class MethodChannelBitlabs extends BitlabsPlatform {
       onFailure(Exception(e));
     }
   }
+
+  @override
+  Future<void> requestTrackingAuthorization() async {
+    await methodChannel.invokeMethod('requestTrackingAuthorization');
+  }
 }

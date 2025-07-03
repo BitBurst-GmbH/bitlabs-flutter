@@ -42,4 +42,6 @@ abstract class BitlabsPlatform extends PlatformInterface {
     void Function(bool) onResponse,
     void Function(Exception) onFailure,
   );
+
+  Future<void> requestTrackingAuthorization();
 }

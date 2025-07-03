@@ -3,6 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../bitlabs.dart';
 
+@Deprecated('This will be removed in a future major.')
 class BitLabsWidget extends StatelessWidget {
   final String html;
   final WidgetType type;

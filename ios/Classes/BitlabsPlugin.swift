@@ -21,6 +21,7 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
         case "launchOfferWall": launchOfferWallImpl(result)
         case "getSurveys": getSurveysImpl(result)
         case "checkSurveys": checkSurveysImpl(result)
+        case "requestTrackingAuthorization": requestTrackingAuthorizationImpl(result)
         default: result(FlutterMethodNotImplemented)
         }
     }
@@ -104,5 +105,10 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
                 result(surveysExist)
             }
         }
+    }
+    
+    private func requestTrackingAuthorizationImpl(_ result: @escaping FlutterResult) {
+        BitLabs.shared.requestTrackingAuthorization()
+        result(true)
     }
 }

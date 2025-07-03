@@ -30,6 +30,7 @@ class BitlabsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     when (call.method) {
       "init" -> initImpl(call, result)
       "setTags" -> setTagsImpl(call, result)
+      "addTag" -> addTagImpl(call, result)
       "launchOfferWall" -> launchOfferWallImpl(result)
       "getSurveys" -> getSurveysImpl(result)
       "checkSurveys" -> checkSurveysImpl(result)
@@ -53,6 +54,20 @@ class BitlabsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
     BitLabs.tags = tags.toMutableMap()
     result.success("Tags set")
+  }
+
+  private fun addTagImpl(call: MethodCall, result: Result) {
+    val key = call.argument<String>("key") ?: run {
+      result.error("Error", "Invalid key argument", null)
+      return
+    }
+    val value = call.argument<String>("value") ?: run {
+      result.error("Error", "Invalid value argument", null)
+      return
+    }
+
+    BitLabs.tags[key] = value
+    result.success("Tag added")
   }
 
   private fun launchOfferWallImpl(result: Result) = activity?.let {

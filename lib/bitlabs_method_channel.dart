@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -89,6 +91,7 @@ class MethodChannelBitlabs extends BitlabsPlatform {
 
   @override
   Future<void> requestTrackingAuthorization() async {
+    if (Platform.isAndroid) return;
     await methodChannel.invokeMethod('requestTrackingAuthorization');
   }
 }

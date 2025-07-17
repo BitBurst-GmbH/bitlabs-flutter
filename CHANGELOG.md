@@ -1,3 +1,8 @@
+## 4.0.0-beta.1
+
+- **Breaking Change**: Removed `SurveyWidget` and `BiLabsLeaderboard`.
+- Make the SDK a native plugin with iOS and Android support.
+- 
 ## 3.0.1
 
 - Expose Survey and Category models

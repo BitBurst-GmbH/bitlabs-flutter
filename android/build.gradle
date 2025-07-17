@@ -49,7 +49,7 @@ android {
     }
 
     dependencies {
-        implementation("com.github.BitBurst-GmbH.bitlabs-android-library:core:4.0.0")
+        implementation("com.prodege.bitlabs:core:5.0.0")
     }
 
     testOptions {

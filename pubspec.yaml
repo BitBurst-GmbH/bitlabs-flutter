@@ -27,5 +27,5 @@ flutter:
         pluginClass: BitlabsPlugin
       android:
         pluginClass: BitlabsPlugin
-        package: ai.bitlabs.bitlabs
+        package: ai.bitlabs.bitlabs_flutter
 

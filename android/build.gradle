@@ -1,4 +1,4 @@
-group = "ai.bitlabs.bitlabs"
+group = "ai.bitlabs.bitlabs_flutter"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -18,7 +18,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -26,7 +25,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "ai.bitlabs.bitlabs"
+    namespace = "ai.bitlabs.bitlabs_flutter"
 
     compileSdk = 35
 

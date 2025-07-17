@@ -1,4 +1,4 @@
-package ai.bitlabs.bitlabs
+package ai.bitlabs.bitlabs_flutter
 
 import ai.bitlabs.sdk.data.model.bitlabs.Category
 import ai.bitlabs.sdk.data.model.bitlabs.Survey

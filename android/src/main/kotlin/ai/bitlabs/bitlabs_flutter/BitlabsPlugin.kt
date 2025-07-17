@@ -1,4 +1,4 @@
-package ai.bitlabs.bitlabs
+package ai.bitlabs.bitlabs_flutter
 
 import android.app.Activity
 import ai.bitlabs.sdk.BitLabs

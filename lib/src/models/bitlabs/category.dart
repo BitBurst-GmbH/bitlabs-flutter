@@ -1,3 +1,5 @@
+import '../../utils/extensions.dart';
+
 class Category {
   final String name;
   final String iconUrl;
@@ -10,16 +12,16 @@ class Category {
       required this.iconName,
       required this.nameInternal});
 
-  Category.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        iconUrl = json['icon_url'],
-        iconName = json['icon_name'],
-        nameInternal = json['name_internal'];
+  Category.fromJson(Map json)
+      : name = json.getValue('name'),
+        iconUrl = json.getValue('iconUrl'),
+        iconName = json.getValue('iconName'),
+        nameInternal = json.getValue('nameInternal');
 
   Map<String, String> toJson() => {
         'name': name,
-        'icon_url': iconUrl,
-        'icon_name': iconName,
-        'name_internal': nameInternal
+        'iconUrl': iconUrl,
+        'iconName': iconName,
+        'nameInternal': nameInternal
       };
 }

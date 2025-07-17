@@ -35,7 +35,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ai.bitlabs.example"
+        applicationId "ai.bitlabs.example_flutter"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

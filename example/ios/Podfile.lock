@@ -26,11 +26,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  bitlabs: 95304f69e93a8598796376a731e92f0070ceff0c
+  bitlabs: fb59fc3f7044088c713e608815f86d4ea60ea1f2
   BLCustom: b5d80343e57b7d67597769017aee3b9efa846ead
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
 
-PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
 
 COCOAPODS: 1.16.2

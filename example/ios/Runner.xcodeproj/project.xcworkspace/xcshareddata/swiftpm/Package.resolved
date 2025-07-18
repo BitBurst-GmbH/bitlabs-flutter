@@ -1,0 +1,15 @@
+{
+  "originHash" : "ec4affdf54bcde6571aaebc9006dbe7ef85c9354ee4805997236364c89f76894",
+  "pins" : [
+    {
+      "identity" : "bitlabs-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BitBurst-GmbH/bitlabs-ios-sdk.git",
+      "state" : {
+        "branch" : "blcustom",
+        "revision" : "550ac5e4d84882f645558a5d084fc271b676c043"
+      }
+    }
+  ],
+  "version" : 3
+}

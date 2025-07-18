@@ -1,4 +1,0 @@
-module bitlabs {
-    header "/Users/omar.raad/StudioProjects/bitlabs-flutter/ios/bitlabs_flutter/.build/index-build/arm64-apple-macosx/debug/bitlabs.build/bitlabs-Swift.h"
-    requires objc
-}

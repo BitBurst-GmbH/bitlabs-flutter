@@ -1,12 +1,13 @@
-## 4.0.0-beta.2
+## 4.0.0
 
-- Add SPM support for iOS.
-
-## 4.0.0-beta.1
-
-- **Breaking Change**: Removed `SurveyWidget` and `BiLabsLeaderboard`.
+- **Breaking**: Removed `SurveyWidget` and `BiLabsLeaderboard`.
 - Make the SDK a native plugin with iOS and Android support.
-- 
+- [iOS] Add SPM support for iOS.
+- [Android] **Breaking** Minimum versions: 
+  - AGP: **8.1.0**.
+  - Gradle: **8.7**.
+  - Kotlin: **2.1.0**.
+
 ## 3.0.1
 
 - Expose Survey and Category models

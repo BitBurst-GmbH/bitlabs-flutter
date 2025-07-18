@@ -8,7 +8,7 @@ BitLabs is available through [Dart Packages](https://pub.dev/). To install
 it, simply add the following line to your pubspec under dependencies:
 
 ```
-bitlabs: ^3.0.1
+bitlabs: ^4.0.0
 ```
 
 ## Guide

@@ -9,10 +9,6 @@
 .history
 .svn/
 
-#SPM
-.build/
-.swiftpm/
-Package.resolved
 
 # IntelliJ related
 *.iml

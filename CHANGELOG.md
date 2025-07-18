@@ -1,3 +1,7 @@
+## 4.0.0-beta.2
+
+- Add SPM support for iOS.
+
 ## 4.0.0-beta.1
 
 - **Breaking Change**: Removed `SurveyWidget` and `BiLabsLeaderboard`.

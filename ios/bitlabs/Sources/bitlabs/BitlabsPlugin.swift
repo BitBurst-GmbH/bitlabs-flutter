@@ -11,8 +11,7 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
         self.channel = channel
         super.init()
     }
-    
-    
+
     public static func register(with registrar: FlutterPluginRegistrar) {
         let ch = FlutterMethodChannel(name: "bitlabs", binaryMessenger: registrar.messenger())
         let instance = BitlabsPlugin(channel: ch)

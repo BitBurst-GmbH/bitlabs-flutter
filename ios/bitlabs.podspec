@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'bitlabs'
-  s.version          = '0.0.1'
+  s.version          = '4.0.0'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC
 A new Flutter plugin project.
@@ -17,7 +17,7 @@ A new Flutter plugin project.
   s.source_files = 'bitlabs/Sources/**/*'
 
   s.dependency 'Flutter'
-  s.dependency 'BLCustom'
+  s.dependency 'BLCustom', '4.1.0'
 
   s.swift_version = '5.0'
   s.platform = :ios, '12.0'

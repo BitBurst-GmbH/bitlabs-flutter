@@ -90,6 +90,23 @@ class MethodChannelBitlabs extends BitlabsPlatform {
   }
 
   @override
+  Future<void> openOffer(String offerId) async {
+    await methodChannel.invokeMethod('openOffer', {'offerId': offerId});
+  }
+
+  @override
+  Future<void> openMagicReceiptsOffer(String offerId) async {
+    await methodChannel
+        .invokeMethod('openMagicReceiptsOffer', {'offerId': offerId});
+  }
+
+  @override
+  Future<void> openMagicReceiptsMerchant(String merchantId) async {
+    await methodChannel
+        .invokeMethod('openMagicReceiptsMerchant', {'merchantId': merchantId});
+  }
+
+  @override
   Future<void> requestTrackingAuthorization() async {
     if (Platform.isAndroid) return;
     await methodChannel.invokeMethod('requestTrackingAuthorization');

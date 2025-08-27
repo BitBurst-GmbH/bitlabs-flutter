@@ -43,5 +43,11 @@ abstract class BitlabsPlatform extends PlatformInterface {
     void Function(Exception) onFailure,
   );
 
+  Future<void> openOffer(String offerId);
+
+  Future<void> openMagicReceiptsOffer(String offerId);
+
+  Future<void> openMagicReceiptsMerchant(String merchantId);
+
   Future<void> requestTrackingAuthorization();
 }

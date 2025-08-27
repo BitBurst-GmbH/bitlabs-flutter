@@ -98,6 +98,18 @@ class BitLabs {
     BitlabsPlatform.instance.launchOfferWall();
   }
 
+  void openOffer(String offerId) {
+    BitlabsPlatform.instance.openOffer(offerId);
+  }
+
+  void openMagicReceiptsOffer(String offerId) {
+    BitlabsPlatform.instance.openMagicReceiptsOffer(offerId);
+  }
+
+  void openMagicReceiptsMerchant(String merchantId) {
+    BitlabsPlatform.instance.openMagicReceiptsMerchant(merchantId);
+  }
+
   void _getAdId([bool requestTrackingAuthorization = false]) async {
     if (!requestTrackingAuthorization) return;
     BitlabsPlatform.instance.requestTrackingAuthorization();

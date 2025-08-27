@@ -6,7 +6,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BitBurst-GmbH/bitlabs-ios-sdk.git",
       "state" : {
-        "revision" : "d785e4d3ae432f4bca20a60963c3acd3b15e685c"
+        "revision" : "4244403d48986c639272a15e0cce128941571f90"
       }
     }
   ],

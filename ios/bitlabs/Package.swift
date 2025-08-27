@@ -8,7 +8,7 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [.iOS("12.0")],
     products: [.library(name: "bitlabs", targets: ["bitlabs"])],
-    dependencies: [.package(url: "https://github.com/BitBurst-GmbH/bitlabs-ios-sdk.git", revision: "d785e4d3ae432f4bca20a60963c3acd3b15e685c")],
+    dependencies: [.package(url: "https://github.com/BitBurst-GmbH/bitlabs-ios-sdk.git", revision: "4244403d48986c639272a15e0cce128941571f90")],
     targets: [
         .target(
             name: "bitlabs",

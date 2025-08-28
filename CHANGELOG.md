@@ -1,3 +1,12 @@
+## 4.1.0
+
+- Support Deep Linking to Offers and Shopping Offers
+```dart
+BitLabs.instance.openOffer(id)
+BitLabs.instance.openMagicReceiptsOffer(id)
+BitLabs.instance.openMagicReceiptsMerchant(id)
+```
+
 ## 4.0.0
 
 - **Breaking**: Removed `SurveyWidget` and `BiLabsLeaderboard`.

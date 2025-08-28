@@ -60,99 +60,69 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const SizedBox(height: 8),
-          Expanded(
-            flex: 5,
-            child: isLeaderboardVisible
-                ? BitLabsWidget(
-                    token: appToken,
-                    uid: uid,
-                    type: WidgetType.leaderboard,
-                  )
-                : const SizedBox.shrink(),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: CustomButton(
-                      onPressed: () =>
-                          setState(() => isLeaderboardVisible = true),
-                      title: 'Show Leaderboard',
-                    ),
+      body: Center(
+        child: Column(
+          spacing: 4,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              spacing: 8,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => BitLabs.instance.openMagicReceiptsMerchant('7'),
+                    child: const Text('Open Shopping Merchant: 7'),
                   ),
-                  const SizedBox(width: 4),
-                ],
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: CustomButton(
-                      onPressed: BitLabs.instance.requestTrackingAuthorization,
-                      title: 'Authorize Tracking(iOS)',
-                    ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => BitLabs.instance.openMagicReceiptsOffer('311768'),
+                    child: const Text('Open Shopping Offer: 311768'),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: CustomButton(
-                      onPressed: checkForSurveys,
-                      title: 'Check for Surveys',
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: CustomButton(
-                      onPressed: () =>
-                          BitLabs.instance.launchOfferWall(context),
-                      title: 'Open OfferWall',
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: CustomButton(
-                      onPressed: getSurveys,
-                      title: 'Get Surveys',
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: CustomButton(
-                      onPressed: () =>
-                          setState(() => isSurveyWidgetVisible = true),
-                      title: 'Show Survey Widget',
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-              ),
-            ],
-          ),
-          if (isSurveyWidgetVisible)
-            BitLabsWidget(
-              token: appToken,
-              uid: uid,
-              type: WidgetType.simple,
+                ),
+              ],
             ),
-          const Spacer(),
-        ],
+            Row(
+              spacing: 8,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: BitLabs.instance.requestTrackingAuthorization,
+                    child: const Text('Authorize Tracking(iOS)'),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => BitLabs.instance.openOffer('1671485'),
+                    child: const Text('Open Shopping Offer:Open Offer with id: 1671485'),
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () => BitLabs.instance.launchOfferWall(context),
+              child: const Text('Open OfferWall'),
+            ),
+            Row(
+              spacing: 8,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: getSurveys,
+                    child: const Text('Get Surveys'),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: checkForSurveys,
+                    child: const Text('Check for Surveys'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -170,17 +140,4 @@ class _HomePageState extends State<HomePage> {
         },
         (exception) => log('[Example] GetSurveys $exception'),
       );
-}
-
-class CustomButton extends StatelessWidget {
-  final String title;
-  final VoidCallback? onPressed;
-
-  const CustomButton({Key? key, required this.title, this.onPressed})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: onPressed, child: Text(title));
-  }
 }

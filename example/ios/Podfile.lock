@@ -1,8 +1,8 @@
 PODS:
-  - bitlabs (0.0.1):
-    - BLCustom
+  - bitlabs (4.0.0):
+    - BLCustom (= 4.1.0)
     - Flutter
-  - BLCustom (4.0.1)
+  - BLCustom (4.1.0)
   - Flutter (1.0.0)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
@@ -26,11 +26,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  bitlabs: fb59fc3f7044088c713e608815f86d4ea60ea1f2
-  BLCustom: b5d80343e57b7d67597769017aee3b9efa846ead
+  bitlabs: a3057d612d938119c097ce5de6e102b23b5112dd
+  BLCustom: 973705d9c0fc13f4510e00d42b345d5de41c0da8
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
 
-PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
 COCOAPODS: 1.16.2

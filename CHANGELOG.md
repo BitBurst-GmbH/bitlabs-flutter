@@ -1,3 +1,8 @@
+## 4.1.1
+
+- [iOS] Fix `addTag` never completing.
+- [iOS] Fix `getSurveys` replying twice on success.
+
 ## 4.1.0
 
 - Support Deep Linking to Offers and Shopping Offers

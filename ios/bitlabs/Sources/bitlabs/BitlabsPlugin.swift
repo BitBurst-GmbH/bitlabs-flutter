@@ -71,6 +71,7 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
         }
 
         offerwall?.tags[key] = value
+        result("Tag added")
     }
 
     private func setTagsImpl(_ call: FlutterMethodCall, _ result: FlutterResult) {
@@ -96,6 +97,7 @@ public class BitlabsPlugin: NSObject, FlutterPlugin {
                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
                 {
                     result(json)
+                    return
                 }
 
                 result(FlutterError(code: "Error", message: "Couldn't Serialize the surveys", details: nil))
